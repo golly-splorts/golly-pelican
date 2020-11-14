@@ -19,6 +19,8 @@ STATIC_PATHS = ['img']
 
 TEMPLATE_PAGES = {}
 TEMPLATE_PAGES['index.html'] = 'index.html'
+TEMPLATE_PAGES['season.html'] = 'season.html'
+TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
 
 # --------------------
 # Add custom routes
