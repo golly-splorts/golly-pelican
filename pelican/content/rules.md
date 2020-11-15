@@ -1,6 +1,5 @@
 Title: Rules
-Date: 2010-12-03 10:20
-Modified: 2010-12-05 19:30
+Date: 2000-01-01 00:00
 
 # The Rules
 
