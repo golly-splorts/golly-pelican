@@ -21,6 +21,8 @@ TEMPLATE_PAGES = {}
 TEMPLATE_PAGES['index.html'] = 'index.html'
 TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
+TEMPLATE_PAGES['league.html'] = 'league.html'
+TEMPLATE_PAGES['maps.html'] = 'maps.html'
 
 # --------------------
 # Add custom routes
