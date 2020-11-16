@@ -32,11 +32,19 @@ TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
 TEMPLATE_PAGES['league.html'] = 'league.html'
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
+TEMPLATE_PAGES['currentGames.html'] = 'currentGames.html'
+TEMPLATE_PAGES['currentPost.html'] = 'currentPost.html'
+TEMPLATE_PAGES['preseason.html'] = 'preseason.html'
 
 # --------------------
 # Add custom routes
 
 THEME_TEMPLATES_OVERRIDES = []
+
+THEME_TEMPLATES_OVERRIDES.append('simulator')
+TEMPLATE_PAGES['simulator/binary_life.html'] = 'simulator/index.html'
+TEMPLATE_PAGES['simulator/binary_life.js']   = 'simulator/binary_life.js'
+TEMPLATE_PAGES['simulator/json-sans-eval.js']   = 'simulator/json-sans-eval.js'
 
 # How to add an app route:
 ### THEME_TEMPLATES_OVERRIDES.append('foobar')
