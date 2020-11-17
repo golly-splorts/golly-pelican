@@ -35,6 +35,8 @@ TEMPLATE_PAGES['maps.html'] = 'maps.html'
 TEMPLATE_PAGES['currentGames.html'] = 'currentGames.html'
 TEMPLATE_PAGES['currentPost.html'] = 'currentPost.html'
 TEMPLATE_PAGES['preseason.html'] = 'preseason.html'
+TEMPLATE_PAGES['jersey.html'] = 'jersey.html'
+TEMPLATE_PAGES['champion.html'] = 'champion.html'
 
 # --------------------
 # Add custom routes
