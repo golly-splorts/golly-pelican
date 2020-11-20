@@ -7,29 +7,25 @@ Date: 2000-01-01 00:00
 
 1. Golly is a game played between two or more teams, each of a different color, on a rectangular grid with even
    dimensions.
-
 1. Play shall proceed according to the rules of Conway's Game of Life, modified for multiple colors.
-
 1. A day shall consist of a set of games between two or more teams.
-
 1. A season shall consist of an odd number of days, following which a pool of winners shall be selected for a
    post-season playoffs bracket. The winner of this bracket shall be declared the Golly Champion until the next
    season begins.
-
 1. All golly games during a given season shall use a common grid size.
-
 1. The objective of both teams is to maintain the most number of alive cells on the M x N grid by the time the game
    is declared over.
-
 1. Once play begins, it shall continue until the team with the most living cells on the board has maintained a
    constant victory percentage (number of live cells of that team's color divided by number of live cells total)
    at a constant value of greater than 50% for a specified number of generations.
 
 ## Section 2. The Field
 
+### Subsection 2.1. The Grid
+
 1. The field shall be laid out as a rectangular M x N grid, where M and N are even integers.
 
-### Subsection 2.1. Patterns
+### Subsection 2.2. Patterns
 
 1. Each matchup of teams shall have a pattern assigned for that matchup.
 1. The initial configuration of each team on the grid is determined by the pattern for that matchup.
@@ -40,14 +36,14 @@ Date: 2000-01-01 00:00
 1. Each map shall, in general, assign an equal number of live squares to each team.
 1. The above rule may not be enforced for some patterns.
 
-### Subsection 2.2. Matchups
+### Subsection 2.3. Matchups
 
-1. Each regular-season matchup between two teams shall be played twice using the same patter. Each team shall switch initial
+1. Each regular-season matchup between two teams shall be played twice using the same pattern. Each team shall switch initial
    positions between games.
-1. The last game of the season shall be the sole exception. Matchups shall take place on random patterns with team
-   assignments determined randomly.
+1. The last game of the season shall be the sole exception to the above rule. Matchups shall take place on random
+   patterns with team assignments determined randomly.
 
-### Subsection 2.3. Quadrants
+### Subsection 2.4. Quadrants
 
 1. The grid shall be divided into four quadrants, which shall have unique names based on the pattern used for that
    game. The quadrants shall serve no purpose in the game whatsoever.
@@ -90,10 +86,10 @@ Date: 2000-01-01 00:00
    over a window of 2X shall be tabulated.
 1. When the running average of the victory percentage has remained constant and not 50\% to within a specified
    tolerance for three consecutive generations, the winning team shall be declared the victor.f
-1. The tolerance used to determine whether the running average has changed rrom the prior generation shall be
+1. The tolerance used to determine whether the running average has changed from the prior generation shall be
    determined by the maximum grid dimension.
 
-## Section 6. Season
+## Section 7. Season
 
 1. Each season shall consist of S games, where S is a positive, odd integer.
 1. Each matchup of teams shall result in two games, with each team swapping positions on the map between games,
