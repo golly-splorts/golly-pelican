@@ -32,11 +32,15 @@ TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
 TEMPLATE_PAGES['league.html'] = 'league.html'
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
-TEMPLATE_PAGES['currentGames.html'] = 'currentGames.html'
-TEMPLATE_PAGES['currentPost.html'] = 'currentPost.html'
-TEMPLATE_PAGES['preseason.html'] = 'preseason.html'
 TEMPLATE_PAGES['jersey.html'] = 'jersey.html'
-TEMPLATE_PAGES['champion.html'] = 'champion.html'
+
+TEMPLATE_PAGES['siteMode_0009.html'] = 'siteMode_0009.html'
+TEMPLATE_PAGES['siteMode_1019.html'] = 'siteMode_1019.html'
+TEMPLATE_PAGES['siteMode_21.html'] = 'siteMode_21.html'
+#TEMPLATE_PAGES['siteMode_22.html'] = 'siteMode_22.html'
+#TEMPLATE_PAGES['siteMode_23.html'] = 'siteMode_23.html'
+TEMPLATE_PAGES['siteMode_31.html'] = 'siteMode_31.html'
+TEMPLATE_PAGES['siteMode_40plus.html'] = 'siteMode_40plus.html'
 
 # --------------------
 # Add custom routes
