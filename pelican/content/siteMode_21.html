@@ -3,18 +3,47 @@
 
 <div class="container">
 
-    <div class="row text-center">
+    <div class="row text-center landing-header">
       <div class="col-md-12">
-        <a name="99" style="position:absolute; top:-100px;"></a>
-        <h2>The Season 1 League Division Series will begin soon!</h2>
+        <h2>Season 1: League Division Series</h2>
+        <h4>The series will begin soon!</h4>
       </div>
     </div>
 
 
-    <div class="row justify-content-md-center seed-table">
+    <div class="row justify-content-md-center">
+      <div class="col-md-4">
 
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "scheduled_postgame.html" %}
+
+        {% include "scheduled_postgame.html" %}
+
+      </div>
+
+
+      <div class="col-md-4">
+
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "scheduled_postgame.html" %}
+
+        {% include "scheduled_postgame.html" %}
+
+      </div>
+
+    </div>
+
+    <div class="row text-center landing-header-below">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
       <div class="col-lg-4">
-          <h2 class="text-center">Hot League Standings</h2>
+          <h3 class="text-center">Hot League Seeds</h3>
 
           <ul class="list-group">
 
@@ -48,7 +77,7 @@
 
 
       <div class="col-lg-4">
-          <h2 class="text-center">Cold League Standings</h2>
+          <h3 class="text-center">Cold League Seeds</h3>
 
           <ul class="list-group">
 
@@ -79,112 +108,6 @@
     </div>
 
 
-
-    <div class="row justify-content-md-center seed-table">
-        <div class="col-md-4">
-            <div class="card bg-primary mb-3">
-                <h4 class="card-header text-white">Hot League Playoff Seeds</h4>
-
-                <ul class="list-group list-group-flush text-left">
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Alewife Arsonists</span>
-                        </td><td align="right">
-                          <b>
-                          1
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Orlando Business Majors</span>
-                        </td><td align="right">
-                          <b>
-                          2
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">San Diego Balloon Animals</span>
-                        </td><td align="right">
-                          <b>
-                          3
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Detroit Grape Chews</span>
-                        </td><td align="right">
-                          <b>
-                          4
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-1">
-        </div>
-
-
-        <div class="col-md-4">
-            <div class="card bg-primary mb-3">
-                <h4 class="card-header text-white">Cold League Playoff Seeds</h4>
-
-                <ul class="list-group list-group-flush">
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Alewife Arsonists</span>
-                        </td><td align="right">
-                          <b>
-                          1
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Orlando Business Majors</span>
-                        </td><td align="right">
-                          <b>
-                          2
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">San Diego Balloon Animals</span>
-                        </td><td align="right">
-                          <b>
-                          3
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                    <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                        <table width="100%"><tr><td>
-                          <span class="seed1color seed1name">Detroit Grape Chews</span>
-                        </td><td align="right">
-                          <b>
-                          4
-                          </b>
-                        </td></tr></table>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
 
 
 </div>
