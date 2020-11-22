@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- minilife html template -->
+<template>
+    {% include "minilife.html" %}
+</template>
+
+
+<div class="container invisible" id="container-mode0009">
+
+    <div class="row text-offwhite text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1 will begin soon!</h2>
+      </div>
+    </div>
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <p>The next season will begin soon. In the meantime, here is a Game of Life simulator...</p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife">
+    </div>
+
+</div>
+
+
+
+<div class="container invisible" id="container-mode1019">
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1 Day 99: Current Games</h2>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-lg-center season-container">
+      <div class="col-md-4 league-container league-1-container">
+        <h4 class="text-center league-container-header"><span id="league-1-name"></span></h4>
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+        <h4 class="text-center league-container-header"><span id="league-2-name"></span></h4>
+      </div>
+    </div>
+
+</div>
+
+
+
+<div class="container container-mode2029 invisible" id="container-mode21">
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: League Division Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center waiting-container lds-waiting-container">
+      <div class="col-md-4 league-container league-1-container">
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+      </div>
+    </div>
+
+    <div class="row text-center landing-header-below" id="lds-seed-table">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+</div>
+
+
+
+
+<div class="container container-mode2029 invisible" id="container-mode22">
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: League Championship Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center waiting-container lcs-waiting-container">
+      <div class="col-md-4 league-container league-1-container">
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+      </div>
+    </div>
+
+    <div class="row text-center landing-header-below" id="lcs-seed-container">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+<div class="container container-mode2029 invisible" id="container-mode23">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: World Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center waiting-container ws-waiting-container">
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="ws-seed-table">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+
+</div>
+
+
+
+<div class="container container-mode3039 invisible" id="container-mode31">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: League Division Series</h2>
+          <h4>Best of 5</h4>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center ongoing-container lds-ongoing-container">
+      <div class="col-md-4 league-container league-1-container">
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+      </div>
+    </div>
+
+
+
+    <div class="row text-center landing-header-below" id="lds-seed-table-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+
+<div class="container container-mode3039 invisible" id="container-mode32">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: League Championship Series</h2>
+          <h4>Best of 5</h4>
+      </div>
+    </div>
+
+
+
+    <div class="row justify-content-md-center ongoing-container lcs-ongoing-container">
+      <div class="col-md-4 league-container league-1-container">
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+      </div>
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="lcs-seed-table-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+<div class="container container-mode3039 invisible" id="container-mode33">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: World Series</h2>
+          <h4>Best of 7</h4>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center ongoing-container ws-ongoing-container">
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="ws-seed-table-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+<div class="container invisible" id="container-mode40plus">
+
+
+    <h2 class="text-center champion-header">Season 1 has ended.<h2>
+    <h3 class="text-center champion-header">Your Golly Champions are: The <span id="champion-team">San Diego Balloon Animals!</span></h3>
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <p>The next season will begin soon. In the meantime, here is a Game of Life simulator...</p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife">
+    </div>
+
+
+</div>
+
+<div class="container invisible" id="container-error">
+
+    <div class="row text-offwhite text-center landing-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">The site is temporarily down.</h2>
+      </div>
+    </div>
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <p>
+        Ninjas have been dispatched to track down those responsible for the downtime
+        and bring them back to Hellmouth Community College to fix the site.
+        </p>
+        <p>
+        In the meantime, here is a Game of Life simulator...
+        </p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife">
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="/theme/js/json-sans-eval.js"></script>
+<script type="text/javascript" src="/theme/js/minilife_core.js"></script>
+<script type="text/javascript" src="landing.js"></script>
+{% endblock %}
