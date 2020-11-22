@@ -12,6 +12,16 @@
       </div>
     </div>
 
+    <div class="vspace40">
+    </div>
+
+    {% include "minilife.html" %}
+
 </div>
 
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="{{ SITEURL }}/theme/js/json-sans-eval.js"></script>
+<script type="text/javascript" src="{{ SITEURL }}/theme/js/minilife_core.js"></script>
+<script type="text/javascript" src="{{ SITEURL }}/theme/js/minilife.js"></script>
 {% endblock %}
