@@ -13,7 +13,7 @@
   // Constants
 
   var baseApiUrl = 'http://localhost:8989';
-  var baseUrl = 'http://localhost:8080/player_viewer/index.html';
+  var baseUrl = 'http://localhost:8000/player_viewer/index.html';
 
   // Colors
   var realBackgroundColor = "#272b30";
@@ -259,6 +259,11 @@
      */
     updateActiveTeamElements : function() {
       this.colors.alive = this.activeTeam.teamColor;
+
+      this.element.playerLeague.innerHTML = this.activeTeam.league;
+      this.element.playerDivision.innerHTML = this.activeTeam.division;
+      this.element.playerTeam.innerHTML = this.activeTeam.teamName;
+
     },
 
     /**
@@ -301,9 +306,6 @@
       this.element.playerName.innerHTML = this.activePlayerData.name;
       this.element.playerRow.innerHTML = this.activePlayerData.row + 1;
       this.element.playerCol.innerHTML = this.activePlayerData.column + 1;
-      this.element.playerTeam.innerHTML = this.activePlayerData.team;
-      this.element.playerLeague.innerHTML = this.activePlayerData.league;
-      this.element.playerDivision.innerHTML = this.activePlayerData.division;
 
       // Handle assembling and adding player link
       var linkElem = document.createElement("a");
