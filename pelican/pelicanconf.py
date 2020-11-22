@@ -56,6 +56,9 @@ TEMPLATE_PAGES['simulator/binary_life.html'] = 'simulator/index.html'
 TEMPLATE_PAGES['simulator/binary_life.js']   = 'simulator/binary_life.js'
 TEMPLATE_PAGES['simulator/json-sans-eval.js']   = 'simulator/json-sans-eval.js'
 
+TEMPLATE_PAGES['player_viewer/player_viewer.html'] = 'player_viewer/index.html'
+TEMPLATE_PAGES['player_viewer/player_viewer.js']   = 'player_viewer/player_viewer.js'
+
 # How to add an app route:
 ### THEME_TEMPLATES_OVERRIDES.append('foobar')
 ### TEMPLATE_PAGES['foobar.html'] = 'foobar/index.html'
