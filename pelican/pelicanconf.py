@@ -28,6 +28,10 @@ PLUGINS = ['render_math']
 
 TEMPLATE_PAGES = {}
 TEMPLATE_PAGES['index.html'] = 'index.html'
+
+TEMPLATE_PAGES['landing.html'] = 'landing.html'
+TEMPLATE_PAGES['landing.js'] = 'landing.js'
+
 TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
 TEMPLATE_PAGES['league.html'] = 'league.html'
@@ -46,6 +50,8 @@ TEMPLATE_PAGES['siteMode_40plus.html'] = 'siteMode_40plus.html'
 
 TEMPLATE_PAGES['allGames.html'] = 'allGames.html'
 
+TEMPLATE_PAGES['miniplayer.html'] = 'miniplayer.html'
+
 # --------------------
 # Add custom routes
 
@@ -54,10 +60,13 @@ THEME_TEMPLATES_OVERRIDES = []
 THEME_TEMPLATES_OVERRIDES.append('simulator')
 TEMPLATE_PAGES['simulator/binary_life.html'] = 'simulator/index.html'
 TEMPLATE_PAGES['simulator/binary_life.js']   = 'simulator/binary_life.js'
-TEMPLATE_PAGES['simulator/json-sans-eval.js']   = 'simulator/json-sans-eval.js'
 
+THEME_TEMPLATES_OVERRIDES.append('player_viewer')
 TEMPLATE_PAGES['player_viewer/player_viewer.html'] = 'player_viewer/index.html'
 TEMPLATE_PAGES['player_viewer/player_viewer.js']   = 'player_viewer/player_viewer.js'
+
+# minilife app is used on multiple pages,
+# so it lives in golly-pelican-theme
 
 # How to add an app route:
 ### THEME_TEMPLATES_OVERRIDES.append('foobar')
