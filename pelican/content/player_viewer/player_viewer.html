@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+<div class="row">
+    <h1>Player Viewer</h1>
+</div>
+
+<p>&nbsp;</p>
+
+
+<div class="row" id="playerteamcontrols">
+
+
+  <div class="col-md-6">
+    <div class="card text-white bg-primary">
+      <div class="card-header">Player Viewer</div>
+      <div class="card-body">
+        <h4><span class="team-viewer-card-title" id="player-viewer-name">&nbsp;</span></h4>
+        <p class="card-text">
+          Row: <span class="team-viewer-card-text" id="player-viewer-row"></span>
+          <br />
+          Col: <span class="team-viewer-card-text" id="player-viewer-col"></span>
+          <br />
+          Team: <span class="team-viewer-card-text" id="player-viewer-team"></span>
+          <br />
+          Player Link: <span class="team-viewer-card-text" id="player-viewer-link"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <label for="exampleSelect1">Select a golly team:</label>
+      <select class="form-control" id="team-selector">
+        <!-- <option>1</option> -->
+      </select>
+    </div>
+    <div>
+      League: <span class="team-viewer-card-text" id="player-viewer-league"></span>
+      <br />
+      Division: <span class="team-viewer-card-text" id="player-viewer-division"></span>
+    </div>
+  </div>
+
+
+</div>
+
+
+<div class="row" id="canvascontainer">
+
+    <canvas id="canvas" width="900" height="450">
+    </canvas>
+
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="player_viewer.js"></script>
+{% endblock %}
