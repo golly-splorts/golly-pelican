@@ -232,60 +232,66 @@
               var elem = document.getElementById(game.id);
 
               // Team name labels
-              if (game.hasOwnProperty('team1Name')) {
-                console.log(elem);
-                //for (let e in elem.getElementsByClassName('team1name')) {
-                //  console.log(e);
-                //  e.innerHTML = game.team1Name;
-                //}
-              }
-              if (game.hasOwnProperty('team2Name')) {
-                for (let e in elem.getElementsByClassName('team2name')) {
-                  e.innerHTML = game.team2Name;
+              if (game.hasOwnProperty('team1Name') && game.hasOwnProperty('team2Name')) {
+                var t1tags = elem.getElementsByClassName('team1name');
+                var t2tags = elem.getElementsByClassName('team2name');
+                var t;
+                for (t = 0; t < t1tags.length; t++) {
+                  teamNameElem = t1tags[t];
+                  teamNameElem.innerHTML = game.team1Name;
+                }
+                for (t = 0; t < t2tags.length; t++) {
+                  teamNameElem = t2tags[t];
+                  teamNameElem.innerHTML = game.team2Name;
                 }
               }
 
               // Team colors
-              if (game.hasOwnProperty('team1Color')) {
-                for (let e in elem.getElementsByClassName('team1colors')) {
-                  console.log(e);
-                  //e.style.color = game.team1Color;
+              if (game.hasOwnProperty('team1Color') && game.hasOwnProperty('team2Color')) {
+                var t1tags = elem.getElementsByClassName('team1colors');
+                var t2tags = elem.getElementsByClassName('team2colors');
+                var t;
+                for (t = 0; t < t1tags.length; t++) {
+                  teamColorElem = t1tags[t];
+                  teamColorElem.style.color = game.team1Color;
+                }
+                for (t = 0; t < t2tags.length; t++) {
+                  teamColorElem = t2tags[t];
+                  teamColorElem.style.color = game.team2Color;
                 }
               }
-              if (game.hasOwnProperty('team2Color')) {
-                console.log(elem.getElementsByClassName('team2colors'));
-                //for (let e in elem.getElementsByClassName('team2colors')) {
-                //  //e.style.color = game.team2Color;
-                //}
+
+              // Assemble team W-L records
+              if (game.hasOwnProperty('team1WinLoss') && game.hasOwnProperty('team2WinLoss')) {
+                var wlstr1 = game.team1WinLoss[0] + "-" + game.team1WinLoss[1];
+                var wlstr2 = game.team2WinLoss[0] + "-" + game.team2WinLoss[1];
+                var t1tags = elem.getElementsByClassName('team1record');
+                var t2tags = elem.getElementsByClassName('team2record');
+                var t;
+                for (t = 0; t < t1tags.length; t++) {
+                  teamWinLossElem = t1tags[t];
+                  teamWinLossElem.innerHTML = wlstr1;
+                }
+                for (t = 0; t < t2tags.length; t++) {
+                  teamWinLossElem = t2tags[t];
+                  teamWinLossElem.innerHTML = wlstr2;
+                }
               }
 
-              // // Assemble team W-L records
-              // if (game.hasOwnProperty('team1WinLoss')) {
-              //   var wlstr = game.team1WinLoss[0] + "-" + game.team1WinLoss[0];
-              //   for (let e in cloneFragment.querySelector('.team1record')) {
-              //     e.innerHTML = wlstr;
-              //   }
-              // }
-              // if (game.hasOwnProperty('team2WinLoss')) {
-              //   var wlstr = game.team2WinLoss[0] + "-" + game.team2WinLoss[0];
-              //   for (let e in cloneFragment.querySelector('.team2record')) {
-              //     e.innerHTML = wlstr;
-              //   }
-              // }
-
-              // // Update map pattern name
-              // if (game.hasOwnProperty('map')) {
-              //   if (game.map.hasOwnProperty('mapName')) {
-              //     var mapName = game.map.mapName;
-              //     for (let e in cloneFragment.querySelector('.map-name')) {
-              //       e.innerHTML = mapName;
-              //     }
-              //   }
-              // }
+              // Update map pattern name
+              console.log(game);
+              if (game.hasOwnProperty('mapName')) {
+                var mapName = game.mapName;
+                var mapTags = elem.getElementsByClassName('map-name');
+                var mt;
+                for (mt = 0; mt < mapTags.length; mt++) {
+                  mapNameElem = mapTags[mt];
+                  mapNameElem.innerHTML = mapName;
+                }
+              }
 
               // // End: Populate game template with game info
               // // --------------------
-
 
             } // end if game in league
           } // end for each game
