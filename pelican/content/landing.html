@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- minilife html template -->
-<template>
-    {% include "minilife.html" %}
+<template id="minilife-template">
+  {% include "minilife.html" %}
 </template>
 
+<template id="fished-game-template">
+  {% include "finished_game.html" %}
+</template>
+
+<template id="fished-postgame-template">
+  {% include "finished_postgame.html" %}
+</template>
+
+<template id="inprogress-game-template">
+  {% include "inprogress_game.html" %}
+</template>
+
+<template id="inprogress-postgame-template">
+  {% include "inprogress_postgame.html" %}
+</template>
+
+<template id="scheduled-game-template">
+  {% include "scheduled_game.html" %}
+</template>
+
+<template id="scheduled-postgame-template">
+  {% include "scheduled_postgame.html" %}
+</template>
 
 <div class="container invisible" id="container-mode0009">
 
@@ -24,7 +46,7 @@
     <div class="vspace40">
     </div>
 
-    <div class="minilife" id="minilife">
+    <div class="minilife" id="minilife-player">
     </div>
 
 </div>
@@ -35,18 +57,18 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-          <h2>Season 1 Day 99: Current Games</h2>
+          <h2>Season 1 Day 99: Current Golly Games</h2>
       </div>
     </div>
 
 
-    <div class="row justify-content-lg-center season-container">
-      <div class="col-md-4 league-container league-1-container">
-        <h4 class="text-center league-container-header"><span id="league-1-name"></span></h4>
+    <div class="row justify-content-lg-center" id="season-leagues-container">
+      <div class="col-md-5 league-container" id="league-1-container">
+        <h4 class="text-center league-container-header" id="league-1-header"><span id="league-1-name"></span></h4>
       </div>
 
-      <div class="col-md-4 league-container league-2-container">
-        <h4 class="text-center league-container-header"><span id="league-2-name"></span></h4>
+      <div class="col-md-5 league-container" id="league-2-container">
+        <h4 class="text-center league-container-header" id="league-2-header"><span id="league-2-name"></span></h4>
       </div>
     </div>
 
@@ -58,27 +80,27 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season 1: League Division Series</h2>
-        <h4>The series will begin soon!</h4>
+        <h2>Season 1: Golly League Division Series</h2>
+        <h4>This best of 5 series will begin soon!</h4>
       </div>
     </div>
 
 
-    <div class="row justify-content-md-center waiting-container lds-waiting-container">
-      <div class="col-md-4 league-container league-1-container">
+    <div class="row justify-content-md-center waiting-container" id="lds-waiting-container">
+      <div class="col-md-5 league-container league-1-container">
       </div>
 
-      <div class="col-md-4 league-container league-2-container">
+      <div class="col-md-5 league-container league-2-container">
       </div>
     </div>
 
-    <div class="row text-center landing-header-below" id="lds-seed-table">
+    <div class="row text-center landing-header-below seed-header">
       <div class="col-md-12">
         <h2>Postseason Seeds</h2>
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table">
+    <div class="row justify-content-md-center seed-table" id="lds-seed-table">
     </div>
 
 </div>
@@ -90,26 +112,26 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season 1: League Championship Series</h2>
-        <h4>The series will begin soon!</h4>
+        <h2>Season 1: Golly League Championship Series</h2>
+        <h4>This best of 5 series will begin soon!</h4>
       </div>
     </div>
 
-    <div class="row justify-content-md-center waiting-container lcs-waiting-container">
-      <div class="col-md-4 league-container league-1-container">
+    <div class="row justify-content-md-center waiting-container" id="lcs-waiting-container">
+      <div class="col-md-5 league-container league-1-container">
       </div>
 
-      <div class="col-md-4 league-container league-2-container">
+      <div class="col-md-5 league-container league-2-container">
       </div>
     </div>
 
-    <div class="row text-center landing-header-below" id="lcs-seed-container">
+    <div class="row text-center landing-header-below seed-header">
       <div class="col-md-12">
         <h2>Postseason Seeds</h2>
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table">
+    <div class="row justify-content-md-center seed-table" id="lcs-seed-table">
     </div>
 
 
@@ -122,24 +144,25 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season 1: World Series</h2>
-        <h4>The series will begin soon!</h4>
+        <h2>Season 1: Golly World Series</h2>
+        <h4>This best of 7 series will begin soon!</h4>
       </div>
     </div>
 
-    <div class="row justify-content-md-center waiting-container ws-waiting-container">
+    <div class="row justify-content-md-center waiting-container" id="ws-waiting-container">
+      <div class="col-md-5 ws-league-like-container">
+      </div>
     </div>
 
 
-    <div class="row text-center landing-header-below" id="ws-seed-table">
+    <div class="row text-center landing-header-below seed-header">
       <div class="col-md-12">
         <h2>Postseason Seeds</h2>
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table">
+    <div class="row justify-content-md-center seed-table" id="ws-seed-table">
     </div>
-
 
 
 </div>
@@ -151,7 +174,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-          <h2>Season 1: League Division Series</h2>
+          <h2>Season 1: Golly League Division Series</h2>
           <h4>Best of 5</h4>
       </div>
     </div>
@@ -187,7 +210,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-          <h2>Season 1: League Championship Series</h2>
+          <h2>Season 1: Golly League Championship Series</h2>
           <h4>Best of 5</h4>
       </div>
     </div>
@@ -222,7 +245,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-          <h2>Season 1: World Series</h2>
+          <h2>Season 1: Golly World Series</h2>
           <h4>Best of 7</h4>
       </div>
     </div>
@@ -250,7 +273,7 @@
 
 
     <h2 class="text-center champion-header">Season 1 has ended.<h2>
-    <h3 class="text-center champion-header">Your Golly Champions are: The <span id="champion-team">San Diego Balloon Animals!</span></h3>
+    <h3 class="text-center champion-header">Your Golly Champions are: The <span id="champion-team">Team That Slipped The Commissioner A $20</span>!</h3>
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
@@ -290,14 +313,10 @@
     <div class="vspace40">
     </div>
 
-    <div class="minilife" id="minilife">
+    <div class="minilife" id="minilife-player">
     </div>
 
 </div>
-
-
-</div>
-
 
 
 {% endblock %}
