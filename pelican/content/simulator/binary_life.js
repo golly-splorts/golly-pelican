@@ -27,6 +27,9 @@
 
   var GOL = {
 
+    baseApiUrl : 'http://192.168.30.20:8989',
+    baseUIUrl : 'http://192.168.30.20:8001',
+
     s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
     s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
 
@@ -283,7 +286,7 @@
       if (this.gameId != null) {
 
         // Load a game from the /game API endpoint
-        let url = 'http://localhost:8989/game/' + this.gameId;
+        let url = this.baseApiUrl + '/game/' + this.gameId;
         fetch(url)
         .then(res => res.json())
         .then((gameApiResult) => {
