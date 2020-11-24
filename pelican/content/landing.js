@@ -2,10 +2,14 @@
 
   var LandingPage = {
 
-    // example: http://localhost:8989/endpoint
-    //          ^^^^^^^^^^^^^^^^^^^^^
-    //               baseUrl
+    // http://localhost:8989/endpoint
+    // ^^^^^^^^^^^^^^^^^^^^^
+    //      baseApiUrl
+    // http://localhost:8000/landing.html
+    // ^^^^^^^^^^^^^^^^^^^^^
+    //      baseUIUrl
     baseApiUrl : 'http://192.168.30.20:8989',
+    baseUIUrl : 'http://192.168.30.20:8001',
 
     landingDivIds : [
       'container-error',
@@ -85,6 +89,7 @@
      */
     mode0009 : function(mode) {
       var container = this.filterContainers('container-mode0009');
+      this.updateSeasonHeader();
       this.minilife(container);
     },
 
@@ -93,6 +98,8 @@
      */
     mode1019 : function(mode) {
       var container = this.filterContainers('container-mode1019');
+      this.updateSeasonHeader();
+      this.updateSeedTable(container);
       this.populateSeasonGames(mode, container);
     },
 
@@ -112,6 +119,8 @@
       } else {
         this.error();
       }
+      this.updateSeasonHeader();
+      this.updateSeedTable();
       //this.populatePostseasonWaiting(mode, container);
 
     },
@@ -132,6 +141,8 @@
       } else {
         this.error();
       }
+      this.updateSeasonHeader();
+      this.updateSeedTable();
       //this.populatePostseasonOngoing(mode, container);
 
     },
@@ -141,7 +152,60 @@
      */
     mode40plus : function(mode) {
       container = this.filterContainers('container-mode40plus');
+      this.updateSeasonHeader();
+      this.updateChampions();
       this.minilife(container);
+    },
+
+    /**
+     * Update the "Season X" or "Season X Day Y" header with information
+     * from the API /today endpoint.
+     */
+    updateSeasonHeader : function() {
+
+      // get current day/season info from API /today
+      let url = this.baseApiUrl + '/today';
+      fetch(url)
+      .then(res => res.json())
+      .then((apiResult) => {
+
+        var season = apiResult[0] + 1;
+        var day = apiResult[1] + 1;
+
+        // get element by id "landing-header-season" and change innerHTML to current season
+        var seasonHead = document.getElementById('landing-header-season');
+        if (seasonHead != null) {
+          seasonHead.innerHTML = season;
+        }
+
+        // get element by id "landing-header-day", if it exists, and change innerHTML to curr day
+        var dayHead = document.getElementById('landing-header-day');
+        if (dayHead != null) {
+          dayHead.innerHTML = day;
+        }
+
+      })
+      .catch(err => { 
+        console.log(err);
+        this.error(-1); 
+      });
+    },
+
+    /**
+     * Use the seed table template to add a postseason seed table to the 
+     * container elem, and populate it with information from the API /seed endpoint.
+     */
+    updateSeedTable : function(elem) {
+      var seedtable = document.getElementsByClassName("seed-table");
+      var template = document.getElementById('seed-table-template');
+      var clone = template.content.cloneNode(true);
+    },
+
+    /**
+     * Populate the champion information on the season-is-over page
+     * using information from the API /champion endpoint.
+     */
+    updateChampions : function() {
     },
 
     /**
@@ -158,11 +222,11 @@
       for (let j in jsfiles) {
         var script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', this.baseUrl + '/theme/js/' + jsfiles[j]);
+        script.setAttribute('src', this.baseUIUrl + '/theme/js/' + jsfiles[j]);
         bod.append(script);
         if (j==1) {
           script.onload = () => {
-            GOL.init();
+            MiniGOL.init();
           }
         }
       }
@@ -279,7 +343,6 @@
               }
 
               // Update map pattern name
-              console.log(game);
               if (game.hasOwnProperty('mapName')) {
                 var mapName = game.mapName;
                 var mapTags = elem.getElementsByClassName('map-name');
@@ -287,6 +350,17 @@
                 for (mt = 0; mt < mapTags.length; mt++) {
                   mapNameElem = mapTags[mt];
                   mapNameElem.innerHTML = mapName;
+                }
+              }
+
+              // Update simulate game button link
+              if (game.hasOwnProperty('id')) {
+                var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.id;
+                var btnTags = elem.getElementsByClassName('simulate');
+                var bt;
+                for (bt = 0; bt < btnTags.length; bt++) {
+                  btnNameElem = btnTags[bt];
+                  btnNameElem.setAttribute('href', btnUrl);
                 }
               }
 
