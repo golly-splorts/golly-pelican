@@ -9,19 +9,20 @@
   // The logic to parse what input parameters the user provided
   // lives in loadConfig()
 
+  var baseApiUrl = 'http://192.168.30.20:8989';
+  var baseUIUrl  = 'http://192.168.30.20:8001';
 
-  // Constants
-
-  var baseApiUrl = 'http://localhost:8989';
-  var baseUrl = 'http://localhost:8000/player_viewer/index.html';
-
-  // Colors
   var realBackgroundColor = "#272b30";
   var gridStrokeColor     = "#666666";
   var mapZoneStrokeColor  = "#dddddd";
   var grays = ["#3a3a3a", "#404040"];
 
   var GOL = {
+
+    baseUIUrl : baseUIUrl,
+    baseApiUrl : baseApiUrl,
+    basePlayerViewerUrl : baseUIUrl + '/player_viewer/player_viewer.html',
+
 
     columns : 120,
     rows : 100,
@@ -64,24 +65,6 @@
         this.readConfig();
         this.keepDOMElements();
         this.loadState();
-        console.log(this.activeCol);
-        console.log(this.activeRow);
-
-        ////// // Load team data and update elements
-        ////// this.loadTeamsData();
-
-        ////// // Set the state of the player viewer from config vars
-        ////// this.setState();
-
-        ////// // Initialize the canvas GUI
-        ////// this.canvas.init();
-
-        ////// // Register events that happen, after the canvas init
-        ////// this.registerEvents();
-
-        ////// // Hold on to your butts
-        ////// this.prepare();
-
       } catch (e) {
         console.log(e);
       }
@@ -173,7 +156,7 @@
     loadTeamsData : function() {
 
       // Load team data
-      let url = 'http://localhost:8989/teams';
+      let url = this.baseApiUrl + '/teams';
       fetch(url)
       .then(res => res.json())
       .then((teamsApiResult) => {
@@ -278,7 +261,7 @@
       team = this.activeTeamName;
       if ((row != null) && (col != null)) {
         // load json for player at this row and column
-        let url = 'http://localhost:8989/roster/' + this.activeTeamAbbr + '/' + row + '/' + col;
+        let url = this.baseApiUrl + '/roster/' + this.activeTeamAbbr + '/' + row + '/' + col;
         fetch(url)
         .then(res => res.json())
         .then((playerApiResult) => {
@@ -309,7 +292,7 @@
 
       // Handle assembling and adding player link
       var linkElem = document.createElement("a");
-      var linkHref = baseUrl + '?team=' + this.activeTeamAbbr + '&row=' + this.activePlayerData.row + '&col=' + this.activePlayerData.column;
+      var linkHref = basePlayerViewerUrl + '?team=' + this.activeTeamAbbr + '&row=' + this.activePlayerData.row + '&col=' + this.activePlayerData.column;
       linkElem.setAttribute("href", linkHref);
       linkElem.classList.add("player-viewer-link");
       linkElem.innerHTML = "permalink";
