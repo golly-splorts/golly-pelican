@@ -5,11 +5,11 @@
   {% include "minilife.html" %}
 </template>
 
-<template id="fished-game-template">
+<template id="finished-game-template">
   {% include "finished_game.html" %}
 </template>
 
-<template id="fished-postgame-template">
+<template id="finished-postgame-template">
   {% include "finished_postgame.html" %}
 </template>
 
@@ -92,16 +92,16 @@
 
 
     <div class="row justify-content-md-center waiting-container" id="lds-waiting-container">
-      <div class="col-md-5 league-container league-1-container">
+      <div class="col-md-5 league-container" id="league-1-container">
         <h4 class="text-center league-container-header" id="league-1-header"><span id="league-1-name"></span></h4>
       </div>
 
-      <div class="col-md-5 league-container league-2-container">
+      <div class="col-md-5 league-container" id="league-2-container">
         <h4 class="text-center league-container-header" id="league-2-header"><span id="league-2-name"></span></h4>
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table waiting-seed-table" id="lds-waiting-seed-table">
+    <div class="seed-table waiting-seed-table" id="lds-waiting-seed-table">
     </div>
 
 </div>
@@ -119,16 +119,16 @@
     </div>
 
     <div class="row justify-content-md-center waiting-container" id="lcs-waiting-container">
-      <div class="col-md-5 league-container league-1-container">
+      <div class="col-md-5 league-container" id="league-1-container">
         <h4 class="text-center league-container-header" id="league-1-header"><span id="league-1-name"></span></h4>
       </div>
 
-      <div class="col-md-5 league-container league-2-container">
+      <div class="col-md-5 league-container" id="league-2-container">
         <h4 class="text-center league-container-header" id="league-2-header"><span id="league-2-name"></span></h4>
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table waiting-seed-table" id="lcs-waiting-seed-table">
+    <div class="seed-table waiting-seed-table" id="lcs-waiting-seed-table">
     </div>
 
 </div>
@@ -150,7 +150,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
+    <div class="seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
     </div>
 
 </div>
@@ -178,7 +178,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table ongoing-seed-table" id="lds-ongoing-seed-table">
+    <div class="seed-table ongoing-seed-table" id="lds-ongoing-seed-table">
     </div>
 
 </div>
@@ -205,7 +205,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table ongoing-seed-table" id="lcs-ongoing-seed-table">
+    <div class="seed-table ongoing-seed-table" id="lcs-ongoing-seed-table">
     </div>
 
 </div>
@@ -226,7 +226,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-md-center seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
+    <div class="seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
     </div>
 
 </div>
@@ -247,7 +247,7 @@
   <div class="vspace40">
   </div>
 
-  <div class="minilife" id="minilife">
+    <div class="minilife" id="minilife-player">
   </div>
 
 
