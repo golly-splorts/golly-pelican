@@ -483,7 +483,6 @@
           }
           var leagues = Array.from(leaguesSet);
           leagues.sort();
-          console.log(leagues);
 
           if ((mode==21) || (mode==22)) {
 
@@ -738,25 +737,24 @@
     populatePostseasonOngoing : function(mode, container) {
       // get the league names from the games
       let url = this.baseApiUrl + '/currentGames';
+
       fetch(url)
       .then(res => res.json())
       .then((currGamesApiResult) => {
-
-        console.log(currGamesApiResult);
-
-        // Assemble a sorted list of leagues
-        var leaguesSet = new Set();
-        for (let g in currGamesApiResult) {
-          leaguesSet.add(currGamesApiResult[g].league);
-        }
-        var leagues = Array.from(leaguesSet);
-        leagues.sort();
 
         // Load the seeds from the API
         let seedsUrl = this.baseApiUrl + '/seeds';
         fetch(seedsUrl)
         .then(res => res.json())
         .then((seedsApiResult) => {
+
+          // Assemble a sorted list of leagues
+          var leaguesSet = new Set();
+          for (let league in seedsApiResult) {
+            leaguesSet.add(league);
+          }
+          var leagues = Array.from(leaguesSet);
+          leagues.sort();
 
           if ((mode==31) || (mode==32)) {
 
@@ -786,7 +784,7 @@
                 if (game.league==leagues[i]) {
 
                   // Create a clone of the template
-                  var postTemplate = document.getElementById('ongoing-postgame-template');
+                  var postTemplate = document.getElementById('inprogress-postgame-template');
                   var cloneFragment = postTemplate.content.cloneNode(true);
 
                   // Add the game id to the template game id
@@ -891,8 +889,6 @@
           } else if(mode==33) {
             // begin if mode 33
 
-            console.log(currGamesApiResult);
-
             // World Series has no league, single-column
             var leagueContainerElem = document.getElementById('ws-league-ongoing-container');
             var g;
@@ -900,7 +896,7 @@
               var game = currGamesApiResult[g];
 
               // Create a clone of the template
-              var postTemplate = document.getElementById('ongoing-postgame-template');
+              var postTemplate = document.getElementById('inprogress-postgame-template');
               var cloneFragment = postTemplate.content.cloneNode(true);
 
               // Add the game id to the template game id
@@ -939,10 +935,9 @@
                 t2tags = elem.getElementsByClassName('team2seed');
                 var i;
                 for (i = 0; i < leagues.length; i++) {
-                  leagueSeedResults = seedsApiResult[leagues[i]];
+                  var leagueSeedResults = seedsApiResult[leagues[i]];
                   t1ix = leagueSeedResults.indexOf(game.team1Name);
                   if (t1ix > 0) {
-                    console.log("team 1 league " + leagues[i] + " has seed " + t1ix);
                     t1seed = t1ix;
                   }
                   t2ix = leagueSeedResults.indexOf(game.team2Name);
@@ -967,7 +962,6 @@
               // Game description
               if (game.hasOwnProperty('description')) {
                 descTags = elem.getElementsByClassName('postseason-game-description');
-                console.log(descTags);
                 var j;
                 for (j = 0; j < descTags.length; j++) {
                   descElem = descTags[j];
@@ -1000,7 +994,18 @@
                 }
               }
 
-            } // end loop creating divs for each game in league
+              // Update simulate game button link
+              if (game.hasOwnProperty('id')) {
+                var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.id;
+                var btnTags = elem.getElementsByClassName('simulate');
+                var bt;
+                for (bt = 0; bt < btnTags.length; bt++) {
+                  btnNameElem = btnTags[bt];
+                  btnNameElem.setAttribute('href', btnUrl);
+                }
+              }
+
+            } // end loop creating divs for each game
 
           } // end if mode 33
 
