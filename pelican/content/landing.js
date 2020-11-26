@@ -820,17 +820,35 @@
                       teamNameElem.innerHTML = game.team2Name;
                     }
 
-                    // Seed number
-                    var leagueSeedResults = seedsApiResult[leagues[i]];
+                    //// Seed number
+                    //var leagueSeedResults = seedsApiResult[leagues[i]];
+                    //t1tags = elem.getElementsByClassName('team1seed');
+                    //t2tags = elem.getElementsByClassName('team2seed');
+                    //t1seed = leagueSeedResults.indexOf(game.team1Name) + 1;
+                    //t2seed = leagueSeedResults.indexOf(game.team2Name) + 1;
+                    //for (t = 0; t < t1tags.length; t++) {
+                    //  t1tags[t].innerHTML = "(" + t1seed + ")";
+                    //}
+                    //for (t = 0; t < t2tags.length; t++) {
+                    //  t2tags[t].innerHTML = "(" + t2seed + ")";
+                    //}
+
+                    // Series W-L
+                    var t1tags, t2tags;
                     t1tags = elem.getElementsByClassName('team1seed');
                     t2tags = elem.getElementsByClassName('team2seed');
-                    t1seed = leagueSeedResults.indexOf(game.team1Name) + 1;
-                    t2seed = leagueSeedResults.indexOf(game.team2Name) + 1;
+
+                    var wl, t1wl, t2wl;
+                    wl = game['team1SeriesWinLoss'];
+                    t1wl = wl[0] + '-' + wl[1];
+                    wl = game['team2SeriesWinLoss'];
+                    t2wl = wl[0] + '-' + wl[1];
+
                     for (t = 0; t < t1tags.length; t++) {
-                      t1tags[t].innerHTML = "(" + t1seed + ")";
+                      t1tags[t].innerHTML = "(" + t1wl + ")";
                     }
                     for (t = 0; t < t2tags.length; t++) {
-                      t2tags[t].innerHTML = "(" + t2seed + ")";
+                      t2tags[t].innerHTML = "(" + t2wl + ")";
                     }
 
                   }
@@ -930,33 +948,52 @@
                   teamNameElem.innerHTML = game.team2Name;
                 }
 
-                // Seed number
+                //// Seed number
+                //t1tags = elem.getElementsByClassName('team1seed');
+                //t2tags = elem.getElementsByClassName('team2seed');
+                //var i;
+                //for (i = 0; i < leagues.length; i++) {
+                //  var leagueSeedResults = seedsApiResult[leagues[i]];
+                //  t1ix = leagueSeedResults.indexOf(game.team1Name);
+                //  if (t1ix > 0) {
+                //    t1seed = t1ix;
+                //  }
+                //  t2ix = leagueSeedResults.indexOf(game.team2Name);
+                //  if (t2ix > 0) {
+                //    t2seed = t2ix;
+                //  }
+                //}
+                //if (t1seed != 0) {
+                //  t1seed += 1;
+                //  for (t = 0; t < t1tags.length; t++) {
+                //    t1tags[t].innerHTML = "(" + t1seed + ")";
+                //  }
+                //}
+                //if (t2seed != 0) {
+                //  t2seed += 1;
+                //  for (t = 0; t < t2tags.length; t++) {
+                //    t2tags[t].innerHTML = "(" + t2seed + ")";
+                //  }
+                //}
+
+                // Series W-L
+                var t1tags, t2tags;
                 t1tags = elem.getElementsByClassName('team1seed');
                 t2tags = elem.getElementsByClassName('team2seed');
-                var i;
-                for (i = 0; i < leagues.length; i++) {
-                  var leagueSeedResults = seedsApiResult[leagues[i]];
-                  t1ix = leagueSeedResults.indexOf(game.team1Name);
-                  if (t1ix > 0) {
-                    t1seed = t1ix;
-                  }
-                  t2ix = leagueSeedResults.indexOf(game.team2Name);
-                  if (t2ix > 0) {
-                    t2seed = t2ix;
-                  }
+
+                var wl, t1wl, t2wl;
+                wl = game['team1SeriesWinLoss'];
+                t1wl = wl[0] + '-' + wl[1];
+                wl = game['team2SeriesWinLoss'];
+                t2wl = wl[0] + '-' + wl[1];
+
+                for (t = 0; t < t1tags.length; t++) {
+                  t1tags[t].innerHTML = "(" + t1wl + ")";
                 }
-                if (t1seed != 0) {
-                  t1seed += 1;
-                  for (t = 0; t < t1tags.length; t++) {
-                    t1tags[t].innerHTML = "(" + t1seed + ")";
-                  }
+                for (t = 0; t < t2tags.length; t++) {
+                  t2tags[t].innerHTML = "(" + t2wl + ")";
                 }
-                if (t2seed != 0) {
-                  t2seed += 1;
-                  for (t = 0; t < t2tags.length; t++) {
-                    t2tags[t].innerHTML = "(" + t2seed + ")";
-                  }
-                }
+
               }
 
               // Game description
