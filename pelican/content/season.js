@@ -69,7 +69,7 @@
         seasonDaysContainer.classList.remove('invisible');
     
         this.setDayButtons(seasonApiResult);
-        this.populateSeasonDays(seasonApiResult);
+        this.populateSeasonDays(season, seasonApiResult);
     
       })
       .catch(err => { throw err });
@@ -165,50 +165,88 @@
       }
     },
 
-    populateSeasonDays : function(seasonApiResult) {
+    populateSeasonDays : function(season, seasonApiResult) {
 
-      var seasonDaysContainer, seasonDayContainerTemplate, finishedGameTemplate;
+      var seasonDaysContainer, seasonDayContainerTemplate;
       var i, leagueSet, day0;
 
       seasonDaysContainer = document.getElementById('season-days-container');
       seasonDayContainerTemplate = document.getElementById('season-day-container-template');
-      finishedGameTemplate = document.getElementById('finished-game-template');
 
-      // // Assemble a sorted list of leagues
-      // leaguesSet = new Set();
-      // day0 = seasonApiResult[0];
-      // for (i = 0; i < day0.length; i++) {
-      //   leaguesSet.add(day0[i].league);
-      // }
-      // var leagues = Array.from(leaguesSet);
-      // leagues.sort();
+      seasonDaysContainer.classList.remove('invisible');
+
+      // Assemble a sorted list of leagues
+      leaguesSet = new Set();
+      day0 = seasonApiResult[0];
+      for (i = 0; i < day0.length; i++) {
+        leaguesSet.add(day0[i].league);
+      }
+      var leagues = Array.from(leaguesSet);
+      leagues.sort();
+
+      // Loop over each day of the season, and add a season day container
+      var iDay;
+      for (iDay = 0; iDay < seasonApiResult.length; iDay++) {
+        var todaysGames = seasonApiResult[iDay];
+
+        // Create copy of season day template
+        var dayCloneFragment = seasonDayContainerTemplate.content.cloneNode(true);
+
+        // Add season-X-day-Y id attribute
+        var todayId = "season-" + season + "-day-" + (iDay + 1);
+        dayCloneFragment.querySelector(".season-day-container").setAttribute("id", todayId);
+
+        // Add to season days container
+        seasonDaysContainer.appendChild(dayCloneFragment);
+
+        // Get that div
+        var todayDiv = document.getElementById(todayId);
+
+        // Set the anchor
+        var aElems = todayDiv.getElementsByClassName('season-day-anchor');
+        var kk;
+        for (kk = 0; kk < aElems.length; kk++) {
+          var aElem = aElems[kk];
+          aElem.setAttribute('name', (iDay + 1));
+        }
+
+        // Update the day
+        var dayElems = todayDiv.getElementsByClassName('season-day');
+        var jj;
+        for (jj = 0; jj < dayElems.length; jj++) {
+          var dayElem = dayElems[jj];
+          dayElem.innerHTML = (iDay + 1);
+        }
+
+        // Loop over each league and get the league divs
+        var iL;
+        for (iL = 0; iL < leagues.length; iL++) {
+          var iC;
+
+          var leagueName = leagues[iL];
+
+          // Set this league's name header in today's games div
+          var leagueNameClass = "league-" + (iL + 1) + "-name";
+          var leagueNameElems = todayDiv.getElementsByClassName(leagueNameClass);
+          for (iC = 0; iC < leagueNameElems.length; iC++) {
+            var leagueNameElem = leagueNameElems[iC];
+            leagueNameElem.innerHTML = leagueName;
+          }
+
+          // Populate the league containers for this league
+          var leagueContainerClass = 'league-' + (iL + 1) + '-container';
+          var leagueContainers = todayDiv.getElementsByClassName(leagueContainerClass);
+          for (iC = 0; iC < leagueContainers.length; iC++) {
+            var leagueContainerElem = leagueContainers[iC];
+            this.fillLeagueContainer(leagueContainerElem, leagueName, todaysGames);
+          }
+        } // end loop over each league
+      }
 
       // // loop over each day
       // // loop over each league
       // // loop over each game matching that league
 
-
-
-
-
-
-
-
-
-      // var iday, day, cloneFragment;
-      // for (iday = seasonApiResult.length-1; iday >= 0; iday--) {
-
-      //   day = seasonApiResult[iday];
-      //   dayCloneFragment = seasonDayContainerTemplate.content.cloneNode(true);
-
-      //   // Add a season-X-day-Y id to the template day container
-      //   if (day[0].hasOwnProperty('day') && day[0].hasOwnProperty('season')) {
-      //     dayIdStr = 'season-' + day[0].season + '-day-' + day[0].day;
-      //     dayCloneFragment.querySelector(".card").setAttribute("id", dayIdStr);
-      //   }
-
-      //   seasonDaysContainer.appendChild(dayCloneFragment);
-      // }
 
 
 
@@ -226,6 +264,98 @@
       //   seasonGamesContainer.appendChild(cloneFragment);
 
 
+
+    },
+
+    /**
+     * Populate the league containers for the given league with games from the /season API endpoint.
+     */
+    fillLeagueContainer : function(leagueContainerElem, leagueName, todaysGames) {
+      var finishedGameTemplate = document.getElementById('finished-game-template');
+
+      var iG;
+      for (iG = 0; iG < todaysGames.length; iG++) {
+        var game = todaysGames[iG];
+        if (game.league == leagueName) {
+          // Create a copy of the finished game template and attach it
+          var gameCloneFragment = finishedGameTemplate.content.cloneNode(true);
+          var gameId = game.id;
+          gameCloneFragment.querySelector(".card").setAttribute("id", gameId);
+          leagueContainerElem.appendChild(gameCloneFragment);
+
+          // Now populate this game card div with details of this game
+          var elem = document.getElementById(gameId);
+
+          // Team name labels
+          if (game.hasOwnProperty('team1Name') && game.hasOwnProperty('team2Name')) {
+            var t1tags = elem.getElementsByClassName('team1name');
+            var t2tags = elem.getElementsByClassName('team2name');
+            var t;
+            for (t = 0; t < t1tags.length; t++) {
+              teamNameElem = t1tags[t];
+              teamNameElem.innerHTML = game.team1Name;
+            }
+            for (t = 0; t < t2tags.length; t++) {
+              teamNameElem = t2tags[t];
+              teamNameElem.innerHTML = game.team2Name;
+            }
+          }
+
+          // Team colors
+          if (game.hasOwnProperty('team1Color') && game.hasOwnProperty('team2Color')) {
+            var t1tags = elem.getElementsByClassName('team1color');
+            var t2tags = elem.getElementsByClassName('team2color');
+            var t;
+            for (t = 0; t < t1tags.length; t++) {
+              teamColorElem = t1tags[t];
+              teamColorElem.style.color = game.team1Color;
+            }
+            for (t = 0; t < t2tags.length; t++) {
+              teamColorElem = t2tags[t];
+              teamColorElem.style.color = game.team2Color;
+            }
+          }
+
+          // Assemble team W-L records
+          if (game.hasOwnProperty('team1WinLoss') && game.hasOwnProperty('team2WinLoss')) {
+            var wlstr1 = "(" + game.team1WinLoss[0] + "-" + game.team1WinLoss[1] + ")";
+            var wlstr2 = "(" + game.team2WinLoss[0] + "-" + game.team2WinLoss[1] + ")";
+            var t1tags = elem.getElementsByClassName('team1record');
+            var t2tags = elem.getElementsByClassName('team2record');
+            var t;
+            for (t = 0; t < t1tags.length; t++) {
+              teamWinLossElem = t1tags[t];
+              teamWinLossElem.innerHTML = wlstr1;
+            }
+            for (t = 0; t < t2tags.length; t++) {
+              teamWinLossElem = t2tags[t];
+              teamWinLossElem.innerHTML = wlstr2;
+            }
+          }
+
+          // Update map pattern name
+          if (game.hasOwnProperty('mapName')) {
+            var mapName = game.mapName;
+            var mapTags = elem.getElementsByClassName('map-name');
+            var mt;
+            for (mt = 0; mt < mapTags.length; mt++) {
+              mapNameElem = mapTags[mt];
+              mapNameElem.innerHTML = mapName;
+            }
+          }
+
+          // Update simulate game button link
+          if (game.hasOwnProperty('id')) {
+            var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.id;
+            var btnTags = elem.getElementsByClassName('simulate');
+            var bt;
+            for (bt = 0; bt < btnTags.length; bt++) {
+              btnNameElem = btnTags[bt];
+              btnNameElem.setAttribute('href', btnUrl);
+            }
+          }
+        } // End if game in correct league
+      } // End new divs for each game
 
     },
 

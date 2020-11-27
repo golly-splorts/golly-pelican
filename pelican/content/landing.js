@@ -484,7 +484,6 @@
       });
     },
 
-
     /**
      * Populate the list of upcoming postseason games.
      */
