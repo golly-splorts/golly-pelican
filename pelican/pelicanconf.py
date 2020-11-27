@@ -33,7 +33,11 @@ TEMPLATE_PAGES['landing.html'] = 'landing.html'
 TEMPLATE_PAGES['landing.js'] = 'landing.js'
 
 TEMPLATE_PAGES['season.html'] = 'season.html'
+TEMPLATE_PAGES['season.js'] = 'season.js'
+
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
+#TEMPLATE_PAGES['postseason.js'] = 'postseason.js'
+
 TEMPLATE_PAGES['league.html'] = 'league.html'
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
 TEMPLATE_PAGES['jersey.html'] = 'jersey.html'
