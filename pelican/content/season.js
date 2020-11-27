@@ -186,7 +186,8 @@
 
       // Loop over each day of the season, and add a season day container
       var iDay;
-      for (iDay = 0; iDay < seasonApiResult.length; iDay++) {
+      //for (iDay = 0; iDay < seasonApiResult.length; iDay++) {
+      for (iDay = seasonApiResult.length - 1; iDay >= 0; iDay--) {
         var todaysGames = seasonApiResult[iDay];
 
         // Create copy of season day template
@@ -241,30 +242,7 @@
             this.fillLeagueContainer(leagueContainerElem, leagueName, todaysGames);
           }
         } // end loop over each league
-      }
-
-      // // loop over each day
-      // // loop over each league
-      // // loop over each game matching that league
-
-
-
-
-
-
-
-      //   cloneFragment = finishedGameTemplate.content.cloneNode(true);
-
-      //   // Add the game id to the template game id
-      //   if (game.hasOwnProperty('id')) {
-      //     cloneFragment.querySelector(".card").setAttribute("id", game.id);
-      //   }
-
-      //   // Add the template game div to the page
-      //   seasonGamesContainer.appendChild(cloneFragment);
-
-
-
+      } // end reverse days loop
     },
 
     /**
@@ -330,6 +308,31 @@
             for (t = 0; t < t2tags.length; t++) {
               teamWinLossElem = t2tags[t];
               teamWinLossElem.innerHTML = wlstr2;
+            }
+          }
+
+          // Update team scores
+          if (game.hasOwnProperty('team1Score') && game.hasOwnProperty('team2Score')) {
+            var t1s = game.team1Score;
+            var t2s = game.team2Score;
+            var iE;
+            var t1ScoreElems = elem.getElementsByClassName('livecells1');
+            for (iE = 0; iE < t1ScoreElems.length; iE++) {
+              t1ScoreElems[iE].innerHTML = t1s;
+            }
+            var t2ScoreElems = elem.getElementsByClassName('livecells2');
+            for (iE = 0; iE < t2ScoreElems.length; iE++) {
+              t2ScoreElems[iE].innerHTML = t2s;
+            }
+          }
+
+          // Update number of generations
+          if (game.hasOwnProperty('generations')) {
+            var genTags = elem.getElementsByClassName('generations-number');
+            var gt;
+            for (gt = 0; gt < genTags.length; gt++) {
+              genNumberElem = genTags[gt];
+              genNumberElem.innerHTML = game.generations;
             }
           }
 

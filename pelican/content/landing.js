@@ -335,14 +335,14 @@
     /**
      * Utility method to populate a league div with results from the /currentGames API
      */
-    fillLeagueContainer : function(leagueContainerElem, leagueNameElem, leagueName, currGamesApiResults) {
+    fillLeagueContainer : function(leagueContainerElem, leagueNameElem, leagueName, currGamesApiResult) {
 
-      leagueNameElem.innerHTML = leagues[i];
+      leagueNameElem.innerHTML = leagueName;
 
       // Create divs for all of the games in this league
       for (let g in currGamesApiResult) {
         var game = currGamesApiResult[g];
-        if (game.league==leagues[i]) {
+        if (game.league==leagueName) {
 
           // Create a clone of the template
           var gametemplate = document.getElementById('inprogress-game-template');
@@ -361,7 +361,7 @@
       // Now populate each div
       for (let g in currGamesApiResult) {
         var game = currGamesApiResult[g];
-        if (game.league==leagues[i]) {
+        if (game.league==leagueName) {
 
           var elem = document.getElementById(game.id);
 
@@ -472,8 +472,9 @@
           // This is the container we will add each game to
           var leagueContainerElem = leagueContainers[i];
           var leagueNameElem = leagueNames[i];
+          var leagueName = leagues[i];
 
-          this.fillLeagueContainer(leagueContainerElem, leagueNameElem, leagueName, currentGamesApiResults);
+          this.fillLeagueContainer(leagueContainerElem, leagueNameElem, leagueName, currGamesApiResult);
 
         } // end for each league
 
