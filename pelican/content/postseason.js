@@ -44,23 +44,6 @@
     },
 
     /**
-     * Update the "Season X" or "Season X Day Y" header with information
-     * from the API /today endpoint.
-     */
-    updatePostseasonHeader : function(season0) {
-
-      var seasonHeaderContainer = document.getElementById('season-header-container');
-      seasonHeaderContainer.classList.remove('invisible');
-
-      // get element by id "landing-header-season" and change innerHTML to current season
-      var seasonHead = document.getElementById('season-header-season-number');
-      if (seasonHead != null) {
-        seasonHead.innerHTML = season0 + 1;
-      }
-
-    },
-
-    /**
      * Get postseason games data and do stuff with it.
      */
     processPostseasonData : function(season0, currentSeason, currentDay) {
@@ -82,10 +65,10 @@
             if (lower=='lds') {
               this.fillLdsSeriesContainer(postseasonApiResult[series]);
             } else if (lower=='lcs') {
-              console.log('here');
               this.fillLcsSeriesContainer(postseasonApiResult[series]);
             } else if (lower=='ws') {
-              //this.fillWsSeriesContainer(postseasonApiResult[series]);
+              this.fillWsSeriesContainer(postseasonApiResult[series]);
+              this.fillChampionsContainer(postseasonApiResult[series]);
             }
 
           }
@@ -95,31 +78,6 @@
       })
       .catch(err => { throw err });
 
-    },
-
-    /**
-     * For the given postseason series,
-     * make the corresponding TOC link visible
-     */
-    addTocLink : function(lower) {
-      var idLabel = lower + '-postseason-toc-text';
-      var tocElem = document.getElementById(idLabel);
-      tocElem.classList.remove('invisible');
-    },
-
-    /**
-     * Get league names from the given postseason series miniseason.
-     */
-    getLeagueNames : function(miniseason) {
-      var i, leaguesSet, day0;
-      leaguesSet = new Set();
-      day0 = miniseason[0];
-      for (i = 0; i < day0.length; i++ ) {
-        leaguesSet.add(day0[i].league);
-      }
-      var leagues = Array.from(leaguesSet);
-      leagues.sort();
-      this.leagues = leagues;
     },
 
     /**
@@ -185,7 +143,7 @@
     },
 
     /**
-     * Fill the LCS game containers for each league
+     * Populate an LCS series container with games.
      */
     fillLcsSeriesContainer : function(miniseason) {
 
@@ -236,18 +194,62 @@
           if (minigame.league == league) {
             this.populateGamesHelper(minigame, seriesContainerElem);
           }
-        }
-      }
+        } // end for each game
+      } // end for each day
     },
 
     /**
      * Fill the WS game container (only one)
      */
-    fillWsSeriesContainer : function(postseasonApiResult) {
-
-      var wsContainer = document.getElementById('postseason-ws-container');
+    fillWsSeriesContainer : function(miniseason) {
+      var container = document.getElementById('postseason-ws-container');
       var leagueContainer = document.getElementById('ws-league-container');
+      this.populateWsGames(miniseason, leagueContainer);
+      container.classList.remove('invisible');
+    },
 
+    /**
+     * Populate a WS series container with games.
+     */
+    populateWsGames : function(miniseason, seriesContainerElem) {
+      console.log(miniseason);
+      var iDay;
+      for (iDay = 0; iDay < miniseason.length; iDay++) {
+        var miniday = miniseason[iDay];
+        var iGame;
+        for (iGame = 0; iGame < miniday.length; iGame++) {
+          var minigame = miniday[iGame];
+          this.populateGamesHelper(minigame, seriesContainerElem);
+        } // end for each game
+      } // end for each day
+    },
+
+    /**
+     * Populate a champion title with the champion, if there is one.
+     */
+    fillChampionsContainer : function(miniseason) {
+      var container = document.getElementById('postseason-champion-container');
+      var lastday = miniseason[miniseason.length-1];
+      var lastgame = lastday[0];
+      var t1w = lastgame['team1SeriesWinLoss'][0];
+      var t2w = lastgame['team2SeriesWinLoss'][0];
+      var t1s = lastgame['team1Score'][0];
+      var t2s = lastgame['team2Score'][0];
+      console.log('---------');
+      console.log(t1w);
+      console.log(t2w);
+      if ((t1w==3) || (t2w==3)) {
+        var championTeamElem = document.getElementById('champion-team');
+        if ((t1w==3) && (t1s > t2s)) {
+          container.classList.remove('invisible');
+          championTeamElem.innerHTML = lastgame['team1Name'];
+          championTeamElem.style.color = lastgame['team1Color'];
+        } else if ((t2w==3) && (t2s > t1s)) {
+          container.classList.remove('invisible');
+          championTeamElem.innerHTML = lastgame['team2Name'];
+          championTeamElem.style.color = lastgame['team2Color'];
+        }
+      }
     },
 
     populateGamesHelper : function(minigame, seriesContainerElem) {
@@ -372,6 +374,52 @@
 
     },
 
+    /**
+     * Update the "Season X" or "Season X Day Y" header with information
+     * from the API /today endpoint.
+     */
+    updatePostseasonHeader : function(season0) {
+
+      var seasonHeaderContainer = document.getElementById('season-header-container');
+
+      // get element by id "landing-header-season" and change innerHTML to current season
+      var seasonHead = document.getElementById('season-header-season-number');
+      if (seasonHead != null) {
+        seasonHead.innerHTML = season0 + 1;
+      }
+
+      seasonHeaderContainer.classList.remove('invisible');
+
+    },
+
+    /**
+     * For the given postseason series,
+     * make the corresponding TOC link visible
+     */
+    addTocLink : function(lower) {
+      var idLabel = lower + '-postseason-toc-text';
+      var tocElem = document.getElementById(idLabel);
+      tocElem.classList.remove('invisible');
+    },
+
+    /**
+     * Get league names from the given postseason series miniseason.
+     */
+    getLeagueNames : function(miniseason) {
+      var i, leaguesSet, day0;
+      leaguesSet = new Set();
+      day0 = miniseason[0];
+      for (i = 0; i < day0.length; i++ ) {
+        leaguesSet.add(day0[i].league);
+      }
+      var leagues = Array.from(leaguesSet);
+      leagues.sort();
+      this.leagues = leagues;
+    },
+
+    /***************************************************
+     * Helper functions
+     */
     helpers : {
       urlParameters : null, // Cache
 
