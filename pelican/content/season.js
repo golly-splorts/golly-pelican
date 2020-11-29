@@ -45,7 +45,6 @@
     updateSeasonHeader : function(season0) {
 
       var seasonHeaderContainer = document.getElementById('season-header-container');
-      seasonHeaderContainer.classList.remove('invisible');
 
       // get element by id "landing-header-season" and change innerHTML to current season
       var seasonHead = document.getElementById('season-header-season-number');
@@ -53,6 +52,8 @@
         var sp1 = parseInt(season0) + 1;
         seasonHead.innerHTML = sp1;
       }
+
+      seasonHeaderContainer.classList.remove('invisible');
 
     },
 
