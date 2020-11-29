@@ -1,60 +1,116 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
-
-<div class="row">
-    <h1>Rosters</h1>
+<div class="container" id="container-player-viewer-header">
+  <div class="row">
+      <h1>Rosters</h1>
+  </div>
 </div>
 
-<div class="row">
-    <p>Select a grid space to see the player that lives and dies in that location.</p>
+
+<div class="container invisible" id="container-player-team-controls">
+
+  <div class="row">
+      <p>Select a grid space to see the player that lives and dies in that location.</p>
+  </div>
+
+  <div class="row" id="row-player-team-controls">
+  
+    <div class="col-md-6" id="player-team-info-card">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h4><span class="team-viewer-card-title" id="player-viewer-name">&nbsp;</span></h4>
+          <p class="card-text">
+            Team: <span class="team-viewer-card-text" id="player-viewer-team"></span>
+            <br />
+            Row: <span class="team-viewer-card-text" id="player-viewer-row"></span>
+            <br />
+            Col: <span class="team-viewer-card-text" id="player-viewer-col"></span>
+            <br />
+            Player Link: <span class="team-viewer-card-text" id="player-viewer-link"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  
+  
+    <div class="col-md-4" id="team-select-form">
+      <div class="form-group">
+        <label for="exampleSelect1">Select a golly team:</label>
+        <select class="form-control" id="team-selector">
+          <!-- <option>1</option> -->
+        </select>
+      </div>
+      <div>
+        League: <span class="team-viewer-card-text" id="player-viewer-league"></span>
+        <br />
+        Division: <span class="team-viewer-card-text" id="player-viewer-division"></span>
+      </div>
+    </div>
+  
+  </div>
+
 </div>
 
-<div class="row" id="playerteamcontrols">
 
-  <div class="col-md-6">
-    <div class="card text-white bg-primary">
-      <div class="card-body">
-        <h4><span class="team-viewer-card-title" id="player-viewer-name">&nbsp;</span></h4>
-        <p class="card-text">
-          Team: <span class="team-viewer-card-text" id="player-viewer-team"></span>
-          <br />
-          Row: <span class="team-viewer-card-text" id="player-viewer-row"></span>
-          <br />
-          Col: <span class="team-viewer-card-text" id="player-viewer-col"></span>
-          <br />
-          Player Link: <span class="team-viewer-card-text" id="player-viewer-link"></span>
+<div class="container invisible" id="container-canvas">
+  <div class="row">
+    <canvas id="canvas" width="900" height="450">
+    </canvas>
+  </div>
+</div>
+
+
+<div class="container invisible" id="container-loading">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
+      </div>
+    </div>
+
+</div>
+
+
+<div class="container invisible" id="container-error">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">The site is temporarily down.</h2>
+      </div>
+    </div>
+
+    <div class="row text-center notify-body">
+      <div class="col-md-12">
+        <p>
+        Ninjas have been dispatched to track down those responsible for the downtime
+        and bring them back to Hellmouth Community College to fix the site.
+        </p>
+        <p>
+        <p>In the meantime, here is a Game of Life simulator. Click to turn cells on and off!</p>
         </p>
       </div>
     </div>
-  </div>
 
-
-  <div class="col-md-4">
-    <div class="form-group">
-      <label for="exampleSelect1">Select a golly team:</label>
-      <select class="form-control" id="team-selector">
-        <!-- <option>1</option> -->
-      </select>
+    <div class="vspace40">
     </div>
-    <div>
-      League: <span class="team-viewer-card-text" id="player-viewer-league"></span>
-      <br />
-      Division: <span class="team-viewer-card-text" id="player-viewer-division"></span>
-    </div>
-  </div>
 
+    <div class="minilife" id="minilife-player">
+    </div>
 
 </div>
 
 
-<div class="row" id="canvascontainer">
+<noscript>
+  <div class="container" id="container-noscript">
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">You must have Javascript enabled to view this site.</h2>
+      </div>
+    </div>
+  </div>
+</noscript>
 
-    <canvas id="canvas" width="900" height="450">
-    </canvas>
-
-</div>
 
 {% endblock %}
 {% block javascript %}

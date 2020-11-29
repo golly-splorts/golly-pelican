@@ -11,10 +11,40 @@
     leagues : null,
     loadingElem : null,
 
+    containers : [
+      'season-header-container',
+      'postseason-champion-container',
+      'postseason-ws-container',
+      'postseason-lcs-container',
+      'postseason-lds-container'
+    ],
+
     init : function() {
+      this.loading();
+      this.loadConfig();
+    },
+
+    /**
+     * Handle the case of an error, tell the user something is wrong
+     */
+    error : function(mode) {
+      // Hide elements
+      this.loadingElem.classList.add('invisible');
+      for (var c in this.containers) {
+        var elem = document.getElementById(this.containers[c]);
+        elem.classList.add('invisible');
+      }
+
+      var container = document.getElementById('container-error');
+      container.classList.remove("invisible");
+    },
+
+    /**
+     * Show the site loading message while waiting for the API response
+     */
+    loading : function() {
       this.loadingElem = document.getElementById('container-loading');
       this.loadingElem.classList.remove('invisible');
-      this.loadConfig();
     },
 
     /**
@@ -46,7 +76,10 @@
         }
 
       })
-      .catch(err => { throw err });
+      .catch(err => {
+        console.log(err);
+        this.error(-1);
+      });
 
     },
 
@@ -85,7 +118,10 @@
         } // end for each series
 
       })
-      .catch(err => { throw err });
+      .catch(err => {
+        console.log(err);
+        this.error(-1);
+      });
 
     },
 

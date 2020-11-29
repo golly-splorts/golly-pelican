@@ -10,16 +10,52 @@
     baseApiUrl : baseApiUrl,
     baseUIUrl : baseUIUrl,
 
+    loadingElem : null,
     season : null,
 
+    containers : [
+      'league-standings-header-container',
+      'league-standings-container'
+    ],
+
     init : function() {
+      this.loading();
       this.loadConfig();
     },
 
+    /**
+     * Handle the case of an error, tell the user something is wrong
+     */
+    error : function(mode) {
+      // Hide elements
+      this.loadingElem.classList.add('invisible');
+      for (var c in this.containers) {
+        var elem = document.getElementById(this.containers[c]);
+        elem.classList.add('invisible');
+      }
+
+      // Show error elements
+      var container = document.getElementById('container-error');
+      container.classList.remove("invisible");
+
+    },
+
+    /**
+     * Show the loading message while loading API data.
+     */
+    loading : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
+    },
+
+    /**
+     * Load parameters from the URL (if any are specified)
+     * and pass them along to the API-calling functions.
+     */
     loadConfig : function() {
 
-      //// Get season url parameter
-      //this.season = this.helpers.getUrlParameter('season');
+      // // Get season url parameter
+      // this.season = this.helpers.getUrlParameter('season');
 
       // Check current season and day
       let url = this.baseApiUrl + '/today';
@@ -39,12 +75,15 @@
           this.processStandingsData(this.season);
         }
       })
-      .catch(err => { throw err });
+      .catch(err => {
+        console.log(err);
+        this.error(-1);
+      });
     },
 
     updateSeasonHeader : function(season0) {
 
-      var seasonHeaderContainer = document.getElementById('league-standings-container');
+      var seasonHeaderContainer = document.getElementById('league-standings-header-container');
 
       // get element by id "landing-header-season" and change innerHTML to current season
       var seasonHead = document.getElementById('standings-header-season-number');
@@ -66,11 +105,11 @@
       fetch(recordsUrl)
       .then(res => res.json())
       .then((standingsApiResult) => {
-        console.log('---');
-        console.log(standingsApiResult);
 
-        // /records should return a list of dictionaries
-        // containing team info, plus win-loss records
+        // Hide loading message and make league standings container visible
+        this.loadingElem.classList.add('invisible');
+        var leagueStandingsElem = document.getElementById('league-standings-container');
+        leagueStandingsElem.classList.remove('invisible');
 
         // Use league/division info to figure out where to update league/division names
         for (var iL in standingsApiResult.leagues) {
@@ -95,7 +134,7 @@
             var ulElemId = 'league-' + iLp1 + '-division-' + iDp1 + '-ul';
             var ulElem = document.getElementById(ulElemId);
 
-            // This is where we need to figure out what the heck to do
+            // Now use the structured league/division nested dictionary
             teamStandingsItems = standingsApiResult.rankings[league][division];
 
             var iS;
@@ -122,7 +161,8 @@
 
               liElem.appendChild(spanElem);
               ulElem.appendChild(liElem);
-            } // finishj for each team in the standings
+
+            } // finish for each team in the standings
 
             iD++;
           } // end each division loop
@@ -133,7 +173,7 @@
       })
       .catch(err => {
         console.log(err);
-        //this.error(-1);
+        this.error(-1);
       }); // end API /standings
 
     },

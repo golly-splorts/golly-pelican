@@ -14,12 +14,19 @@
   var mapZoneStrokeColor  = "#dddddd";
   var grays = ["#3a3a3a", "#404040"];
 
-  var GOL = {
+  var PlayerViewer = {
 
     baseUIUrl : baseUIUrl,
     baseApiUrl : baseApiUrl,
     basePlayerViewerUrl : baseUIUrl + '/player_viewer/player_viewer.html',
 
+    containers : [
+      'container-player-viewer-header',
+      'container-player-team-controls',
+      'container-canvas',
+    ],
+
+    loadingElem : null,
 
     columns : 120,
     rows : 100,
@@ -59,12 +66,38 @@
      */
     init : function() {
       try {
+        this.loading();
         this.readConfig();
         this.keepDOMElements();
         this.loadState();
       } catch (e) {
         console.log(e);
+        this.error(-1);
       }
+    },
+
+    /**
+     * Handle the case of an error, tell the user something is wrong
+     */
+    error : function(mode) {
+      // Hide elements
+      this.loadingElem.classList.add('invisible');
+      for (var c in this.containers) {
+        var elem = document.getElementById(this.containers[c]);
+        elem.classList.add('invisible');
+      }
+
+      // Show error elements
+      var container = document.getElementById('container-error');
+      container.classList.remove("invisible");
+    },
+
+    /**
+     * Show the site loading message while waiting for the API response
+     */
+    loading : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
     },
 
     /**
@@ -158,6 +191,13 @@
       .then(res => res.json())
       .then((teamsApiResult) => {
 
+        // Hide loading message and reveal player viewer
+        this.loadingElem.classList.add('invisible');
+        for (var c in this.containers) {
+          var elem = document.getElementById(this.containers[c]);
+          elem.classList.remove('invisible');
+        }
+
         // Save team data for other methods to use
         this.teamsApiResult = teamsApiResult;
 
@@ -176,6 +216,10 @@
         }
 
       })
+      .catch(err => {
+        console.log(err);
+        this.error(-1);
+      });
     },
 
     /**
@@ -269,7 +313,12 @@
             this.finishSetup()
           }
 
+        })
+        .catch(err => {
+          console.log(err);
+          this.error(-1);
         });
+
       } else {
         if (firstTime) {
           this.finishSetup();
@@ -339,33 +388,33 @@
        * When user changes dropdown, use it to set active team.
        */
       dropdownChange : function(event) {
-        GOL.activeTeamAbbr = event.target.value;
-        if (GOL.validateActiveTeamAbbr()) {
-          GOL.loadActiveTeamData(false);
+        PlayerViewer.activeTeamAbbr = event.target.value;
+        if (PlayerViewer.validateActiveTeamAbbr()) {
+          PlayerViewer.loadActiveTeamData(false);
         }
-        GOL.canvas.updateActiveCell(GOL.activeCol, GOL.activeRow);
+        PlayerViewer.canvas.updateActiveCell(PlayerViewer.activeCol, PlayerViewer.activeRow);
       },
 
       /**
        * When user clicks down, set mouse down state.
        */
       canvasMouseDown : function(event) {
-        var position = GOL.helpers.mousePosition(event);
-        GOL.handlers.lastX = position[0];
-        GOL.handlers.lastY = position[1];
-        GOL.canvas.updateActiveCell(position[0], position[1]);
+        var position = PlayerViewer.helpers.mousePosition(event);
+        PlayerViewer.handlers.lastX = position[0];
+        PlayerViewer.handlers.lastY = position[1];
+        PlayerViewer.canvas.updateActiveCell(position[0], position[1]);
       },
 
       ///**
       // * Handle user mouse up instance.
       // */
       //canvasMouseUp : function() {
-      //  GOL.handlers.mouseDown = false;
+      //  PlayerViewer.handlers.mouseDown = false;
       //  // Store the last mouse position as the
       //  // new active row and column
-      //  GOL.activeCol = GOL.handlers.lastX;
-      //  GOL.activeRow = GOL.handlers.lastY;
-      //  GOL.canvas.updateSelectedCell(position[0], position[1]);
+      //  PlayerViewer.activeCol = PlayerViewer.handlers.lastX;
+      //  PlayerViewer.activeRow = PlayerViewer.handlers.lastY;
+      //  PlayerViewer.canvas.updateSelectedCell(position[0], position[1]);
       //  // and probably re-load data, hmm?
       //},
 
@@ -375,11 +424,11 @@
       // * mouse location.
       // */
       //canvasMouseMove : function(event) {
-      //  if (GOL.handlers.mouseDown) {
-      //    var position = GOL.helpers.mousePosition(event);
-      //    if ((position[0] !== GOL.handlers.lastX) || (position[1] !== GOL.handlers.lastY)) {
-      //      GOL.handlers.lastX = position[0];
-      //      GOL.handlers.lastY = position[1];
+      //  if (PlayerViewer.handlers.mouseDown) {
+      //    var position = PlayerViewer.helpers.mousePosition(event);
+      //    if ((position[0] !== PlayerViewer.handlers.lastX) || (position[1] !== PlayerViewer.handlers.lastY)) {
+      //      PlayerViewer.handlers.lastX = position[0];
+      //      PlayerViewer.handlers.lastY = position[1];
       //    }
       //  }
       //},
@@ -406,13 +455,13 @@
         this.canvas = document.getElementById('canvas');
         this.context = this.canvas.getContext('2d');
 
-        this.cellSize = GOL.cellSize;
+        this.cellSize = PlayerViewer.cellSize;
         this.cellSpace = 1;
 
         // register the mousedown/mouseup/mousemove events with function callbacks
-        GOL.helpers.registerEvent(this.canvas, 'mousedown', GOL.handlers.canvasMouseDown, false);
-        GOL.helpers.registerEvent(document, 'mouseup', GOL.handlers.canvasMouseUp, false);
-        GOL.helpers.registerEvent(this.canvas, 'mousemove', GOL.handlers.canvasMouseMove, false);
+        PlayerViewer.helpers.registerEvent(this.canvas, 'mousedown', PlayerViewer.handlers.canvasMouseDown, false);
+        PlayerViewer.helpers.registerEvent(document, 'mouseup', PlayerViewer.handlers.canvasMouseUp, false);
+        PlayerViewer.helpers.registerEvent(this.canvas, 'mousemove', PlayerViewer.handlers.canvasMouseMove, false);
       },
 
       /**
@@ -420,8 +469,8 @@
        */
       clearWorld : function () {
         // Draw cells
-        for (i = 0 ; i < GOL.columns; i++) {
-          for (j = 0 ; j < GOL.rows; j++) {
+        for (i = 0 ; i < PlayerViewer.columns; i++) {
+          for (j = 0 ; j < PlayerViewer.rows; j++) {
             this.drawCell(i, j, false);
           }
         }
@@ -435,23 +484,23 @@
 
         // set grid
         this.width = this.height = 1;
-        this.cellSize = GOL.cellSize;
+        this.cellSize = PlayerViewer.cellSize;
         this.cellSpace = 1;
 
         // Dynamic canvas size
-        this.width = this.width + (this.cellSpace * GOL.columns) + (this.cellSize * GOL.columns);
+        this.width = this.width + (this.cellSpace * PlayerViewer.columns) + (this.cellSize * PlayerViewer.columns);
         this.canvas.setAttribute('width', this.width);
-        this.height = this.height + (this.cellSpace * GOL.rows) + (this.cellSize * GOL.rows);
+        this.height = this.height + (this.cellSpace * PlayerViewer.rows) + (this.cellSize * PlayerViewer.rows);
         this.canvas.setAttribute('height', this.height);
 
         // Fill background
-        this.context.fillStyle = GOL.colors.grid;
+        this.context.fillStyle = PlayerViewer.colors.grid;
         this.context.fillRect(0, 0, this.width, this.height);
 
         // Draw cells
-        for (i = 0 ; i < GOL.columns; i++) {
-          for (j = 0 ; j < GOL.rows; j++) {
-            if ((i==GOL.activeRow) && (j==GOL.activeCol)) {
+        for (i = 0 ; i < PlayerViewer.columns; i++) {
+          for (j = 0 ; j < PlayerViewer.rows; j++) {
+            if ((i==PlayerViewer.activeRow) && (j==PlayerViewer.activeCol)) {
               this.drawCell(i, j, true);
             } else {
               this.drawCell(i, j, false);
@@ -466,15 +515,15 @@
       drawCell : function (i, j, alive) {
 
         if (alive) {
-          this.context.fillStyle = GOL.colors.alive;
+          this.context.fillStyle = PlayerViewer.colors.alive;
         } else {
-          this.context.fillStyle = GOL.colors.dead;
+          this.context.fillStyle = PlayerViewer.colors.dead;
         }
 
         this.context.fillRect(this.cellSpace + (this.cellSpace * i) + (this.cellSize * i), this.cellSpace + (this.cellSpace * j) + (this.cellSize * j), this.cellSize, this.cellSize);
 
         // Draw light strokes cutting the canvas through the middle
-        if (i===parseInt(GOL.columns/2)) {
+        if (i===parseInt(PlayerViewer.columns/2)) {
           this.context.fillStyle = mapZoneStrokeColor;
           this.context.fillRect(
             (this.cellSpace * i+1) + (this.cellSize * i+1) - 2*this.cellSpace,
@@ -484,7 +533,7 @@
           );
         }
 
-        if (j===parseInt(GOL.rows/2)) {
+        if (j===parseInt(PlayerViewer.rows/2)) {
           this.context.fillStyle = mapZoneStrokeColor;
           this.context.fillRect(
             (this.cellSpace * i+1) + (this.cellSize * i+1) - 2*this.cellSpace,
@@ -502,8 +551,8 @@
        * from the mouse position, then pass them here.
        */
       updateActiveCell : function(i, j) {
-        if (i >= 0 && i < GOL.columns && j >= 0 && j < GOL.rows) {
-          if ((GOL.activeCol != null) && (GOL.activeRow != null)) {
+        if (i >= 0 && i < PlayerViewer.columns && j >= 0 && j < PlayerViewer.rows) {
+          if ((PlayerViewer.activeCol != null) && (PlayerViewer.activeRow != null)) {
             // Turn off current active cell
             this.clearWorld();
           }
@@ -514,14 +563,14 @@
           }
 
           // Update active row and column
-          GOL.activeCol = i;
-          GOL.activeRow = j;
+          PlayerViewer.activeCol = i;
+          PlayerViewer.activeRow = j;
 
           // Update player data
-          GOL.loadPlayerData(false);
+          PlayerViewer.loadPlayerData(false);
         } else {
-          GOL.activeCol = null;
-          GOL.activeRow = null;
+          PlayerViewer.activeCol = null;
+          PlayerViewer.activeRow = null;
         }
       },
 
@@ -582,7 +631,7 @@
       mousePosition : function (e) {
         // http://www.malleus.de/FAQ/getImgMousePos.html
         // http://www.quirksmode.org/js/events_properties.html#position
-        var event, x, y, domObject, posx = 0, posy = 0, top = 0, left = 0, cellSize = GOL.cellSize + 1;
+        var event, x, y, domObject, posx = 0, posy = 0, top = 0, left = 0, cellSize = PlayerViewer.cellSize + 1;
 
         event = e;
         if (!event) {
@@ -621,8 +670,8 @@
   /**
    * Init on 'load' event
    */
-  GOL.helpers.registerEvent(window, 'load', function () {
-    GOL.init();
+  PlayerViewer.helpers.registerEvent(window, 'load', function () {
+    PlayerViewer.init();
   }, false);
 
 }());

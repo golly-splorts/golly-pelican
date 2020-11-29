@@ -1,18 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <template id="map-card-template">
   {% include "map.html" %}
 </template>
 
-<div class="container">
 
+<div class="container" id="container-maps-header">
   <h2 class="season-header text-center">Golly Maps</h2>
+</div>
 
-  <div class="row" id="maps-container">
+
+<div class="container invisible" id="container-maps">
+
+  <div class="row" id="row-maps">
   </div>
 
 </div>
+
+
+<div class="container invisible" id="container-loading">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
+      </div>
+    </div>
+
+</div>
+
+
+<div class="container invisible" id="container-error">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">The site is temporarily down.</h2>
+      </div>
+    </div>
+
+    <div class="row text-center notify-body">
+      <div class="col-md-12">
+        <p>
+        Ninjas have been dispatched to track down those responsible for the downtime
+        and bring them back to Hellmouth Community College to fix the site.
+        </p>
+        <p>
+        <p>In the meantime, here is a Game of Life simulator. Click to turn cells on and off!</p>
+        </p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife-player">
+    </div>
+
+</div>
+
+
+<noscript>
+  <div class="container" id="container-noscript">
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">You must have Javascript enabled to view this site.</h2>
+      </div>
+    </div>
+  </div>
+</noscript>
 
 {% endblock %}
 {% block javascript %}

@@ -21,10 +21,38 @@
 
     loadingElem : null,
 
+    containers : [
+      'container-maps-header',
+      'container-maps'
+    ],
+
     init : function() {
+      this.loading();
+      this.populateMapCards();
+    },
+
+    /**
+     * Handle the case of an error, tell the user something is wrong
+     */
+    error : function(mode) {
+      // Hide elements
+      this.loadingElem.classList.add('invisible');
+      for (var c in this.containers) {
+        var elem = document.getElementById(this.containers[c]);
+        elem.classList.add('invisible');
+      }
+
+      // Show error elements
+      var container = document.getElementById('container-error');
+      container.classList.remove("invisible");
+    },
+
+    /**
+     * Show the loading message while loading API data.
+     */
+    loading : function() {
       this.loadingElem = document.getElementById('container-loading');
       this.loadingElem.classList.remove('invisible');
-      this.populateMapCards();
     },
 
     /**
@@ -32,14 +60,16 @@
      */
     populateMapCards : function() {
 
-      var mapContainerElem = document.getElementById('maps-container');
+      var mapRowElem = document.getElementById('row-maps');
 
       let mapsUrl = this.baseApiUrl + '/maps';
       fetch(mapsUrl)
       .then(res => res.json())
       .then((mapsApiResult) => {
 
-        this.loadingElem.classList.remove('invisible');
+        this.loadingElem.classList.add('invisible');
+        var mapsContainer = document.getElementById('container-maps');
+        mapsContainer.classList.remove('invisible');
 
         var iM;
         for (iM = 0; iM < mapsApiResult.length; iM++) {
@@ -55,7 +85,7 @@
           }
 
           // Add the template map card to the page
-          mapContainerElem.appendChild(cloneFragment);
+          mapRowElem.appendChild(cloneFragment);
 
           // Get a reference to the card we just added
           var mapCard = document.getElementById(thisMap.patternName);
@@ -97,7 +127,7 @@
       })
       .catch(err => {
         console.log(err);
-        //this.error(-1);
+        this.error(-1);
       }); // end API /maps
     },
 

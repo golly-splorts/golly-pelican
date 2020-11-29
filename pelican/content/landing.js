@@ -62,6 +62,7 @@
      * Handle the case of an error, tell the user something is wrong
      */
     error : function(mode) {
+      // Don't need to hide anything, it's all hidden by default
       var container = document.getElementById('container-error');
       container.classList.remove("invisible");
     },
