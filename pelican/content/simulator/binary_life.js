@@ -13,13 +13,9 @@
 
 (function () {
 
-  // The logic to parse what input parameters the user provided
-  // lives in loadConfig()
+  var baseApiUrl = 'http://192.168.30.20:8989';
+  var baseUIUrl  = 'http://192.168.30.20:8001';
 
-
-  // Constants
-
-  // Colors
   var realBackgroundColor = "#272b30";
   var gridStrokeColor1    = "#3a3a3a";
   var mapZoneStrokeColor  = "#dddddd";
@@ -27,8 +23,9 @@
 
   var GOL = {
 
-    baseApiUrl : 'http://192.168.30.20:8989',
-    baseUIUrl : 'http://192.168.30.20:8001',
+    baseUIUrl : baseUIUrl,
+    baseApiUrl : baseApiUrl,
+    baseSimulatorUrl : baseUIUrl + '/simulator/index.html',
 
     s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
     s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
@@ -346,7 +343,7 @@
       } else if (this.patternName != null) {
 
         // Load a game from the /map API endpoint
-        let url = 'http://localhost:8989/map/' + this.patternName;
+        let url = this.baseApiUrl + '/map/' + this.patternName;
         fetch(url)
         .then(res => res.json())
         .then((mapApiResult) => {

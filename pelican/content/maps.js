@@ -19,7 +19,18 @@
     baseApiUrl : baseApiUrl,
     baseUIUrl : baseUIUrl,
 
+    loadingElem : null,
+
     init : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
+      this.populateMapCards();
+    },
+
+    /**
+     * Load map data from /maps endpoint, and use it to populate map cards.
+     */
+    populateMapCards : function() {
 
       var mapContainerElem = document.getElementById('maps-container');
 
@@ -27,6 +38,8 @@
       fetch(mapsUrl)
       .then(res => res.json())
       .then((mapsApiResult) => {
+
+        this.loadingElem.classList.remove('invisible');
 
         var iM;
         for (iM = 0; iM < mapsApiResult.length; iM++) {
@@ -54,14 +67,6 @@
             var elem = mapCardTitleElems[iE];
             elem.innerHTML = thisMap.mapName;
           }
-
-          //// Set the img link to the simulator
-          //var imgLinkElems = mapCard.getElementsByClassName('map-card-simulator-link');
-          //var iL;
-          //for (iL = 0; iL < imgLinkElems.length; iL++) {
-          //  var imgLinkElem = imgLinkElems[iL];
-          //  imgLinkElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName);
-          //}
 
           // Set img src
           var imgElems = mapCard.getElementsByClassName('map-card-image');

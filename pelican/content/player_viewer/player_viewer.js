@@ -6,9 +6,6 @@
 
 (function () {
 
-  // The logic to parse what input parameters the user provided
-  // lives in loadConfig()
-
   var baseApiUrl = 'http://192.168.30.20:8989';
   var baseUIUrl  = 'http://192.168.30.20:8001';
 

@@ -8,10 +8,18 @@
     baseApiUrl : baseApiUrl,
     baseUIUrl : baseUIUrl,
 
+    loadingElem: null,
+
     init : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
       this.loadConfig();
     },
 
+    /**
+     * Load parameters from the URL (if any are specified)
+     * and pass them along to the API-calling functions.
+     */
     loadConfig : function() {
 
       this.season = this.helpers.getUrlParameter('season');
@@ -33,9 +41,21 @@
           this.updateSeasonHeader(this.season);
           this.processSeasonData(this.season);
         }
-      })
-      .catch(err => { throw err });
 
+      })
+      .catch(err => {
+        console.log(err);
+        this.error(-1);
+      });
+
+    },
+
+    /**
+     * Handle the case of an error, tell the user something is wrong
+     */
+    error : function(mode) {
+      var container = document.getElementById('container-error');
+      container.classList.remove("invisible");
     },
 
     /**
@@ -61,11 +81,14 @@
      * Get season data from the API and process it.
      */
     processSeasonData : function(season) {
+
       // Get all games for this season
       let url = this.baseApiUrl + '/season/' + season;
       fetch(url)
       .then(res => res.json())
       .then((seasonApiResult) => {
+
+        this.loadingElem.classList.add('invisible');
 
         var seasonDaysContainer = document.getElementById('season-days-container');
         seasonDaysContainer.classList.remove('invisible');
@@ -78,6 +101,10 @@
     
     },
 
+    /**
+     * Use the number of days in the season returned
+     * to create a button for each day in the season.
+     */
     setDayButtons : function(seasonApiResult) {
       var dayContainer = document.getElementById('day-buttons-container');
       dayContainer.classList.remove('invisible');
@@ -167,6 +194,10 @@
       }
     },
 
+    /**
+     * The core function.
+     * Create day containers for each day, and add each game to each day container.
+     */
     populateSeasonDays : function(season, seasonApiResult) {
 
       var seasonDaysContainer, seasonDayContainerTemplate;

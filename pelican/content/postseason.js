@@ -9,11 +9,18 @@
     baseUIUrl : baseUIUrl,
 
     leagues : null,
+    loadingElem : null,
 
     init : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
       this.loadConfig();
     },
 
+    /**
+     * Load parameters from the URL (if any are specified)
+     * and pass them along to the API-calling functions.
+     */
     loadConfig : function() {
 
       this.season = this.helpers.getUrlParameter('season');
@@ -53,6 +60,8 @@
       fetch(postseasonUrl)
       .then(res => res.json())
       .then((postseasonApiResult) => {
+
+        this.loadingElem.classList.add('invisible');
 
         for (var series in postseasonApiResult) {
 
