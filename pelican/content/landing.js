@@ -298,6 +298,7 @@
       .then((apiResult) => {
         if (apiResult.hasOwnProperty('champion')) {
           champs.innerHTML = apiResult.champion;
+          champs.style.color = apiResult.color;
         }
       })
       .catch(err => {
