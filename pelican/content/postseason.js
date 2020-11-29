@@ -212,7 +212,6 @@
      * Populate a WS series container with games.
      */
     populateWsGames : function(miniseason, seriesContainerElem) {
-      console.log(miniseason);
       var iDay;
       for (iDay = 0; iDay < miniseason.length; iDay++) {
         var miniday = miniseason[iDay];
@@ -233,11 +232,8 @@
       var lastgame = lastday[0];
       var t1w = lastgame['team1SeriesWinLoss'][0];
       var t2w = lastgame['team2SeriesWinLoss'][0];
-      var t1s = lastgame['team1Score'][0];
-      var t2s = lastgame['team2Score'][0];
-      console.log('---------');
-      console.log(t1w);
-      console.log(t2w);
+      var t1s = lastgame['team1Score'];
+      var t2s = lastgame['team2Score'];
       if ((t1w==3) || (t2w==3)) {
         var championTeamElem = document.getElementById('champion-team');
         if ((t1w==3) && (t1s > t2s)) {
