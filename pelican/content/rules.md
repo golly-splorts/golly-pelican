@@ -89,7 +89,7 @@ Date: 2000-01-01 00:00
 1. The tolerance used to determine whether the running average has changed from the prior generation shall be
    determined by the maximum grid dimension.
 
-## Section 7. Season
+## Section 6. Season
 
 1. Each season shall consist of S games, where S is a positive, odd integer.
 1. Each matchup of teams shall result in two games, with each team swapping positions on the map between games,
