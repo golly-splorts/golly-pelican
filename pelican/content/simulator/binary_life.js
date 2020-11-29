@@ -293,6 +293,17 @@
 
           this.gameApiResult = gameApiResult;
 
+          // Set the game title
+          var gameTitleElem = document.getElementById('golly-game-title');
+          if (gameApiResult.isPlayoffs == true) {
+            gameTitleElem.innerHTML = "Golly: " + gameApiResult.description;
+          } else {
+            var sp1 = gameApiResult.season + 1;
+            var dp1 = gameApiResult.day + 1;
+            var descr = "Golly: Season " + sp1 + ' Day ' + dp1;
+            gameTitleElem.innerHTML = descr;
+          }
+
           // Determine if we know a winner/loser
           if (this.gameApiResult.hasOwnProperty('team1Score') && this.gameApiResult.hasOwnProperty('team2Score')) {
             var s1 = this.gameApiResult.team1Score;
