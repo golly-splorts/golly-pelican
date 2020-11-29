@@ -36,11 +36,12 @@ TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['season.js'] = 'season.js'
 
 TEMPLATE_PAGES['postseason.html'] = 'postseason.html'
-#TEMPLATE_PAGES['postseason.js'] = 'postseason.js'
+TEMPLATE_PAGES['postseason.js'] = 'postseason.js'
 
 TEMPLATE_PAGES['league.html'] = 'league.html'
+TEMPLATE_PAGES['league.js'] = 'league.js'
+
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
-TEMPLATE_PAGES['jersey.html'] = 'jersey.html'
 
 TEMPLATE_PAGES['siteMode_0009.html'] = 'siteMode_0009.html'
 TEMPLATE_PAGES['siteMode_1019.html'] = 'siteMode_1019.html'
