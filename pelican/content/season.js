@@ -32,6 +32,7 @@
         elem.classList.add('invisible');
       }
 
+      // Show error 
       var container = document.getElementById('container-error');
       container.classList.remove("invisible");
     },

@@ -14,8 +14,9 @@
     baseApiUrl : baseApiUrl,
     baseUIUrl : baseUIUrl,
 
+    loadingElem : null,
+
     landingDivIds : [
-      'container-error',
       'container-mode0009',
       'container-mode1019',
       'container-mode21',
@@ -28,6 +29,8 @@
     ],
 
     init : function() {
+
+      this.loading();
 
       // Load a game from the /game API endpoint
       let url = this.baseApiUrl + '/mode';
@@ -62,9 +65,30 @@
      * Handle the case of an error, tell the user something is wrong
      */
     error : function(mode) {
-      // Don't need to hide anything, it's all hidden by default
+
+      // Hide elements
+      this.loadingElem.classList.add('invisible');
+      for (var c in this.containers) {
+        try {
+          var elem = document.getElementById(this.containers[c]);
+          elem.classList.add('invisible');
+        } catch (e) {
+          // do nothing
+        }
+      }
+
+      // Show error 
       var container = document.getElementById('container-error');
       container.classList.remove("invisible");
+
+    },
+
+    /**
+     * Show the site loading message while waiting for the API response
+     */
+    loading : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
     },
 
     /**
@@ -289,7 +313,6 @@
      * using information from the API /champion endpoint.
      */
     updateChampions : function() {
-      console.log('here');
       var champs = document.getElementById('champion-team');
 
       // get current day/season info from API /today
@@ -327,7 +350,7 @@
         bod.append(script);
         if (j==1) {
           script.onload = () => {
-            MiniGOL.init();
+            LandingPage.init();
           }
         }
       }
