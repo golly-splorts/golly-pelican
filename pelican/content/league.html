@@ -1,147 +1,87 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
+<div class="container invisible" id="league-standings-container">
 
-    <div class="row text-center landing-header">
-      <div class="col-md-12">
-          <h2>Season 1: League Standings</h2>
-      </div>
+  <div class="row text-center league-standings-header-row">
+    <div class="col-md-12">
+      <h2 class="text-center league-standings-header-text">Golly: Season <span id="standings-header-season-number">_</span> Standings</h2>
+    </div>
+  </div>
+
+  <!-- league 1 -->
+  <div class="row text-center justify-content-lg-center league-standings-league-header-row">
+    <div class="col-md-8">
+      <h2 class="text-center league-standings-league-header-text"><span id="league-1-name"></span></h2>
+    </div>
+  </div>
+
+  <div class="row justify-content-lg-center" id="league-1-container">
+
+    <div class="col-lg-4" id="league-1-division-1-container">
+      <h4 class="text-center league-standings-division-header-text"><span id="league-1-division-1-name"></span></h4>
+      <ul class="list-group" id="league-1-division-1-ul">
+        <!--
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Team 1
+          <span class="standings-record">W-L</span>
+        </li>
+        -->
+      </ul>
     </div>
 
-    <h1 class="text-center league-header">Golly League</h1>
-
-    <div class="row justify-content-lg-center league-standings-section">
-      <div class="col-lg-8">
-          <h2 class="text-center">Hot League Standings</h2>
-      </div>
+    <div class="col-lg-4" id="league-1-division-2-container">
+      <h4 class="text-center league-standings-division-header-text"><span id="league-1-division-2-name"></span></h4>
+      <ul class="list-group" id="league-1-division-2-ul">
+        <!--
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Team 1
+          <span class="standings-record">W-L</span>
+        </li>
+        -->
+      </ul>
     </div>
 
-    <div class="row justify-content-lg-center">
-      <div class="col-lg-4">
+  </div>
 
-          <ul class="list-group">
+  <!-- league 2 -->
+  <div class="row text-center justify-content-lg-center league-standings-league-header-row">
+    <div class="col-md-8">
+      <h2 class="text-center league-standings-league-header-text"><span id="league-2-name"></span></h2>
+    </div>
+  </div>
 
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              San Diego Balloon Animals
-              <span class="standings-record">16-4</span>
-            </li>
+  <div class="row justify-content-lg-center" id="league-2-container">
 
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Alewife Arsonists
-              <span class="standings-record">14-6</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Baltimore Texas
-              <span class="standings-record">10-10</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Detroit Grape Chews
-              <span class="standings-record">4-16</span>
-            </li>
-
-          </ul>
-
-      </div>
-
-      <div class="col-lg-4">
-
-          <ul class="list-group">
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              San Diego Balloon Animals
-              <span class="standings-record">16-4</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Alewife Arsonists
-              <span class="standings-record">14-6</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Baltimore Texas
-              <span class="standings-record">10-10</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Detroit Grape Chews
-              <span class="standings-record">4-16</span>
-            </li>
-
-          </ul>
-
-      </div>
+    <div class="col-lg-4" id="league-2-division-1-container">
+      <h4 class="text-center league-standings-division-header-text"><span id="league-2-division-1-name"></span></h4>
+      <ul class="list-group" id="league-2-division-1-ul">
+        <!--
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Team 1
+          <span class="standings-record">W-L</span>
+        </li>
+        -->
+      </ul>
     </div>
 
-
-    <div class="row justify-content-lg-center league-standings-section">
-      <div class="col-lg-8">
-          <h2 class="text-center">Cold League Standings</h2>
-      </div>
+    <div class="col-lg-4" id="league-2-division-1-container">
+      <h4 class="text-center league-standings-division-header-text"><span id="league-2-division-2-name"></span></h4>
+      <ul class="list-group" id="league-2-division-2-ul">
+        <!--
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Team 1
+          <span class="standings-record">W-L</span>
+        </li>
+        -->
+      </ul>
     </div>
 
-    <div class="row justify-content-lg-center">
-      <div class="col-lg-4">
-
-          <ul class="list-group">
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              San Diego Balloon Animals
-              <span class="standings-record">16-4</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Alewife Arsonists
-              <span class="standings-record">14-6</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Baltimore Texas
-              <span class="standings-record">10-10</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Detroit Grape Chews
-              <span class="standings-record">4-16</span>
-            </li>
-
-          </ul>
-
-      </div>
-
-      <div class="col-lg-4">
-
-          <ul class="list-group">
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              San Diego Balloon Animals
-              <span class="standings-record">16-4</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Alewife Arsonists
-              <span class="standings-record">14-6</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Baltimore Texas
-              <span class="standings-record">10-10</span>
-            </li>
-
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              Detroit Grape Chews
-              <span class="standings-record">4-16</span>
-            </li>
-
-          </ul>
-
-      </div>
-    </div>
-
-
+  </div>
 
 </div>
 
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="league.js"></script>
 {% endblock %}
