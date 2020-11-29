@@ -42,6 +42,7 @@ TEMPLATE_PAGES['league.html'] = 'league.html'
 TEMPLATE_PAGES['league.js'] = 'league.js'
 
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
+TEMPLATE_PAGES['maps.js'] = 'maps.js'
 
 TEMPLATE_PAGES['siteMode_0009.html'] = 'siteMode_0009.html'
 TEMPLATE_PAGES['siteMode_1019.html'] = 'siteMode_1019.html'
