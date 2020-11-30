@@ -7,17 +7,21 @@
 
 
 <div class="container invisible" id="season-header-container">
-    <h2 class="text-center season-header">Season <span id="season-header-season-number">_</span> Postseason</h2>
-    <div class="row justify-content-md-center season-toc">
-      <div class="col-lg-8">
-        <div class="text-center lead postseason-jump-to">Jump to:</div>
-        <div class="text-center lead" id="postseason-toc-text">
-          <a class="invisible postseason-toc-text" id="ws-postseason-toc-text" href="#ws">World Series (Round 3)</a>
-          <a class="invisible postseason-toc-text" id="lcs-postseason-toc-text" href="#lcs">Championship Series (Round 2)</a>
-          <a class="invisible postseason-toc-text" id="lds-postseason-toc-text" href="#lds">Division Series (Round 1)</a>
-        </div>
+  <h2 class="text-center season-header">Season <span id="season-header-season-number">_</span> Postseason</h2>
+</div>
+
+
+<div class="container invisible" id="postseason-toc-container">
+  <div class="row justify-content-md-center season-toc">
+    <div class="col-lg-8">
+      <div class="text-center lead postseason-jump-to">Jump to:</div>
+      <div class="text-center lead" id="postseason-toc-text">
+        <a class="invisible postseason-toc-text" id="ws-postseason-toc-text" href="#ws">World Series (Round 3)</a>
+        <a class="invisible postseason-toc-text" id="lcs-postseason-toc-text" href="#lcs">Championship Series (Round 2)</a>
+        <a class="invisible postseason-toc-text" id="lds-postseason-toc-text" href="#lds">Division Series (Round 1)</a>
       </div>
     </div>
+  </div>
 </div>
 
 
@@ -114,6 +118,18 @@
 </div>
 
 
+
+<div class="container invisible" id="container-postseason-waiting">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+          <h4 class="text-success">The postseason will begin on Day 50...</h4>
+      </div>
+    </div>
+
+</div>
+
+
 <div class="container invisible" id="container-loading">
 
     <div class="row text-center notify-header">
@@ -125,11 +141,22 @@
 </div>
 
 
+<div class="container invisible" id="container-invalid">
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">An invalid API parameter was specified.</h2>
+        <p>No one has been notified.</p>
+      </div>
+    </div>
+
+</div>
+
+
 <div class="container invisible" id="container-error">
 
     <div class="row text-center notify-header">
       <div class="col-md-12">
-        <h2 class="text-danger">The site backend is temporarily down.</h2>
+        <h2 class="text-danger">The site has experienced a technical glitch.</h2>
       </div>
     </div>
 
@@ -143,6 +170,7 @@
     </div>
 
 </div>
+
 
 <noscript>
   <div class="container" id="container-noscript">
