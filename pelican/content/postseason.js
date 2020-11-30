@@ -13,6 +13,7 @@
 
     containers : [
       'season-header-container',
+      'postseason-toc-container',
       'postseason-champion-container',
       'postseason-ws-container',
       'postseason-lcs-container',
@@ -68,11 +69,33 @@
           this.season = this.currentSeason;
         }
 
-        if (this.season <= this.currentSeason) {
+        if (this.season < this.currentSeason) {
           this.updatePostseasonHeader(this.season);
           this.processPostseasonData(this.season, this.currentSeason, this.currentDay);
+
+        } else if (this.season == this.currentSeason) {
+          this.updatePostseasonHeader(this.season);
+          let modeUrl = this.baseApiUrl + '/mode';
+          fetch(modeUrl)
+          .then(res => res.json())
+          .then((modeApiResult) => {
+            var mode = modeApiResult.mode;
+            if (mode < 0) {
+              this.error(-1);
+            } else if (mode < 20) {
+              this.postseasonWaitingMessage()
+            } else {
+              this.processPostseasonData(this.season, this.currentSeason, this.currentDay);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.error(-1);
+          });
+
         } else {
-          // error invalid season specified
+          var elem = document.getElementById('container-invalid');
+          elem.classList.remove('invisible');
         }
 
       })
@@ -81,6 +104,14 @@
         this.error(-1);
       });
 
+    },
+
+    postseasonWaitingMessage : function() {
+      // Hide loading message
+      this.loadingElem.classList.add('invisible');
+      // Show waiting for postseason message
+      var waitingElem = document.getElementById('container-postseason-waiting');
+      waitingElem.classList.remove('invisible');
     },
 
     /**
@@ -94,7 +125,12 @@
       .then(res => res.json())
       .then((postseasonApiResult) => {
 
+        // Remove loading message
         this.loadingElem.classList.add('invisible');
+
+        // Show table of contents
+        var tocElem = document.getElementById('postseason-toc-container');
+        tocElem.classList.remove('invisible');
 
         for (var series in postseasonApiResult) {
 
