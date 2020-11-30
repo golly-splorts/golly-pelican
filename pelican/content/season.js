@@ -66,9 +66,29 @@
           this.season = this.currentSeason;
         }
 
-        if (this.season <= this.currentSeason) {
+        if (this.season < this.currentSeason) {
           this.updateSeasonHeader(this.season);
           this.processSeasonData(this.season);
+
+        } else if (this.season == this.currentSeason) {
+          this.updateSeasonHeader(this.season);
+          let modeUrl = this.baseApiUrl + '/mode';
+          fetch(modeUrl)
+          .then(res => res.json())
+          .then((modeApiResult) => {
+            var mode = modeApiResult.mode;
+            if (mode < 0) {
+              this.eror(-1);
+            } else if (mode < 10) {
+              this.seasonWaitingMessage()
+            } else {
+              this.processSeasonData(this.season);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.error(-1);
+          });
         }
 
       })
@@ -77,6 +97,14 @@
         this.error(-1);
       });
 
+    },
+
+    seasonWaitingMessage : function() {
+      // Hide loading message
+      this.loadingElem.classList.add('invisible');
+      // Show waiting for postseason message
+      var waitingElem = document.getElementById('container-season-waiting');
+      waitingElem.classList.remove('invisible');
     },
 
     /**
