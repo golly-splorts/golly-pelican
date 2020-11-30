@@ -97,14 +97,17 @@
     filterContainers : function(saveid) {
       var ix = this.landingDivIds.indexOf(saveid);
       if (ix<0) {
-        this.error();
+        this.error(-1);
       }
       var i;
       for (i=0; i<this.landingDivIds.length; i++) {
         if (i!=ix) {
           // Remove every div except the one with specified id
-          var e = document.getElementById(this.landingDivIds[i]);
-          e.parentNode.removeChild(e);
+          try {
+            var elem = document.getElementById(this.landingDivIds[i]);
+            elem.parentNode.removeChild(elem);
+          } catch (e) {
+          }
         }
       }
       var container = document.getElementById(saveid);
@@ -118,6 +121,7 @@
     mode0009 : function(mode) {
       var container = this.filterContainers('container-mode0009');
       this.updateSeasonHeader();
+      this.loadingElem.classList.add('invisible');
       this.minilife();
     },
 
@@ -145,7 +149,7 @@
       } else if (mode==23) {
         container = this.filterContainers('container-mode23');
       } else {
-        this.error();
+        this.error(-1);
       }
       this.updateSeasonHeader();
       this.updateSeedTable();
@@ -167,7 +171,7 @@
       } else if (mode==33) {
         container = this.filterContainers('container-mode33');
       } else {
-        this.error();
+        this.error(-1);
       }
       this.updateSeasonHeader();
       this.updateSeedTable();
@@ -197,7 +201,13 @@
       .then(res => res.json())
       .then((apiResult) => {
 
-        var season = apiResult[0] + 1;
+        var season;
+        if (apiResult[0]==-1) {
+          season = 1;
+        } else {
+          var season = apiResult[0] + 1;
+        }
+
         var day = apiResult[1] + 1;
 
         // get element by id "landing-header-season" and change innerHTML to current season
@@ -350,7 +360,7 @@
         bod.append(script);
         if (j==1) {
           script.onload = () => {
-            LandingPage.init();
+            MiniGOL.init();
           }
         }
       }
@@ -509,7 +519,7 @@
       .catch(err => {
         console.log(err);
         this.error(-1);
-      });
+      }); // end /currentGames api call
     },
 
     /**
