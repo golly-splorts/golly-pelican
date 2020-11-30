@@ -84,14 +84,14 @@ Date: 2000-01-01 00:00
 1. Game play shall proceed uninterrupted for 2X generations, during which a running average of the victory
    percentage (the number of live cells of the team with the most cells, divided by the number of live cells total)
    over a window of 2X shall be tabulated.
-1. When the running average of the victory percentage has remained constant and not 50\% to within a specified
-   tolerance for three consecutive generations, the winning team shall be declared the victor.f
+1. When the running average of the victory percentage has remained constant (and not 50%) to within a specified
+   tolerance for three consecutive generations, the winning team shall be declared the victor.
 1. The tolerance used to determine whether the running average has changed from the prior generation shall be
    determined by the maximum grid dimension.
 
 ## Section 6. Season
 
-1. Each season shall consist of S games, where S is a positive, odd integer.
+1. Each season shall consist of S games, where S is a positive, odd integer. In general, S = 49.
 1. Each matchup of teams shall result in two games, with each team swapping positions on the map between games,
    excepting the last matchup of the season, which shall consist of a single game.
 1. Each team shall play their season's games against teams in the same division (intra-divisional gamess) or
