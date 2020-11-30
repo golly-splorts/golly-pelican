@@ -474,6 +474,8 @@
       .then(res => res.json())
       .then((currGamesApiResult) => {
 
+        this.loadingElem.classList.add('invisible');
+
         // Assemble a sorted list of leagues
         var leaguesSet = new Set();
         for (let g in currGamesApiResult) {
@@ -525,6 +527,8 @@
         fetch(seedsUrl)
         .then(res => res.json())
         .then((seedsApiResult) => {
+
+          this.loadingElem.classList.add('invisible');
 
           // Assemble a sorted list of leagues
           var leaguesSet = new Set();
@@ -797,6 +801,8 @@
         fetch(seedsUrl)
         .then(res => res.json())
         .then((seedsApiResult) => {
+
+          this.loadingElem.classList.add('invisible');
 
           // Assemble a sorted list of leagues
           var leaguesSet = new Set();
