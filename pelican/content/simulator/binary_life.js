@@ -175,6 +175,7 @@
      */
     init : function() {
       try {
+        this.loading();
         this.listLife.init();   // Reset/init algorithm
         this.loadConfig();      // Load config from URL
         this.keepDOMElements(); // Keep DOM references (getElementsById)
@@ -191,6 +192,24 @@
       }
     },
 
+    loading : function() {
+      this.loadingElem = document.getElementById('container-loading');
+      this.loadingElem.classList.remove('invisible');
+    },
+
+    removeLoadingElem : function() {
+      this.loadingElem.classList.add('invisible');
+    },
+
+    showControlsElem : function() {
+      var controls = document.getElementById('container-golly-controls');
+      controls.classList.remove('invisible');
+    },
+
+    showGridElem : function() {
+      var canv = document.getElementById('container-canvas');
+      canv.classList.remove('invisible');
+    },
 
     /**
      * Load config from URL
@@ -287,6 +306,11 @@
         fetch(url)
         .then(res => res.json())
         .then((gameApiResult) => {
+      
+          // Remove loading message, show controls and grid
+          this.removeLoadingElem();
+          this.showControlsElem();
+          this.showGridElem();
 
           this.gameApiResult = gameApiResult;
 
@@ -348,6 +372,11 @@
         .then(res => res.json())
         .then((mapApiResult) => {
 
+          // Remove loading message, show controls and grid
+          this.removeLoadingElem();
+          this.showControlsElem();
+          this.showGridElem();
+
           this.setTeamNames();
           this.setColors();
 
@@ -398,6 +427,11 @@
           this.initialState1 = this.s1Default;
           this.initialState2 = this.s2Default;
         }
+
+        // Remove loading message, show controls and grid
+        this.removeLoadingElem();
+        this.showControlsElem();
+        this.showGridElem();
 
         this.setInitialState();
 

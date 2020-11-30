@@ -1,190 +1,243 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
+<div class="container" id="container-golly-header">
+  <div class="row">
+    <h1 class="golly-simulator-header" style="color: #eee;"><span id="golly-game-title">Binary Game of Life</span></h1>
+  </div>
+</div>
 
-<div class="row">
 
-    <h1 style="color: #eee;"><span id="golly-game-title">Binary Game of Life</span></h1>
+<div class="container" id="container-golly-frontmatter">
+
+  <div class="row">
+
+    <p>To get started, click the <span class="badge badge-success">Run</span> button, or interact with the grid 
+    below to fill in cells. Binary life works the same as normal life, except
+    when new cells are born, they take on the color that the majority of their
+    parent cells have. Each team begins below with the acorn pattern. Refresh the
+    page to get the acorn pattern back.</p>
+    
+    <p>If you're not sure what all of this is about, check out the
+    Wikipedia article on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a>.
+    </p>
+
+  </div>
 
 </div>
 
-<p>&nbsp;</p>
 
-<p>To get started, click the <span class="badge badge-success">Run</span> button, or interact with the grid 
-below to fill in cells. Binary life works the same as normal life, except
-when new cells are born, they take on the color that the majority of their
-parent cells have. Each team begins below with the acorn pattern. Refresh the
-page to get the acorn pattern back.</p>
+<div class="container invisible" id="container-golly-controls">
 
-<p>If you're not sure what all of this is about, check out the
-Wikipedia article on <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a>.
-</p>
+  <div class="row">
+  
+      <div class="col-md-4">
+  
+          <div class="card bg-primary mb-3">
+              <h4 class="card-header text-white">Scoreboard</h4>
+  
+              <ul class="list-group scoreboard-panel list-group-flush">
+  
+                  <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
+                      <table width="100%"><tr><td>
+                        <span class="badge badge-success" id="team1winner"></span>
+                        <span class="badge badge-danger" id="team1loser"></span>
+                        <span class="team1color team1name"></span>
+                      </td><td align="right">
+                        <b>
+                        <span class="team1color" id="livecells1"></span>
+                        </b>
+                      </td></tr></table>
+                  </li>
+  
+                  <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells2">
+                      <table width="100%"><tr><td>
+                        <span class="badge badge-success" id="team2winner"></span>
+                        <span class="badge badge-danger" id="team2loser"></span>
+                        <span class="team2color team2name"></span>
+                      </td><td align="right">
+                        <b>
+                        <span class="team2color" id="livecells2"></span>
+                        </b>
+                      </td></tr></table>
+                  </li>
+  
+                  <li class="list-group-item scoreboard-panel" id="scoreboard-panel-generation">
+                      <table width="100%"><tr><td>
+                        Generation:
+                      </td><td align="right">
+                        <span id="generation"></span>
+                      </td></tr></table>
+                  </li>
+  
+                  <li class="list-group-item scoreboard-panel" id="scoreboard-panel-map">
+                      <table width="100%"><tr><td>
+                        Map:
+                      </td><td align="right">
+                        <span class="badge badge-brightmono" id="mapname-label"></span>
+                      </td></tr></table>
+                  </li>
+  
+              </ul>
+  
+          </div>
+  
+      </div>
+  
+      <div class="col-md-4">
+  
+          <div class="card bg-primary mb-3">
+              <h4 class="card-header text-white">Stats</h4>
+  
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                      <table width="100%"><tr><td>
+                        <span class="team1color team1name"></span> Territory:
+                      </td><td align="right" class="territory-score-column">
+                        <b>
+                        <span class="team1color" id="territory1"></span>
+                        </b>
+                      </td></tr></table>
+                  </li>
+                  <li class="list-group-item">
+                      <table width="100%"><tr><td>
+                        <span class="team2color team2name"></span> Territory:
+                      </td><td align="right" class="territory-score-column">
+                        <b>
+                        <span class="team2color" id="territory2"></span>
+                        </b>
+                      </td></tr></table>
+                  </li>
+  
+                  <li class="list-group-item">
+                      <table width="100%"><tr><td>
+                        Victory Percentage:
+                      </td><td align="right">
+                        <span id="victoryPct"></span>
+                      </td></tr></table>
+                  </li>
+  
+                  <li class="list-group-item">
+                      <table width="100%"><tr><td>
+                        Live Cells:
+                      </td><td align="right">
+                        <span id="livecells"></span>
+                      </td></tr></table>
+                  </li>
+  
+              </ul>
+  
+          </div>
+  
+      </div>
+      <div class="col-md-4">
+  
+          <div class="card bg-primary">
+              <h4 class="card-header text-white">Life Control</h4>
+  
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                      <div class="box controls">
+                          <form action="">
+                              <div class="btn-group" role="group" aria-label="Basic example">
+                                  <button type="button" id="buttonRun"   class="btn btn-lg btn-success btn-secondary">Run</button>
+                                  <button type="button" id="buttonStep"  class="btn btn-lg btn-default btn-secondary">Step</button>
+                                  <button type="button" id="buttonClear" class="btn btn-lg btn-default btn-secondary">Clear</button>
+                              </div>
+                          </form>
+                      </div>
+                  </li>
+                  <li class="list-group-item">
+                      <div class="box controls">
+                          <form action="">
+                              <div class="btn-group" role="group" aria-label="Basic example">
+                                  <button type="button" id="buttonGrid"   class="btn btn-lg btn-default btn-secondary">Grid</button>
+                                  <button type="button" id="buttonTrail"  class="btn btn-lg btn-default btn-secondary">Trail</button>
+                                  <button type="button" id="buttonColors" class="btn btn-lg btn-default btn-secondary">Colors</button>
+                              </div>
+                          </form>
+                      </div>
+                  </li>
+              </ul>
+  
+          </div>
+  
+      </div>
+  </div>
 
-<div class="row">
+</div>
 
-    <div class="col-md-4">
+<div class="container invisible" id="container-canvas">
 
-        <div class="card bg-primary mb-3">
-            <h4 class="card-header text-white">Scoreboard</h4>
+  <div class="row">
+    <table border="0">
+      <tr>
+        <td>
+          <span class="badge badge-brightmono" id="zone2label"></span>
+        </td><td align="right">
+          <span class="badge badge-brightmono" id="zone1label"></span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <canvas id="canvas" width="900" height="450">
+          </canvas>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span class="badge badge-brightmono" id="zone3label"></span>
+        </td><td align="right">
+          <span class="badge badge-brightmono" id="zone4label"></span>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-            <ul class="list-group scoreboard-panel list-group-flush">
+</div>
 
-                <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells1">
-                    <table width="100%"><tr><td>
-                      <span class="badge badge-success" id="team1winner"></span>
-                      <span class="badge badge-danger" id="team1loser"></span>
-                      <span class="team1color team1name"></span>
-                    </td><td align="right">
-                      <b>
-                      <span class="team1color" id="livecells1"></span>
-                      </b>
-                    </td></tr></table>
-                </li>
+</div>
 
-                <li class="list-group-item scoreboard-panel" id="scoreboard-panel-livecells2">
-                    <table width="100%"><tr><td>
-                      <span class="badge badge-success" id="team2winner"></span>
-                      <span class="badge badge-danger" id="team2loser"></span>
-                      <span class="team2color team2name"></span>
-                    </td><td align="right">
-                      <b>
-                      <span class="team2color" id="livecells2"></span>
-                      </b>
-                    </td></tr></table>
-                </li>
 
-                <li class="list-group-item scoreboard-panel" id="scoreboard-panel-generation">
-                    <table width="100%"><tr><td>
-                      Generation:
-                    </td><td align="right">
-                      <span id="generation"></span>
-                    </td></tr></table>
-                </li>
+<div class="container invisible" id="container-loading">
 
-                <li class="list-group-item scoreboard-panel" id="scoreboard-panel-map">
-                    <table width="100%"><tr><td>
-                      Map:
-                    </td><td align="right">
-                      <span class="badge badge-brightmono" id="mapname-label"></span>
-                    </td></tr></table>
-                </li>
-
-            </ul>
-
-        </div>
-
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
+      </div>
     </div>
 
-    <div class="col-md-4">
+</div>
 
-        <div class="card bg-primary mb-3">
-            <h4 class="card-header text-white">Stats</h4>
 
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <table width="100%"><tr><td>
-                      <span class="team1color team1name"></span> Territory:
-                    </td><td align="right" class="territory-score-column">
-                      <b>
-                      <span class="team1color" id="territory1"></span>
-                      </b>
-                    </td></tr></table>
-                </li>
-                <li class="list-group-item">
-                    <table width="100%"><tr><td>
-                      <span class="team2color team2name"></span> Territory:
-                    </td><td align="right" class="territory-score-column">
-                      <b>
-                      <span class="team2color" id="territory2"></span>
-                      </b>
-                    </td></tr></table>
-                </li>
+<div class="container invisible" id="container-error">
 
-                <li class="list-group-item">
-                    <table width="100%"><tr><td>
-                      Victory Percentage:
-                    </td><td align="right">
-                      <span id="victoryPct"></span>
-                    </td></tr></table>
-                </li>
-
-                <li class="list-group-item">
-                    <table width="100%"><tr><td>
-                      Live Cells:
-                    </td><td align="right">
-                      <span id="livecells"></span>
-                    </td></tr></table>
-                </li>
-
-            </ul>
-
-        </div>
-
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">The site has experienced a technical glitch.</h2>
+      </div>
     </div>
-    <div class="col-md-4">
 
-        <div class="card bg-primary">
-            <h4 class="card-header text-white">Life Control</h4>
-
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                    <div class="box controls">
-                        <form action="">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" id="buttonRun"   class="btn btn-lg btn-success btn-secondary">Run</button>
-                                <button type="button" id="buttonStep"  class="btn btn-lg btn-default btn-secondary">Step</button>
-                                <button type="button" id="buttonClear" class="btn btn-lg btn-default btn-secondary">Clear</button>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="box controls">
-                        <form action="">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" id="buttonGrid"   class="btn btn-lg btn-default btn-secondary">Grid</button>
-                                <button type="button" id="buttonTrail"  class="btn btn-lg btn-default btn-secondary">Trail</button>
-                                <button type="button" id="buttonColors" class="btn btn-lg btn-default btn-secondary">Colors</button>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-            </ul>
-
-        </div>
-
+    <div class="row text-center notify-body">
+      <div class="col-md-12">
+        <p>
+        Ninjas have been dispatched to track down those responsible for the downtime
+        and bring them back to Hellmouth Community College to fix the site.
+        </p>
+      </div>
     </div>
-</div>
-
-<div class="row" id="canvascontainer">
-
-  <table border="0">
-    <tr>
-      <td>
-        <span class="badge badge-brightmono" id="zone2label"></span>
-      </td><td align="right">
-        <span class="badge badge-brightmono" id="zone1label"></span>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <canvas id="canvas" width="900" height="450">
-        </canvas>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <span class="badge badge-brightmono" id="zone3label"></span>
-      </td><td align="right">
-        <span class="badge badge-brightmono" id="zone4label"></span>
-      </td>
-    </tr>
-  </table>
 
 </div>
 
-</div>
+<noscript>
+  <div class="container" id="container-noscript">
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">You must have Javascript enabled to view this site.</h2>
+      </div>
+    </div>
+  </div>
+</noscript>
 
 {% endblock %}
 {% block javascript %}
