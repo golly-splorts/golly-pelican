@@ -377,6 +377,10 @@
           this.showControlsElem();
           this.showGridElem();
 
+          // Set the game title
+          var gameTitleElem = document.getElementById('golly-game-title');
+          gameTitleElem.innerHTML = "Golly Map: " + mapApiResult.mapName;
+
           this.setTeamNames();
           this.setColors();
 
@@ -412,6 +416,11 @@
           // Load a random configuration for each state
           this.initialState1 = 'random';
           this.initialState2 = 'random';
+
+          // Set the game title
+          var gameTitleElem = document.getElementById('golly-game-title');
+          gameTitleElem.innerHTML = "Golly Random Pattern";
+
         } else if ((this.s1user != null) || (this.s2user != null)) {
           if (this.s1user != null) {
             this.initialState1 = this.s1user;
@@ -423,9 +432,19 @@
           } else {
             this.initialState2 = [{}];
           }
+
+          // Set the game title
+          var gameTitleElem = document.getElementById('golly-game-title');
+          gameTitleElem.innerHTML = "Golly Sandbox";
+
         } else {
           this.initialState1 = this.s1Default;
           this.initialState2 = this.s2Default;
+
+          // Set the game title
+          var gameTitleElem = document.getElementById('golly-game-title');
+          gameTitleElem.innerHTML = "Golly Sandbox";
+
         }
 
         // Remove loading message, show controls and grid
