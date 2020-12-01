@@ -261,8 +261,7 @@
 
       } else {
         // Default patterns
-        this.game_mode = false;
-        this.sandbox_mode = true;
+        this.sandboxMode = true;
         this.grid.mapOverlay = false;
 
       }
@@ -870,7 +869,6 @@
 
       // Keyboard Events
       this.helpers.registerEvent(document.body, 'keyup', this.handlers.keyboard, false);
-
       // Controls
       this.helpers.registerEvent(document.getElementById('buttonRun'), 'click', this.handlers.buttons.run, false);
       this.helpers.registerEvent(document.getElementById('buttonStep'), 'click', this.handlers.buttons.step, false);
@@ -971,6 +969,7 @@
         window.requestAnimationFrame(GOL.nextStep);
       } else {
         if (GOL.clear.schedule) {
+          console.log('finally cleaning up');
           GOL.cleanUp();
         }
       }
@@ -994,7 +993,7 @@
        * (sandbox mode only)
        */
       canvasMouseDown : function(event) {
-        if (this.sandbox_mode===true) {
+        if (GOL.sandboxMode === true || GOL.mapMode === true) {
           var position = GOL.helpers.mousePosition(event);
           GOL.canvas.switchCell(position[0], position[1]);
           GOL.handlers.lastX = position[0];
@@ -1009,7 +1008,7 @@
        * (sandbox mode only)
        */
       canvasMouseUp : function() {
-        if (this.sandbox_mode===true) {
+        if (GOL.sandboxMode === true || GOL.mapModed === true) {
           GOL.handlers.mouseDown = false;
         }
       },
@@ -1022,7 +1021,7 @@
        * (sandbox mode only)
        */
       canvasMouseMove : function(event) {
-        if (this.sandbox_mode===true) {
+        if (GOL.sandboxMode === true || GOL.mapMode === true) {
           if (GOL.handlers.mouseDown) {
             var position = GOL.helpers.mousePosition(event);
             if ((position[0] !== GOL.handlers.lastX) || (position[1] !== GOL.handlers.lastY)) {
@@ -1046,7 +1045,7 @@
 
         if (event.keyCode === 67) { // Key: C
           // User can only clear the board in sandbox mode
-          if (this.sandboxMode === true || this.mapMode === true) {
+          if (GOL.sandboxMode === true || GOL.mapMode === true) {
             GOL.handlers.buttons.clear();
           }
         } else if (event.keyCode === 82 ) { // Key: R
@@ -1093,13 +1092,12 @@
          * Button Handler - Clear World
          */
         clear : function() {
-          if (this.sandboxMode === true || this.mapMode === true) {
+          if (GOL.sandboxMode === true || GOL.mapMode === true) {
             if (GOL.running) {
               GOL.clear.schedule = true;
+              console.log('scheduled clear');
               GOL.running = false;
-              // TODO figure out if this replacement will work?
               $("#buttonRun").text("Run");
-              //document.getElementById('buttonRun').innerHTML = "Run";
               document.getElementById('buttonRun').classList.remove("btn-danger");
               document.getElementById('buttonRun').classList.add("btn-success");
             } else {
@@ -1113,7 +1111,6 @@
          * Button Handler - Remove/Add Trail
          */
         trail : function() {
-          //GOL.element.messages.layout.innerHTML = GOL.trail.current ? 'Trail is Off' : 'Trail is On';
           GOL.trail.current = !GOL.trail.current;
           if (GOL.running) {
             GOL.trail.schedule = true;
@@ -1316,7 +1313,7 @@
        * cmr - this is only activated when a user clicks on a cell
        */
       switchCell : function(i, j) {
-        if (this.sandbox_mode===true) {
+        if (GOL.sandboxMode===true) {
           if (GOL.listLife.isAlive(i, j)) {
             if (GOL.listLife.getCellColor(i, j) == 1) {
               // Swap colors
