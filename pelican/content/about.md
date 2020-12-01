@@ -32,20 +32,20 @@ unexpected ways."
 
 John Conway passed away on 11 April 2020. Although he would probably
 [roll his eyes at us](https://www.youtube.com/watch?v=E8kUJL04ELA),
-we dedicate golly to the memory of John Conway.
+we dedicate Golly to the memory of John Conway.
 
 Here is [an excellent video summarizing John Conway's career](https://www.youtube.com/watch?v=WsecAiJDI8s)
 from [Numberphile](https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A).
 
-## What is golly? How is golly different from the Game of Life?
+## What is Golly? How is Golly different from the Game of Life?
 
 Golly is a modified version of the Game of Life in which live cells have colors,
 and cells that become alive take on the color of the majority of their parents.
 
-More of the rules specific to Golly can be found on the [Rules](rules.html) page.
-
 Teams achieve a win by being the tam with the most live cells on the grid when the 
-simulation reaches a steady state (also see [Rules](rules.md)).
+simulation reaches a steady state.
+
+More of the rules specific to Golly can be found on the [Rules](rules.html) page.
 
 Golly was wholly inspired by blaseball. It is classified as a splort. If those words
 do not mean anything to you, please continue on to the next question.
@@ -67,7 +67,7 @@ Splorts are a reflection of the random and absurd nature of the universe and our
 They can help us learn to embrace whatever happens, build communities, create art, make new
 friends, and have fun.
 
-## Who is the commissioner of golly?
+## Who is the commissioner of Golly?
 
 Rubrix Helicopter is the Golly Commissioner.
 
@@ -78,7 +78,7 @@ to be awakend from the cryogenic state after 100 years.
 Instead, the Metablaseball Research Laboratory at Hellmouth Community College decided
 to awaken Rubrix Helicopter and make them the Golly Commissioner.
 This served to free up storage space occupied by the crogenic chamber, and significantly
-reduced HCC's electrical bill, which was key to securing support for golly from
+reduced HCC's electrical bill, which was key to securing support for Golly from
 HCC administrators.
 
 ## What is the Metablaseball Research Laboratory (MeRL)?
@@ -91,7 +91,7 @@ simulates these simple blaseball universes using specialized mechanical devices.
 
 Research at MeRL doesn't stop at blaseball - MeRL applies the techniques
 of metablaseball to other splorts. In fact, this is exactly what led to the
-birth of the splort of golly.
+birth of the splort of Golly.
 
 ## What is Hellmouth Community College (HCC)?
 
