@@ -44,20 +44,6 @@ TEMPLATE_PAGES['league.js'] = 'league.js'
 TEMPLATE_PAGES['maps.html'] = 'maps.html'
 TEMPLATE_PAGES['maps.js'] = 'maps.js'
 
-TEMPLATE_PAGES['siteMode_0009.html'] = 'siteMode_0009.html'
-TEMPLATE_PAGES['siteMode_1019.html'] = 'siteMode_1019.html'
-TEMPLATE_PAGES['siteMode_21.html'] = 'siteMode_21.html'
-TEMPLATE_PAGES['siteMode_22.html'] = 'siteMode_22.html'
-TEMPLATE_PAGES['siteMode_23.html'] = 'siteMode_23.html'
-TEMPLATE_PAGES['siteMode_31.html'] = 'siteMode_31.html'
-TEMPLATE_PAGES['siteMode_32.html'] = 'siteMode_32.html'
-TEMPLATE_PAGES['siteMode_33.html'] = 'siteMode_33.html'
-TEMPLATE_PAGES['siteMode_40plus.html'] = 'siteMode_40plus.html'
-
-TEMPLATE_PAGES['allGames.html'] = 'allGames.html'
-
-TEMPLATE_PAGES['miniplayer.html'] = 'miniplayer.html'
-
 # --------------------
 # Add custom routes
 
