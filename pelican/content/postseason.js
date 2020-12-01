@@ -82,7 +82,8 @@
             var mode = modeApiResult.mode;
             if (mode < 0) {
               this.error(-1);
-            } else if (mode < 20) {
+            } else if ((mode < 20) || (mode == 21)) {
+              // This also happens when waiting for first postseason series
               this.postseasonWaitingMessage()
             } else {
               this.processPostseasonData(this.season, this.currentSeason, this.currentDay);
@@ -477,7 +478,8 @@
     addTocLink : function(lower) {
       var idLabel = lower + '-postseason-toc-text';
       var tocElem = document.getElementById(idLabel);
-      tocElem.classList.remove('invisible');
+      //tocElem.classList.remove('invisible');
+      tocElem.setAttribute('href', '#' + lower);
     },
 
     /**
