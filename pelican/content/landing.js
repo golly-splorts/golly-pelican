@@ -185,6 +185,7 @@
     mode40plus : function(mode) {
       container = this.filterContainers('container-mode40plus');
       this.updateSeasonHeader();
+      this.loadingElem.classList.add('invisible');
       this.updateChampions();
       this.minilife();
     },
@@ -337,10 +338,14 @@
       fetch(url)
       .then(res => res.json())
       .then((apiResult) => {
+
         if (apiResult.hasOwnProperty('champion')) {
           champs.innerHTML = apiResult.champion;
           champs.style.color = apiResult.color;
+        } else {
+          this.error(-1);
         }
+
       })
       .catch(err => {
         console.log(err);
