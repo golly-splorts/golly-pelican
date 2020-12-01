@@ -18,7 +18,7 @@
 
     baseUIUrl : baseUIUrl,
     baseApiUrl : baseApiUrl,
-    basePlayerViewerUrl : baseUIUrl + '/player_viewer/player_viewer.html',
+    basePlayerViewerUrl : baseUIUrl + '/player_viewer/index.html',
 
     containers : [
       'container-player-viewer-header',
@@ -338,7 +338,7 @@
 
       // Handle assembling and adding player link
       var linkElem = document.createElement("a");
-      var linkHref = basePlayerViewerUrl + '?team=' + this.activeTeamAbbr + '&row=' + this.activePlayerData.row + '&col=' + this.activePlayerData.column;
+      var linkHref = this.basePlayerViewerUrl + '?team=' + this.activeTeamAbbr + '&row=' + this.activePlayerData.row + '&col=' + this.activePlayerData.column;
       linkElem.setAttribute("href", linkHref);
       linkElem.classList.add("player-viewer-link");
       linkElem.innerHTML = "permalink";
