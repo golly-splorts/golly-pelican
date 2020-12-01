@@ -42,7 +42,7 @@ from [Numberphile](https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A).
 Golly is a modified version of the Game of Life in which live cells have colors,
 and cells that become alive take on the color of the majority of their parents.
 
-More of the rules specific to Golly can be found on the [Rules](rules.md) page.
+More of the rules specific to Golly can be found on the [Rules](rules.html) page.
 
 Teams achieve a win by being the tam with the most live cells on the grid when the 
 simulation reaches a steady state (also see [Rules](rules.md)).
