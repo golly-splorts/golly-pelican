@@ -246,6 +246,8 @@
       .then(res => res.json())
       .then((seedsApiResult) => {
 
+        this.loadingElem.classList.add('invisible');
+
         var seedtables = document.getElementsByClassName("seed-table");
         var template = document.getElementById('seed-table-template');
         var clone = template.content.cloneNode(true);
@@ -543,8 +545,6 @@
         .then(res => res.json())
         .then((seedsApiResult) => {
 
-          this.loadingElem.classList.add('invisible');
-
           // Assemble a sorted list of leagues
           var leaguesSet = new Set();
           for (var league in seedsApiResult) {
@@ -721,26 +721,29 @@
                 // Seed number
                 t1tags = elem.getElementsByClassName('team1seed');
                 t2tags = elem.getElementsByClassName('team2seed');
+                t1ix = -1;
+                t2ix = -1;
                 var i;
                 for (i = 0; i < leagues.length; i++) {
                   leagueSeedResults = seedsApiResult[leagues[i]];
                   t1ix = leagueSeedResults.indexOf(game.team1Name);
-                  if (t1ix > 0) {
-                    console.log("team 1 league " + leagues[i] + " has seed " + t1ix);
+                  console.log(t1ix);
+                  if (t1ix >= 0) {
                     t1seed = t1ix;
                   }
                   t2ix = leagueSeedResults.indexOf(game.team2Name);
-                  if (t2ix > 0) {
+                  console.log(t2ix);
+                  if (t2ix >= 0) {
                     t2seed = t2ix;
                   }
                 }
-                if (t1seed != 0) {
+                if (t1seed >= 0) {
                   t1seed += 1;
                   for (t = 0; t < t1tags.length; t++) {
                     t1tags[t].innerHTML = "(" + t1seed + ")";
                   }
                 }
-                if (t2seed != 0) {
+                if (t2seed >= 0) {
                   t2seed += 1;
                   for (t = 0; t < t2tags.length; t++) {
                     t2tags[t].innerHTML = "(" + t2seed + ")";
