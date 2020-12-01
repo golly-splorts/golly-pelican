@@ -195,6 +195,9 @@
      */
     updateSeasonHeader : function() {
 
+      var seasonHeadTitle = document.getElementById('landing-header-season').parentNode;
+      seasonHeadTitle.classList.add('invisible');
+
       // get current day/season info from API /today
       let url = this.baseApiUrl + '/today';
       fetch(url)
@@ -221,6 +224,8 @@
         if (dayHead != null) {
           dayHead.innerHTML = day;
         }
+        
+        seasonHeadTitle.classList.remove('invisible');
 
       })
       .catch(err => {
