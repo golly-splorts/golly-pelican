@@ -5,15 +5,23 @@ Date: 2000-01-01 00:00
 
 ## What is Conway's Game of Life?
 
-Brief explanation
+Life is a cellular automaton that evolves deterministically from an initial state.
+Life takes place on a grid, and each cell is designated as either alive or dead.
+The rules of the game are as follows:
 
-Link to Life wikipedia page
+* A living cell with fewer than two live neighbors will die, as if through underpopulation.
+* A living cell with two or three live neighbors will continue living in the next generation.
+* A cell with more than three live neighbors will die, as if by overpopulation.
+* A dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 
-Link to Life wiki
+More information can be found on the [Wikipedia page](https://en.wikipedia.org/wiki/Conway's_Game_of_Life)
+for Conway's Game of Life.
 
-Pedro Verruma version of life: https://pmav.eu/stuff/javascript-game-of-life-v3.1.1/
+[LifeWiki](https://conwaylife.com/wiki/Main_Page) has a wealth of information about different
+patterns, variations on the Game of Life rules, and notable news and historical information about
+the Game of Life.
 
-implementation of Tony Finch's list life algorithm: http://dotat.at/prog/life/life.html
+## Who was John Conway?
 
 John Conway was a distinguished mathematician who made many contributions to mathematics,
 including the invention of the Game of Life. A nomination of Conway to become a Fellow of
@@ -29,11 +37,12 @@ we dedicate golly to the memory of John Conway.
 Here is [an excellent video summarizing John Conway's career](https://www.youtube.com/watch?v=WsecAiJDI8s)
 from [Numberphile](https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A).
 
-## What is golly?
+## What is golly? How is golly different from the Game of Life?
 
-Golly is a competitive, two-player version of the Game of Life where cells have
-multiple colors, one for each team. The rules of the Game of Life are adapted for
-multiple colors.
+Golly is a modified version of the Game of Life in which live cells have colors,
+and cells that become alive take on the color of the majority of their parents.
+
+More of the rules specific to Golly can be found on the [Rules](rules.md) page.
 
 Teams achieve a win by being the tam with the most live cells on the grid when the 
 simulation reaches a steady state (also see [Rules](rules.md)).
@@ -68,19 +77,17 @@ to be awakend from the cryogenic state after 100 years.
 
 Instead, the Metablaseball Research Laboratory at Hellmouth Community College decided
 to awaken Rubrix Helicopter and make them the Golly Commissioner.
-
 This served to free up storage space occupied by the crogenic chamber, and significantly
 reduced HCC's electrical bill, which was key to securing support for golly from
 HCC administrators.
 
 ## What is the Metablaseball Research Laboratory (MeRL)?
 
-The Metablaseball Research Laboratory (MeRL) is a research laboratory at
-Hellmouth Community College. MeRL researches ways of creating absurd,
-simulated versions of blaseball, modifying or adding rules, and creating 
-rosters of fictional players and filling in their backstories. MeRL then
-simulates these simple blaseball universes using specialized mechanical
-devices.
+The [Metablaseball Research Laboratory (MeRL)](https://ch4zm.github.io/metablaseball)
+is a research laboratory at Hellmouth Community College. MeRL researches ways of 
+creating absurd, simulated versions of blaseball, modifying or adding rules, and 
+creating rosters of fictional players and filling in their backstories. MeRL then
+simulates these simple blaseball universes using specialized mechanical devices.
 
 Research at MeRL doesn't stop at blaseball - MeRL applies the techniques
 of metablaseball to other splorts. In fact, this is exactly what led to the
