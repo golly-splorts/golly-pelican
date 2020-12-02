@@ -36,18 +36,21 @@
       let url = this.baseApiUrl + '/mode';
       fetch(url)
       .then(res => res.json())
-      .then((apiResult) => {
+      .then((modeApiResult) => {
 
-        var mode = apiResult.mode;
+        console.log(modeApiResult);
+
+        var mode = modeApiResult.mode;
+        var start = modeApiResult.start;
 
         if (mode < 0) {
           this.error(mode);
         } else if (mode < 10) {
-          this.mode0009(mode);
+          this.mode0009(mode, start);
         } else if (mode < 20) {
           this.mode1019(mode);
         } else if (mode < 30) {
-          this.mode2029(mode);
+          this.mode2029(mode, start);
         } else if (mode < 40) {
           this.mode3039(mode);
         } else {
@@ -118,9 +121,10 @@
     /**
      * Function called if site is in mode 0-9 (pre-season)
      */
-    mode0009 : function(mode) {
+    mode0009 : function(mode, countdownStart) {
       var container = this.filterContainers('container-mode0009');
       this.updateSeasonHeader();
+      this.updateCountdownClock(countdownStart);
       this.loadingElem.classList.add('invisible');
       this.minilife();
     },
@@ -138,7 +142,7 @@
     /**
      * Function called if site is in mode 20-29 (waiting for postseason)
      */
-    mode2029 : function(mode) {
+    mode2029 : function(mode, countdownStart) {
 
       // Handle special cases
       var container;
@@ -152,6 +156,7 @@
         this.error(-1);
       }
       this.updateSeasonHeader();
+      this.updateCountdownClock(countdownStart);
       this.updateSeedTable();
       this.populatePostseasonWaiting(mode, container);
 
@@ -233,6 +238,13 @@
         console.log(err);
         this.error(-1);
       });
+    },
+
+    updateCountdownClock : function(countdownSeconds) {
+      var unixStart = Math.floor(Date.now() / 1000) + countdownSeconds;
+      var flipdown = new FlipDown(unixStart, {
+        headings: ["D", "H", "M", "S"],
+      }).start();
     },
 
     /**
