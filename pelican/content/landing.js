@@ -38,8 +38,6 @@
       .then(res => res.json())
       .then((modeApiResult) => {
 
-        console.log(modeApiResult);
-
         var mode = modeApiResult.mode;
         var start = modeApiResult.start;
 
@@ -71,9 +69,9 @@
 
       // Hide elements
       this.loadingElem.classList.add('invisible');
-      for (var c in this.containers) {
+      for (var c in this.landingDivIds) {
         try {
-          var elem = document.getElementById(this.containers[c]);
+          var elem = document.getElementById(this.landingDivIds[c]);
           elem.classList.add('invisible');
         } catch (e) {
           // do nothing
