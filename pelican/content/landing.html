@@ -37,19 +37,20 @@
 
 <div class="container invisible" id="container-mode0009">
 
-    <div class="row text-offwhite text-center landing-header">
+    <div class="row text-offwhite text-center landing-header justify-content-lg-center">
       <div class="col-md-12">
         <h2>Season <span id="landing-header-season"></span> will begin soon!</h2>
       </div>
+    </div>
+
+    <div class="row justify-content-lg-center flipdown-clock">
+      <div id="flipdown" class="flipdown"></div>
     </div>
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
         <p>The next season will begin soon. In the meantime, here is a Game of Life simulator. Click to turn cells on and off!</p>
       </div>
-    </div>
-
-    <div class="vspace40">
     </div>
 
     <div class="minilife" id="minilife-player">
@@ -90,6 +91,9 @@
       </div>
     </div>
 
+    <div class="row justify-content-lg-center flipdown-clock">
+      <div id="flipdown" class="flipdown"></div>
+    </div>
 
     <div class="row justify-content-md-center waiting-container" id="lds-waiting-container">
       <div class="col-md-5 league-container" id="league-1-container">
@@ -116,6 +120,10 @@
         <h2>Season <span id="landing-header-season">_</span>: Golly League Championship Series</h2>
         <h4>This best of 5 series will begin soon!</h4>
       </div>
+    </div>
+
+    <div class="row justify-content-lg-center flipdown-clock">
+      <div id="flipdown" class="flipdown"></div>
     </div>
 
     <div class="row justify-content-md-center waiting-container" id="lcs-waiting-container">
@@ -145,6 +153,10 @@
       </div>
     </div>
 
+    <div class="row justify-content-lg-center flipdown-clock">
+      <div id="flipdown" class="flipdown"></div>
+    </div>
+
     <div class="row justify-content-md-center waiting-container" id="ws-waiting-container">
       <div class="col-md-5 league-container" id="ws-league-waiting-container">
       </div>
@@ -166,7 +178,6 @@
         <h4>Best of 5</h4>
       </div>
     </div>
-
 
     <div class="row justify-content-md-center ongoing-container lds-ongoing-container">
       <div class="col-md-4 league-container" id="league-1-container">
@@ -294,8 +305,14 @@
 </noscript>
 
 {% endblock %}
+{% block css %}
+    <link href="{{ SITEURL }}/theme/css/flipdown.min.css"  rel="stylesheet" type="text/css">
+    <!-- re-include custom.css to override some flipdown.css settings -->
+    <link href="{{ SITEURL }}/theme/css/custom.css"  rel="stylesheet" type="text/css">
+{% endblock %}
 {% block javascript %}
-<script type="text/javascript" src="/theme/js/json-sans-eval.js"></script>
-<script type="text/javascript" src="/theme/js/minilife_core.js"></script>
-<script type="text/javascript" src="landing.js"></script>
+  <script type="text/javascript" src="{{ SITEURL }}/theme/js/json-sans-eval.js"></script>
+  <script type="text/javascript" src="{{ SITEURL }}/theme/js/minilife_core.js"></script>
+  <script type="text/javascript" src="{{ SITEURL }}/theme/js/flipdown.min.js"></script>
+  <script type="text/javascript" src="landing.js"></script>
 {% endblock %}
