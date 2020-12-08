@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
+export GOLLY_STAGE="integration"
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
+export GOLLY_BASE_UI="http://localhost:8000"
+export GOLLY_BASE_API="http://localhost:8989"
