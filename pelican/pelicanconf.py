@@ -1,6 +1,6 @@
 import os, re, glob
 
-SITEURL = ''
+SITEURL = os.environ.get('GOLLY_BASE_UI', '')
 
 AUTHOR = u'Ch4zm of Hellmouth'
 SITENAME = u'Golly'
@@ -60,13 +60,11 @@ TEMPLATE_PAGES['player_viewer/player_viewer.js']   = 'player_viewer/player_viewe
 # minilife app is used on multiple pages,
 # so it lives in golly-pelican-theme
 
-# How to add an app route:
-### THEME_TEMPLATES_OVERRIDES.append('foobar')
-### TEMPLATE_PAGES['foobar.html'] = 'foobar/index.html'
-### TEMPLATE_PAGES['foobar.css']  = 'foobar/foobar.css'
-### TEMPLATE_PAGES['foobar.json'] = 'foobar/foobar.json'
-### TEMPLATE_PAGES['foobar_modcontrol.js'] = 'foobar/foobar_modcontrol.js'
-
+# These two env vars are used via Jinja in golly-pelican-theme (header.html) to set API/UI base URLs.
+# If they are empty strings, we use Javscript to deduce the base UI URL,
+# and insert "api." beteen the protocol and base URL to get the API URL.
+GOLLY_BASE_UI = os.environ.get('GOLLY_BASE_UI', '')
+GOLLY_BASE_API = os.environ.get('GOLLY_BASE_API', '')
 
 
 # --------------------

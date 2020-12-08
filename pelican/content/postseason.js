@@ -1,12 +1,9 @@
 (function () {
 
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   var PostseasonPage = {
 
-    baseApiUrl : baseApiUrl,
-    baseUIUrl : baseUIUrl,
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
 
     leagues : null,
     loadingElem : null,

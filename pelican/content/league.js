@@ -1,14 +1,9 @@
 (function () {
 
-  // standings-header-season-number 
-
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   var LeaguePage = {
 
-    baseApiUrl : baseApiUrl,
-    baseUIUrl : baseUIUrl,
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
 
     loadingElem : null,
     season : null,

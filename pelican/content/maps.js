@@ -1,8 +1,5 @@
 (function () {
 
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   mapDescriptions = {
     'random' : 'A completely random map layout, territory split 50/50.',
     'twoacorn': 'Two fast-growing acorn metheuselas placed in the top and bottom halves of the grid.',
@@ -16,8 +13,8 @@
 
   var MapsPage = {
 
-    baseApiUrl : baseApiUrl,
-    baseUIUrl : baseUIUrl,
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
 
     loadingElem : null,
 

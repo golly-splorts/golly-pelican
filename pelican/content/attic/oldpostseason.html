@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <h1 class="text-center season-header">Season 5 Postseason</h1>
+    
+    <div class="row justify-content-md-center season-toc">
+        <div class="col-lg-8">
+        <p class="text-center lead">Jump to:</p>
+
+        <p class="text-center lead">
+        <a href="#ws">World Series (Round 3)</a>
+        &bull; 
+        <a href="#cs">Championship Series (Round 2)</a>
+        &bull; 
+        <a href="#ds">Division Series (Round 1)</a>
+        </p>
+        </div>
+    </div>
+
+
+
+    <div class="row justify-content-md-center postseason-series-header">
+      <div class="col-lg-8">
+          <a name="ws" class="padded-anchor"></a>
+          <h2 class="text-center">World Series</h2>
+            <p class="text-center lead">Best of 7</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-6">
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+      </div>
+    </div>
+
+
+
+    <div class="row justify-content-lg-center postseason-series-header">
+      <div class="col-lg-8">
+          <a name="cs" class="padded-anchor"></a>
+          <h2 class="text-center">Championship Series</h2>
+            <p class="text-center lead">Best of 5</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-6">
+
+        <h4 class="text-center">Hot League Championship Series</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+      </div>
+      <div class="col-lg-6">
+
+        <h4 class="text-center">Cold League Championship Series</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row justify-content-lg-center postseason-series-header">
+      <div class="col-lg-8">
+          <a name="ds" class="padded-anchor"></a>
+          <h2 class="text-center">Division Series</h2>
+            <p class="text-center lead">Best of 5</p>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-lg-center">
+
+
+      <div class="col-lg-6">
+
+        <h4 class="text-center">Hot League Divison Series 1</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+
+        <h4 class="text-center">Hot League Division Series 2</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+      </div>
+
+
+      <div class="col-lg-6">
+
+        <h4 class="text-center">Cold League Divison Series 1</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+
+        <h4 class="text-center">Cold League Division Series 2</h4>
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+        {% include "finished_postgame.html" %}
+
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}

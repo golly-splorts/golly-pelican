@@ -6,9 +6,6 @@
 
 (function () {
 
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   var realBackgroundColor = "#272b30";
   var gridStrokeColor     = "#666666";
   var mapZoneStrokeColor  = "#dddddd";
@@ -16,9 +13,10 @@
 
   var PlayerViewer = {
 
-    baseUIUrl : baseUIUrl,
-    baseApiUrl : baseApiUrl,
-    basePlayerViewerUrl : baseUIUrl + '/player_viewer/index.html',
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
+
+    basePlayerViewerUrl : getBaseUIUrl() + '/player_viewer/index.html',
 
     containers : [
       'container-player-viewer-header',

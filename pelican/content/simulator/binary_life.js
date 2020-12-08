@@ -13,9 +13,6 @@
 
 (function () {
 
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   var realBackgroundColor = "#272b30";
   var gridStrokeColor1    = "#3a3a3a";
   var mapZoneStrokeColor  = "#dddddd";
@@ -23,9 +20,11 @@
 
   var GOL = {
 
-    baseUIUrl : baseUIUrl,
-    baseApiUrl : baseApiUrl,
-    baseSimulatorUrl : baseUIUrl + '/simulator/index.html',
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
+
+    // this may duplicate / between the base url and simulator
+    baseSimulatorUrl : getBaseUIUrl() + '/simulator/index.html',
 
     s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
     s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',

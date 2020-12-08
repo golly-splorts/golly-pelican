@@ -1,0 +1,453 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container container-mode0009">
+
+    <div class="row text-offwhite text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1 will begin soon!</h2>
+      </div>
+    </div>
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <p>The next season will begin soon. In the meantime, here is a smol Game of Life simulator...</p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife">
+    </div>
+
+</div>
+
+
+
+<div class="container container-mode1019">
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1 Day 99: Current Games</h2>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-lg-center season-container">
+
+      <div class="col-md-4 league-container league-1-container">
+
+        <!--
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+        -->
+
+      </div>
+
+
+      <div class="col-md-4 league-container league-2-container">
+
+        <!--
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+
+        {% include "inprogress_game.html" %}
+        -->
+
+      </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<div class="container container-mode2029" id="container-mode21">
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: League Division Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center waiting-container lds-waiting-container">
+      <div class="col-md-4 league-container league-1-container">
+
+        <!--
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "scheduled_postgame.html" %}
+
+        {% include "scheduled_postgame.html" %}
+        -->
+
+      </div>
+
+
+      <div class="col-md-4 league-container league-2-container">
+
+        <!--
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "scheduled_postgame.html" %}
+
+        {% include "scheduled_postgame.html" %}
+        -->
+
+      </div>
+
+    </div>
+
+    <div class="row text-center landing-header-below" id="lds-seed-table">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+      <!--
+      <div class="col-lg-4">
+        <h3 class="text-center">Hot League Seeds</h3>
+
+        <ul class="list-group">
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            San Diego Balloon Animals
+            <span class="badge badge-primary badge-pill seed-number">1</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Alewife Arsonists
+            <span class="badge badge-primary badge-pill seed-number">2</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Baltimore Texas
+            <span class="badge badge-primary badge-pill seed-number">3</span>
+          </li>
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Detroit Grape Chews
+            <span class="badge badge-primary badge-pill seed-number">4</span>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="col-lg-1">
+      </div>
+
+      <div class="col-lg-4">
+          <h3 class="text-center">Cold League Seeds</h3>
+
+          <ul class="list-group">
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              San Diego Balloon Animals
+              <span class="badge badge-primary badge-pill seed-number">1</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Alewife Arsonists
+              <span class="badge badge-primary badge-pill seed-number">2</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Baltimore Texas
+              <span class="badge badge-primary badge-pill seed-number">3</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Detroit Grape Chews
+              <span class="badge badge-primary badge-pill seed-number">4</span>
+            </li>
+
+          </ul>
+
+      </div>
+      -->
+
+    </div>
+
+</div>
+
+
+
+
+<div class="container container-mode2029" id="container-mode22">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: League Championship Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center waiting-container lcs-waiting-container">
+      <div class="col-md-4 league-container league-1-container">
+
+        <!--
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "scheduled_postgame.html" %}
+        -->
+
+      </div>
+
+
+      <div class="col-md-4 league-container league-2-container">
+
+        <!--
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "scheduled_postgame.html" %}
+        -->
+
+      </div>
+
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="lcs-seed-container">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+<div class="container container-mode2029" id="container-mode23">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2>Season 1: World Series</h2>
+        <h4>The series will begin soon!</h4>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center waiting-container ws-waiting-container">
+
+      <!--
+      <div class="col-md-4">
+
+        {% include "scheduled_postgame.html" %}
+
+      </div>
+      -->
+
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="ws-seed-table">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+
+</div>
+
+
+
+<div class="container container-mode3039" id="container-mode31">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: League Division Series</h2>
+          <h4>Best of 5</h4>
+      </div>
+    </div>
+
+
+
+    <div class="row justify-content-md-center ongoing-container lds-ongoing-container">
+      <div class="col-md-4 league-container league-1-container">
+
+        <!--
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "inprogress_postgame.html" %}
+
+        {% include "inprogress_postgame.html" %}
+        -->
+
+      </div>
+
+      <div class="col-md-4 league-container league-2-container">
+
+        <!--
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "inprogress_postgame.html" %}
+
+        {% include "inprogress_postgame.html" %}
+        -->
+
+      </div>
+
+
+    </div>
+
+
+
+    <div class="row text-center landing-header-below" id="lds-seed-container-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+
+<div class="container container-mode3039" id="container-mode32">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: League Championship Series</h2>
+          <h4>Best of 5</h4>
+      </div>
+    </div>
+
+
+
+    <div class="row justify-content-md-center ongoing-container lds-ongoing-container">
+      <div class="col-md-4">
+
+        <!--
+        <h4 class="text-center">Hot League</h4>
+
+        {% include "inprogress_postgame.html" %}
+        -->
+
+      </div>
+
+      <div class="col-md-4">
+
+        <!--
+        <h4 class="text-center">Cold League</h4>
+
+        {% include "inprogress_postgame.html" %}
+        -->
+
+      </div>
+
+
+    </div>
+
+
+
+    <div class="row text-center landing-header-below" id="lcs-seed-container-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+
+<div class="container container-mode3039" id="container-mode33">
+
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+          <h2>Season 1: World Series</h2>
+          <h4>Best of 7</h4>
+      </div>
+    </div>
+
+
+
+    <div class="row justify-content-md-center ongoing-container ws-ongoing-container">
+
+      <!--
+      <div class="col-md-4">
+
+        {% include "inprogress_postgame.html" %}
+
+      </div>
+      -->
+
+    </div>
+
+
+    <div class="row text-center landing-header-below" id="ws-seed-container-ongoing">
+      <div class="col-md-12">
+        <h2>Postseason Seeds</h2>
+      </div>
+    </div>
+
+
+    <div class="row justify-content-md-center seed-table">
+    </div>
+
+
+</div>
+
+
+<div class="container container-mode40plus">
+
+
+    <h2 class="text-center champion-header">Season 1 has ended.<h2>
+    <h3 class="text-center champion-header">Your Golly Champions are: The <span id="champion-team">San Diego Balloon Animals!</span></h3>
+
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <p>The next season will begin soon. In the meantime, here is a smol Game of Life simulator...</p>
+      </div>
+    </div>
+
+    <div class="vspace40">
+    </div>
+
+    <div class="minilife" id="minilife">
+    </div>
+
+
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="landing.js"></script>
+{% endblock %}

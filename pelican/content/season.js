@@ -1,12 +1,9 @@
 (function () {
 
-  var baseApiUrl = 'http://192.168.30.20:8989';
-  var baseUIUrl  = 'http://192.168.30.20:8001';
-
   var SeasonPage = {
 
-    baseApiUrl : baseApiUrl,
-    baseUIUrl : baseUIUrl,
+    baseApiUrl : getBaseApiUrl(),
+    baseUIUrl : getBaseUIUrl(),
 
     loadingElem: null,
 

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" id="container-countdown">
+
+  <div class="row justify-content-lg-center">
+    <h2>Countdown Clock</h2>
+  </div>
+
+  <div class="row justify-content-lg-center">
+    <div id="flipdown" class="flipdown"></div>
+  </div>
+
+</div>
+
+<noscript>
+  <div class="container" id="container-noscript">
+    <div class="row text-center landing-header">
+      <div class="col-md-12">
+        <h2 class="text-danger">You must have Javascript enabled to view this site.</h2>
+      </div>
+    </div>
+  </div>
+</noscript>
+
+{% endblock %}
+{% block css %}
+    <link href="{{ SITEURL }}/theme/css/flipdown.min.css"  rel="stylesheet" type="text/css">
+{% endblock %}
+{% block javascript %}
+  <script type="text/javascript" src="countdown.js"></script>
+  <script type="text/javascript" src="{{ SITEURL }}/theme/js/flipdown.min.js"></script>
+{% endblock %}
