@@ -22,5 +22,8 @@ release_prod:
 test_deploy:
 	scripts/deploy.sh --dry-run
 
+deploy_local:
+	scripts/deploy_local.sh
+
 deploy:
 	scripts/deploy.sh

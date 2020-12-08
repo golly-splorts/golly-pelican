@@ -1,5 +1,9 @@
 #!/bin/bash
 
+export GOLLY_UI_PORT="8888"
+export GOLLY_API_PORT="8989"
+
+export GOLLY_BASE_UI="http://localhost:${GOLLY_UI_PORT}"
+export GOLLY_BASE_API="http://localhost:${GOLLY_API_PORT}"
+
 export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
-export GOLLY_BASE_UI="http://localhost:8000"
-export GOLLY_BASE_API="http://localhost:8989"
