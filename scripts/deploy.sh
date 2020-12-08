@@ -21,10 +21,11 @@ else
 	echo "\$GOLLY_STAGE is set to '$GOLLY_STAGE'"
 fi
 
-# This block discovers the command line flag `--dry-run`
-# and passes on positional arguments as $1, $2, etc.
-if [[ "$1" == "--dry-run" ]]; then
-    DRY_RUN="--dry-run"
+# Check for command line flag `--dry-run`
+if [[ $# > 0 ]]; then
+    if [[ "$1" == "--dry-run" ]]; then
+        DRY_RUN="--dry-run"
+    fi
 fi
 
 # Figure out the domain for the given stage
