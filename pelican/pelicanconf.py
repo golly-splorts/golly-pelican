@@ -3,7 +3,14 @@ import os, re, glob
 SITEURL = os.environ.get('GOLLY_BASE_UI', '')
 
 AUTHOR = u'Ch4zm of Hellmouth'
-SITENAME = u'Golly'
+
+stage = os.environ.get('GOLLY_STAGE', '')
+if stage=="dev":
+    SITENAME = u'Golly123'
+elif stage=="integration":
+    SITENAME = u'Golly456'
+else:
+    SITENAME = u'Golly'
 
 PATH = 'content'
 THEME = 'golly-pelican-theme'
