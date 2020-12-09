@@ -72,6 +72,8 @@ git config user.name "Ch4zm of Hellmouth"
 # Set the email for git commit
 git config user.email "ch4zm.of.hellmouth@gmail.com"
 
+echo $DOM > CNAME
+
 git add -A .
 
 git commit -a -m "Automatic deploy of ${GOLLY_STAGE} at $(date -u +"%Y-%m-%d-%H-%M-%S")"
