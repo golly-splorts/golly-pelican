@@ -75,10 +75,10 @@ if ! git --no-pager diff --ignore-submodules=untracked --exit-code; then
 fi
 
 git fetch --all
-git -c advice.detachedHead=false checkout origin/$PROMOTE_FROM_BRANCH
+git -c advice.detachedHead=false checkout gh/$PROMOTE_FROM_BRANCH
 git checkout -B $PROMOTE_DEST_BRANCH
 git tag $RELEASE_TAG
-git push --force origin $PROMOTE_DEST_BRANCH
+git push --force gh $PROMOTE_DEST_BRANCH
 git push --tags
 
 if [[ -e "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}" ]]; then
