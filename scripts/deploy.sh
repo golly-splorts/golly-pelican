@@ -67,10 +67,10 @@ echo "Committing new content..."
 cd output
 
 # Set the username for git commit
-git config --local user.name="Ch4zm of Hellmouth"
+git config user.name "Ch4zm of Hellmouth"
 
 # Set the email for git commit
-git config --local user.email="ch4zm.of.hellmouth@gmail.com"
+git config user.email "ch4zm.of.hellmouth@gmail.com"
 
 git add -A .
 
