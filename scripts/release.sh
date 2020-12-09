@@ -74,16 +74,16 @@ if ! git --no-pager diff --ignore-submodules=untracked --exit-code; then
     exit 1
 fi
 
-echo git fetch --all
-echo git -c advice.detachedHead=false checkout origin/$PROMOTE_FROM_BRANCH
-echo git checkout -B $PROMOTE_DEST_BRANCH
-echo git tag $RELEASE_TAG
-echo git push --force origin $PROMOTE_DEST_BRANCH
-echo git push --tags
+git fetch --all
+git -c advice.detachedHead=false checkout origin/$PROMOTE_FROM_BRANCH
+git checkout -B $PROMOTE_DEST_BRANCH
+git tag $RELEASE_TAG
+git push --force origin $PROMOTE_DEST_BRANCH
+git push --tags
 
 if [[ -e "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}" ]]; then
     source "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}"
-    echo make -C "$GOLLY_PELICAN_HOME" deploy
+    make -C "$GOLLY_PELICAN_HOME" deploy
 else
     echo "Error: Could not find environment config file ${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}. Unable to deploy."
     exit 1
