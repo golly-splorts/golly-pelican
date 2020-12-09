@@ -56,6 +56,8 @@ cd ${GOLLY_PELICAN_HOME}/pelican
 rm -fr output
 git clone -b gh-pages git@${GH_URL}:golly-splorts/${REPO}.git output
 
+rm -fr output/*
+
 echo "Generating pelican content..."
 pelican content
 
@@ -63,7 +65,6 @@ pelican content
 echo "Committing new content..."
 cd output
 git add -A .
-
 git commit -a -m "Automatic deploy of ${GOLLY_STAGE} at $(date -u +"%Y-%m-%d-%H-%M-%S")"
 RESULT=$?
 if [ $RESULT -eq 0 ]; then
