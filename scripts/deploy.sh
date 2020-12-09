@@ -4,6 +4,7 @@ set -euo pipefail
 
 # This is machine-dependent (SSH config)
 GH_URL="ch4zm.github.com"
+DRY_RUN=""
 
 if [ -z ${GOLLY_PELICAN_HOME+x} ]; then
 	echo 'You must set the $GOLLY_PELICAN_HOME environment variable to proceed.'
