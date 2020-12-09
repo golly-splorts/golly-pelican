@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -euo pipefail
+set -x
 
 if [ -z "${GOLLY_PELICAN_HOME}" ]; then
 	echo 'You must set the $GOLLY_PELICAN_HOME environment variable to proceed.'
@@ -79,7 +80,7 @@ git -c advice.detachedHead=false checkout gh/$PROMOTE_FROM_BRANCH
 git checkout -B $PROMOTE_DEST_BRANCH
 git tag $RELEASE_TAG
 git push --force gh $PROMOTE_DEST_BRANCH
-git push --tags
+git push --tags gh
 
 if [[ -e "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}" ]]; then
     source "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}"
