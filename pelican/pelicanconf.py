@@ -34,10 +34,9 @@ PLUGINS = ['render_math']
 # Map template pages to their final file name
 
 TEMPLATE_PAGES = {}
-TEMPLATE_PAGES['index.html'] = 'index.html'
 
-TEMPLATE_PAGES['landing.html'] = 'landing.html'
-TEMPLATE_PAGES['landing.js'] = 'landing.js'
+TEMPLATE_PAGES['index.html'] = 'index.html'
+TEMPLATE_PAGES['index.js'] = 'index.js'
 
 TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['season.js'] = 'season.js'
