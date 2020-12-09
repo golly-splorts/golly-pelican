@@ -17,7 +17,7 @@ release_integration:
 	scripts/release.sh dev integration
 
 release_prod:
-	scripts/release.sh staging prod
+	scripts/release.sh integration prod
 
 test_deploy:
 	scripts/deploy.sh --dry-run
