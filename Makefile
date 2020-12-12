@@ -10,6 +10,9 @@ all:
 # - this will look for environment.X
 # - if found, source it and run make deploy
 
+release_main:
+	scripts/release.sh $(CB) main
+
 release_dev:
 	scripts/release.sh $(CB) dev
 
