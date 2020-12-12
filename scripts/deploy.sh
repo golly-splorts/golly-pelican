@@ -26,6 +26,10 @@ fi
 if [[ $# > 0 ]]; then
     if [[ "$1" == "--dry-run" ]]; then
         DRY_RUN="--dry-run"
+    else
+        echo "Error: unrecognized argument provided."
+        echo "Only valid input argument is --dry-run."
+        exit 1;
     fi
 fi
 
