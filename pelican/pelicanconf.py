@@ -1,8 +1,15 @@
 import os, re, glob
 
+
+GOLLY_PELICAN_VERSION = "0.0.1"
+
+
+# Yes, this is supposed to be UI not URI...
 SITEURL = os.environ.get('GOLLY_BASE_UI', '')
 
 AUTHOR = u'Ch4zm of Hellmouth'
+
+HERE = os.path.abspath(os.path.dirname(__file__))
 
 stage = os.environ.get('GOLLY_STAGE', '')
 if stage=="dev":
