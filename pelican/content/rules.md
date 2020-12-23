@@ -92,9 +92,11 @@ Date: 2000-01-01 00:00
 ## Section 6. Season
 
 1. Each season shall consist of S games, where S is a positive, odd integer. In general, S = 49.
-1. Each matchup of teams shall result in two games, with each team swapping positions on the map between games,
-   excepting the last matchup of the season, which shall consist of a single game.
-1. Each team shall play their season's games against teams in the same division (intra-divisional gamess) or
+1. <s>Each matchup of teams shall result in two games, with each team swapping positions on the map between games,
+   excepting the last matchup of the season, which shall consist of a single game.</s> (Amended in Season 3:
+   "Each matchup of teams shall result in two games played on two random maps, excepting the last matchup of the
+   season, which shall consist of a single game.")
+1. Each team shall play their season's games against teams in the same division (intra-divisional games) or
    against teams in the same league (inter-divisional games).
 1. Schedules for each season shall be determined randomly. Mechanisms may be implemented to ensure a fair schedule
    for all teams.
@@ -103,7 +105,7 @@ Date: 2000-01-01 00:00
 
 1. At the end of each season, a playoffs bracket shall be determined.
 1. Each league shall declare one winner from each division, with each division winner earning a spot in the
-   playoffs bracket. The remaining spots in the playoffs bracketr shall go to the non-division winner teams with
+   playoffs bracket. The remaining spots in the playoffs bracket shall go to the non-division winner teams with
    the best win records in the league.
 1. In the case where two teams are tied in number of wins, the best record shall be assigned to the team with the
    most cumulative live cells at the end of each game (the highest-scoring team). in the case of a tie in scores,
