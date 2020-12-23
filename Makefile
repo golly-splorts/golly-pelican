@@ -5,6 +5,9 @@ CB := $(shell git branch --show-current)
 all:
 	@echo "no default make rule defined"
 
+rosters:
+	scripts/make_roster_pages.py
+
 # Procedure:
 # - run make release_X command
 # - this will look for environment.X
