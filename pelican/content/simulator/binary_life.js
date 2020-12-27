@@ -1696,7 +1696,7 @@
         } else {
           if (GOL.gameMode && GOL.neighborColorLegacyMode) {
             return 1;
-          } else if (xx%2==yy%2) {
+          } else if (x%2==y%2) {
             return 1;
           } else {
             return 2;
@@ -1884,7 +1884,7 @@
         } else {
           if (GOL.neighborColorLegacyMode) {
             color = 1;
-          } else if (xx%2==yy%2) {
+          } else if (x%2==y%2) {
             color = 1;
           } else {
             color = 2;
