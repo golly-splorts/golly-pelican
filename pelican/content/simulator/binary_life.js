@@ -32,6 +32,7 @@
     gameMode : false,
     mapMode : false,
     sandboxMode : false,
+    neighborColorLegacyMode : false,
 
     teamNames: [],
     teamColors: [],
@@ -337,6 +338,11 @@
 
           this.setTeamNames();
           this.setColors();
+
+          // If the game is season 0-2,
+          // use legacy neighbor color rules (to preserve outcome)
+          // otherwise, use updated neighbor color rules
+          this.neighborColorLegacyMode = (this.gameApiResult.season < 3);
 
           // Store map data as its own variable, for code re-use
           this.mapApiResult = this.gameApiResult.map;
@@ -968,7 +974,6 @@
         window.requestAnimationFrame(GOL.nextStep);
       } else {
         if (GOL.clear.schedule) {
-          console.log('finally cleaning up');
           GOL.cleanUp();
         }
       }
@@ -1094,7 +1099,6 @@
           if (GOL.sandboxMode === true || GOL.mapMode === true) {
             if (GOL.running) {
               GOL.clear.schedule = true;
-              console.log('scheduled clear');
               GOL.running = false;
               $("#buttonRun").text("Run");
               document.getElementById('buttonRun').classList.remove("btn-danger");
@@ -1687,10 +1691,16 @@
 
         if (color1 > color2) {
           return 1;
-        } else if (color1 < color2) {
+        } else if (color2 > color1) {
           return 2;
         } else {
-          return 0;
+          if (GOL.gameMode && GOL.neighborColorLegacyMode) {
+            return 1;
+          } else if (x%2==y%2) {
+            return 1;
+          } else {
+            return 2;
+          }
         }
       },
 
@@ -1867,10 +1877,18 @@
         }
 
         var color;
-        if (neighbors1 >= neighbors2) {
+        if (neighbors1 > neighbors2) {
           color = 1;
-        } else {
+        } else if (neighbors2 > neighbors1) {
           color = 2;
+        } else {
+          if (GOL.neighborColorLegacyMode) {
+            color = 1;
+          } else if (x%2==y%2) {
+            color = 1;
+          } else {
+            color = 2;
+          }
         }
 
         //return neighbors;
