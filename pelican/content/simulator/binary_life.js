@@ -2,12 +2,14 @@
 
 /**
  * Game of Life - JS & CSS
- * http://pmav.eu
- * 04/Sep/2010
+ * Pedro Verruma (http://pmav.eu)
+ * 04 September 2010
  *
- * Modifications by charles reid
+ * Major modifications by Charles Reid (https://github.com/charlesreid1)
  * 12 February 2018
  * 11 July 2019
+ *
+ * Major modifications by Ch4zm of Hellmouth (https://github.com/ch4zm)
  * 26 October 2020
  */
 
