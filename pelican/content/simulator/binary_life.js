@@ -317,7 +317,7 @@
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          if (gameApiResult.isPlayoffs == true) {
+          if (gameApiResult.isPostseason == true) {
             gameTitleElem.innerHTML = "Golly: " + gameApiResult.description;
           } else {
             var sp1 = gameApiResult.season + 1;
