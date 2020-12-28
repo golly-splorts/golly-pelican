@@ -86,7 +86,6 @@ if [[ -e "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}" ]]; then
     source "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}"
     make -C "$GOLLY_PELICAN_HOME" deploy
 else
-    echo "Error: Could not find environment config file ${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}. Unable to deploy."
-    exit 1
+    echo "Could not find environment config file ${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}. Unable to deploy."
 fi
 
