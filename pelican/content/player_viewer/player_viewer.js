@@ -142,6 +142,7 @@
       this.element.playerCol      = document.getElementById('player-viewer-col');
       this.element.playerTeam     = document.getElementById('player-viewer-team');
       this.element.playerLink     = document.getElementById('player-viewer-link');
+      this.element.teamLink       = document.getElementById('player-viewer-team-link');
       this.element.playerLeague   = document.getElementById('player-viewer-league');
       this.element.playerDivision = document.getElementById('player-viewer-division');
 
@@ -285,6 +286,20 @@
       this.element.playerLeague.innerHTML = this.activeTeam.league;
       this.element.playerDivision.innerHTML = this.activeTeam.division;
       this.element.playerTeam.innerHTML = this.activeTeam.teamName;
+
+      // Handle assembling and adding team link
+      var linkElem = document.createElement("a");
+      var linkHref = this.basePlayerViewerUrl + '?team=' + this.activeTeamAbbr;
+      linkElem.setAttribute("href", linkHref);
+      linkElem.classList.add("player-viewer-team-link");
+      linkElem.innerHTML = "permalink";
+
+      // it should also be in an <a> tag.
+      // remove prior <a> tag
+      while (this.element.teamLink.hasChildNodes()) {
+        this.element.teamLink.removeChild(this.element.teamLink.childNodes[0]);
+      }
+      this.element.teamLink.appendChild(linkElem);
 
     },
 
