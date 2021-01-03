@@ -3,6 +3,8 @@
 set -euo pipefail
 set -x
 
+REMOTE="gh"
+
 if [ -z "${GOLLY_PELICAN_HOME}" ]; then
 	echo 'You must set the $GOLLY_PELICAN_HOME environment variable to proceed.'
 	exit 1
@@ -57,6 +59,15 @@ fi
 
 export PROMOTE_FROM_BRANCH=$1 PROMOTE_DEST_BRANCH=$2
 
+if [[ "$(git log ${REMOTE}/${PROMOTE_FROM_BRANCH}..HEAD)" ]]; then
+    if [[ $FORCE == "--force" ]]; then
+        echo "You have unpushed changes on your promote from branch ${PROMOTE_FROM_BRANCH}. Forcing deployment anyway."
+    else
+        echo "You have unpushed changes on your promote from branch ${PROMOTE_FROM_BRANCH}! Aborting."
+        exit 1
+    fi
+fi
+
 RELEASE_TAG=$(date -u +"%Y-%m-%d-%H-%M-%S")-${PROMOTE_DEST_BRANCH}.release
 
 if [[ "$(git --no-pager log --graph --abbrev-commit --pretty=oneline --no-merges -- $PROMOTE_DEST_BRANCH ^$PROMOTE_FROM_BRANCH)" != "" ]]; then
@@ -76,11 +87,11 @@ if ! git --no-pager diff --ignore-submodules=untracked --exit-code; then
 fi
 
 git fetch --all
-git -c advice.detachedHead=false checkout gh/$PROMOTE_FROM_BRANCH
+git -c advice.detachedHead=false checkout ${REMOTE}/$PROMOTE_FROM_BRANCH
 git checkout -B $PROMOTE_DEST_BRANCH
 git tag $RELEASE_TAG
-git push --force gh $PROMOTE_DEST_BRANCH
-git push --tags gh
+git push --force $REMOTE $PROMOTE_DEST_BRANCH
+git push --tags $REMOTE
 
 if [[ -e "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}" ]]; then
     source "${GOLLY_PELICAN_HOME}/environment.${PROMOTE_DEST_BRANCH}"
