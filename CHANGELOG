@@ -1,3 +1,10 @@
+Version 5.0:
+
+* Fix bug in player viewer indexing
+* Add 1-based indexing to player viewer
+* Add team permalinks to player viewer
+* Fix bug in season page on day 0
+
 Version 4.0:
 
 * Update maps page with new map descriptions
