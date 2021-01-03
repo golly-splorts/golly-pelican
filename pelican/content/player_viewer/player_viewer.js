@@ -109,6 +109,15 @@
       row = this.helpers.getUrlParameter('row');
       col = this.helpers.getUrlParameter('col');
 
+      row1 = this.helpers.getUrlParameter('row1');
+      col1 = this.helpers.getUrlParameter('col1');
+      if (row1 != null && col1 != null) {
+        row = row1 - 1;
+        col = col1 - 1;
+      }
+      console.log(row);
+      console.log(col);
+
       var nrows, ncols;
       nrows = this.rows;
       ncols = this.columns;
@@ -120,12 +129,14 @@
           col = null;
         }
       }
+
       if (col != null) { 
         if (col < 0 || col >= ncols) {
           row = null;
           col = null;
         }
       }
+
       if (row != null && col != null) {
         this.activeRow = row;
         this.activeCol = col;
@@ -351,7 +362,7 @@
 
       // Handle assembling and adding player link
       var linkElem = document.createElement("a");
-      var linkHref = this.basePlayerViewerUrl + '?team=' + this.activeTeamAbbr + '&row=' + this.activePlayerData.row + '&col=' + this.activePlayerData.column;
+      var linkHref = this.basePlayerViewerUrl + '?team=' + this.activeTeamAbbr + '&row1=' + (this.activePlayerData.row+1) + '&col1=' + (this.activePlayerData.column+1);
       linkElem.setAttribute("href", linkHref);
       linkElem.classList.add("player-viewer-link");
       linkElem.innerHTML = "permalink";
@@ -513,7 +524,7 @@
         // Draw cells
         for (i = 0 ; i < PlayerViewer.columns; i++) {
           for (j = 0 ; j < PlayerViewer.rows; j++) {
-            if ((i==PlayerViewer.activeRow) && (j==PlayerViewer.activeCol)) {
+            if ((i==PlayerViewer.activeCol) && (j==PlayerViewer.activeRow)) {
               this.drawCell(i, j, true);
             } else {
               this.drawCell(i, j, false);
