@@ -340,6 +340,7 @@
 
           this.setTeamNames();
           this.setColors();
+          this.drawIcons();
 
           // If the game is season 0-2,
           // use legacy neighbor color rules (to preserve outcome)
@@ -372,7 +373,7 @@
 
       } else if (this.patternName != null) {
 
-        // Load a game from the /map API endpoint
+        // Load a random map from the /map API endpoint
         let url = this.baseApiUrl + '/map/' + this.patternName;
         fetch(url)
         .then(res => res.json())
@@ -579,8 +580,75 @@
         }
         this.colors.current = colorpal - 1;
         this.colors.alive = this.colors.schemes[this.colors.current].alive;
-
       }
+    },
+
+    /**
+     * Draw the icons for each team.
+     * Get data from the /teams endpoint first.
+     * Team abbreviation.
+     * This is only called when in gameMode.
+     */
+    drawIcons : function() {
+
+      // Get team abbreviations from /teams endpoint
+      // (abbreviations are used to get svg filename)
+      let url = this.baseApiUrl + '/teams/' + this.gameApiResult.season;
+      fetch(url)
+      .then(res => res.json())
+      .then((teamApiResult) => {
+
+        this.teamApiResult = teamApiResult;
+
+        // Assemble team abbreviations
+        var teamAbbrs = ['', ''];
+        var k;
+        for (k = 0; k < teamApiResult.length; k++) {
+          if (teamApiResult[k].teamName == this.gameApiResult.team1Name) {
+            teamAbbrs[0] = teamApiResult[k].teamAbbr.toLowerCase();
+          }
+          if (teamApiResult[k].teamName == this.gameApiResult.team2Name) {
+            teamAbbrs[1] = teamApiResult[k].teamAbbr.toLowerCase();
+          }
+        }
+
+        // Assemble team colors/names
+        var teamColors = [this.gameApiResult.team1Color, this.gameApiResult.team2Color];
+        var teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name];
+
+        var iconSize = "25";
+
+        // For each team, make a new <object> tag
+        // that gets data from an svg file.
+        var i;
+        for (i = 0; i < 2; i++) {
+          var ip1 = i + 1;
+          var containerId = "team" + ip1 + "-icon-container";
+          var iconId = "team" + ip1 + "-icon";
+
+          var container = document.getElementById(containerId);
+          var svg = document.createElement("object");
+          svg.setAttribute('type', 'image/svg+xml');
+          svg.setAttribute('data', '../img/' + teamAbbrs[i] + '.svg');
+          svg.setAttribute('height', iconSize);
+          svg.setAttribute('width', iconSize);
+          svg.setAttribute('id', iconId);
+          svg.setAttribute('class', 'golly-icon');
+          svg.classList.add('invisible');
+          container.appendChild(svg);
+
+          // Wait a little bit for the data to load,
+          // then modify the color and make it visible
+          setTimeout(function(color, elemId) {
+            var mysvg = $('#' + elemId).getSVG();
+            mysvg.find("g path:first-child()").attr('fill', color);
+            $('#' + elemId).removeClass('invisible');
+          }, 100, teamColors[i], iconId);
+        }
+
+      })
+      .catch(err => { throw err });
+
     },
 
     /**
