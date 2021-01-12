@@ -349,7 +349,7 @@
       championTeamElem.innerHTML = winTeamName;
       championTeamElem.style.color = winTeamColor;
 
-      var iconSize = "128";
+      var iconSize = "250";
       var iconId = "champion-icon";
       var icontainerId = "champion-icon-container";
       var icontainer = document.getElementById(icontainerId);
@@ -374,6 +374,7 @@
         $('#' + elemId).removeClass('invisible');
         console.log($("#" + elemId));
       }, 250, winTeamColor, iconId);
+
     },
 
     populateGamesHelper : function(minigame, seriesContainerElem) {

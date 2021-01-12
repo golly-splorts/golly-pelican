@@ -339,6 +339,7 @@
      */
     updateChampions : function() {
       var champs = document.getElementById('champion-team');
+      var champsIcon = document.getElementById('champion-icon');
 
       // get current day/season info from API /today
       let url = this.baseApiUrl + '/champion';
@@ -349,6 +350,34 @@
         if (apiResult.hasOwnProperty('champion')) {
           champs.innerHTML = apiResult.champion;
           champs.style.color = apiResult.color;
+
+          var winTeamAbbr;
+          if (apiResult.hasOwnProperty('abbr')) {
+
+            var iconSize = "200";
+            var iconId = "champion-icon";
+            var icontainerId = "champion-icon-container";
+            var icontainer = document.getElementById(icontainerId);
+            var svg = document.createElement("object");
+            svg.setAttribute('type', 'image/svg+xml');
+            svg.setAttribute('data', '../img/' + apiResult.abbr + '.svg');
+            svg.setAttribute('height', iconSize);
+            svg.setAttribute('width', iconSize);
+            svg.setAttribute('id', iconId);
+            svg.classList.add('icon');
+            svg.classList.add('team-icon');
+            svg.classList.add('invisible');
+            icontainer.appendChild(svg);
+
+            // Wait a little bit for the data to load,
+            // then modify the color and make it visible
+            setTimeout(function(color, elemId) {
+              var mysvg = $('#' + elemId).getSVG();
+              mysvg.find("g path:first-child()").attr('fill', color);
+              $('#' + elemId).removeClass('invisible');
+            }, 250, apiResult.color, iconId);
+          }
+
         } else {
           this.error(-1);
         }
