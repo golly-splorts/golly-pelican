@@ -117,39 +117,53 @@
      */
     processPostseasonData : function(season0, currentSeason, currentDay) {
 
-      // Get postseason
-      let postseasonUrl = this.baseApiUrl + '/postseason/' + season0;
-      fetch(postseasonUrl)
+      // Get team data
+      let teamsUrl = this.baseApiUrl + '/teams/' + season0;
+      fetch(teamsUrl)
       .then(res => res.json())
-      .then((postseasonApiResult) => {
+      .then((teamsApiResult) => {
 
-        // Remove loading message
-        this.loadingElem.classList.add('invisible');
+        this.teamsApiResult = teamsApiResult;
 
-        // Show table of contents
-        var tocElem = document.getElementById('postseason-toc-container');
-        tocElem.classList.remove('invisible');
+        // Get postseason
+        let postseasonUrl = this.baseApiUrl + '/postseason/' + season0;
+        fetch(postseasonUrl)
+        .then(res => res.json())
+        .then((postseasonApiResult) => {
 
-        for (var series in postseasonApiResult) {
+          // Remove loading message
+          this.loadingElem.classList.add('invisible');
 
-          // If it is current season, some game series may be empty lists
-          if (postseasonApiResult[series].length > 0) {
+          // Show table of contents
+          var tocElem = document.getElementById('postseason-toc-container');
+          tocElem.classList.remove('invisible');
 
-            // Get lowercase series name
-            var lower = series.toLowerCase();
-            this.addTocLink(lower);
-            if (lower=='lds') {
-              this.fillLdsSeriesContainer(postseasonApiResult[series]);
-            } else if (lower=='lcs') {
-              this.fillLcsSeriesContainer(postseasonApiResult[series]);
-            } else if (lower=='ws') {
-              this.fillWsSeriesContainer(postseasonApiResult[series]);
-              this.fillChampionsContainer(postseasonApiResult[series]);
+          for (var series in postseasonApiResult) {
+
+            // If it is current season, some game series may be empty lists
+            if (postseasonApiResult[series].length > 0) {
+
+              // Get lowercase series name
+              var lower = series.toLowerCase();
+              this.addTocLink(lower);
+              if (lower=='lds') {
+                this.fillLdsSeriesContainer(postseasonApiResult[series]);
+              } else if (lower=='lcs') {
+                this.fillLcsSeriesContainer(postseasonApiResult[series]);
+              } else if (lower=='ws') {
+                this.fillWsSeriesContainer(postseasonApiResult[series]);
+                this.fillChampionsContainer(postseasonApiResult[series]);
+              }
+
             }
 
-          }
+          } // end for each series
 
-        } // end for each series
+        })
+        .catch(err => {
+          console.log(err);
+          this.error(-1);
+        });
 
       })
       .catch(err => {
@@ -313,37 +327,73 @@
       var t2w = lastgame['team2SeriesWinLoss'][0];
       var t1s = lastgame['team1Score'];
       var t2s = lastgame['team2Score'];
+
+      var championTeamElem = document.getElementById('champion-team');
+
+      var winTeamName, winTeamColor, winTeamAbbr;
       if ((t1w==3) || (t2w==3)) {
-        var championTeamElem = document.getElementById('champion-team');
-        if ((t1w==3) && (t1s > t2s)) {
-          container.classList.remove('invisible');
-          championTeamElem.innerHTML = lastgame['team1Name'];
-          championTeamElem.style.color = lastgame['team1Color'];
-        } else if ((t2w==3) && (t2s > t1s)) {
-          container.classList.remove('invisible');
-          championTeamElem.innerHTML = lastgame['team2Name'];
-          championTeamElem.style.color = lastgame['team2Color'];
+        winTeamName = lastgame['team1Name'];
+        winTeamColor = lastgame['team1Color'];
+      } else if ((t2w==3) && (t2s > t1s)) {
+        winTeamName = lastgame['team1Name'];
+        winTeamColor = lastgame['team1Color'];
+      }
+      var k;
+      for (k = 0; k < this.teamsApiResult.length; k++) {
+        if (this.teamsApiResult[k].teamName == winTeamName) {
+          winTeamAbbr = this.teamsApiResult[k].teamAbbr.toLowerCase();
         }
       }
+
+      container.classList.remove('invisible');
+      championTeamElem.innerHTML = winTeamName;
+      championTeamElem.style.color = winTeamColor;
+
+      var iconSize = "128";
+      var iconId = "champion-icon";
+      var icontainerId = "champion-icon-container";
+      var icontainer = document.getElementById(icontainerId);
+      var svg = document.createElement("object");
+      svg.setAttribute('type', 'image/svg+xml');
+      svg.setAttribute('data', '../img/' + winTeamAbbr + '.svg');
+      svg.setAttribute('height', iconSize);
+      svg.setAttribute('width', iconSize);
+      svg.setAttribute('id', iconId);
+      svg.classList.add('icon');
+      svg.classList.add('team-icon');
+      svg.classList.add('invisible');
+      icontainer.appendChild(svg);
+
+      // Wait a little bit for the data to load,
+      // then modify the color and make it visible
+      setTimeout(function(color, elemId) {
+        console.log('ohai');
+        var mysvg = $('#' + elemId).getSVG();
+        mysvg.find("g path:first-child()").attr('fill', color);
+        console.log($("#" + elemId));
+        $('#' + elemId).removeClass('invisible');
+        console.log($("#" + elemId));
+      }, 250, winTeamColor, iconId);
     },
 
     populateGamesHelper : function(minigame, seriesContainerElem) {
 
+      // --------------
+      // Create a new game:
       // Create a clone of the template
       var gametemplate = document.getElementById('finished-postgame-template');
       var cloneFragment = gametemplate.content.cloneNode(true);
-
       // Add the game id to the template game id
       if (minigame.hasOwnProperty('id')) {
         cloneFragment.querySelector(".card").setAttribute("id", minigame.id);
       }
-
       // Add the template game div to the page
       seriesContainerElem.appendChild(cloneFragment);
-
+      // Populate this element
       var elem = document.getElementById(minigame.id);
 
-      // Team name labels
+      // --------------
+      // Team name labels:
       if (minigame.hasOwnProperty('team1Name') && minigame.hasOwnProperty('team2Name')) {
         var t1tags = elem.getElementsByClassName('team1name');
         var t2tags = elem.getElementsByClassName('team2name');
@@ -358,6 +408,7 @@
         }
       }
 
+      // --------------
       // Team colors
       if (minigame.hasOwnProperty('team1Color') && minigame.hasOwnProperty('team2Color')) {
         var t1tags = elem.getElementsByClassName('team1color');

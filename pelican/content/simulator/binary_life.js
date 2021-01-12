@@ -604,7 +604,7 @@
 
         this.teamApiResult = teamApiResult;
 
-        // Assemble team abbreviations
+        // Assemble team1/2 abbreviations
         var teamAbbrs = ['', ''];
         var k;
         for (k = 0; k < teamApiResult.length; k++) {
@@ -616,14 +616,13 @@
           }
         }
 
-        // Assemble team colors/names
+        // Assemble team1/2 colors/names
         var teamColors = [this.gameApiResult.team1Color, this.gameApiResult.team2Color];
         var teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name];
 
-        var iconSize = "25";
-
         // For each team, make a new <object> tag
         // that gets data from an svg file.
+        var iconSize = "25";
         var i;
         for (i = 0; i < 2; i++) {
           var ip1 = i + 1;
@@ -637,7 +636,8 @@
           svg.setAttribute('height', iconSize);
           svg.setAttribute('width', iconSize);
           svg.setAttribute('id', iconId);
-          svg.setAttribute('class', 'golly-icon');
+          svg.classList.add('icon');
+          svg.classList.add('team-icon');
           svg.classList.add('invisible');
           container.appendChild(svg);
 
@@ -652,6 +652,9 @@
 
       })
       .catch();
+      // Note: intentionally do nothing.
+      // If we can't figure out how to draw
+      // the team icon, just leave it be.
 
     },
 
