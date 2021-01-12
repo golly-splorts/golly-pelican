@@ -48,8 +48,7 @@
                       <table width="100%"><tr><td class="scoreboard-table-left-column">
                         <span class="badge badge-success" id="team1winner"></span>
                         <span class="badge badge-danger" id="team1loser"></span>
-                        <span class="icon team-icon" id="team1-icon-container">
-                        </span>
+                        <span class="icon team-icon" id="team1-icon-container"></span>
                         <span class="team1color team1name"></span>
                       </td><td align="right" class="scoreboard-table-right-column">
                         <b>
@@ -62,8 +61,7 @@
                       <table width="100%"><tr><td class="scoreboard-table-left-column">
                         <span class="badge badge-success" id="team2winner"></span>
                         <span class="badge badge-danger" id="team2loser"></span>
-                        <span class="icon team-icon" id="team2-icon-container">
-                        </span>
+                        <span class="icon team-icon" id="team2-icon-container"></span>
                         <span class="team2color team2name"></span>
                       </td><td align="right" class="scoreboard-table-right-column">
                         <b>
@@ -100,6 +98,8 @@
               <h4 class="card-header text-white">Stats</h4>
   
               <ul class="list-group list-group-flush">
+
+                  <!--
                   <li class="list-group-item">
                       <table width="100%"><tr><td>
                         <span class="team1color team1name"></span> Territory:
@@ -109,6 +109,7 @@
                         </b>
                       </td></tr></table>
                   </li>
+
                   <li class="list-group-item">
                       <table width="100%"><tr><td>
                         <span class="team2color team2name"></span> Territory:
@@ -118,6 +119,7 @@
                         </b>
                       </td></tr></table>
                   </li>
+                  -->
   
                   <li class="list-group-item">
                       <table width="100%"><tr><td>
@@ -132,6 +134,26 @@
                         Live Cells:
                       </td><td align="right">
                         <span id="livecells"></span>
+                      </td></tr></table>
+                  </li>
+
+                  <li class="list-group-item" id="team1record-container">
+                      <table width="100%"><tr><td>
+                        <span class="team1color"><span class="team1name"></span> WL:</span>
+                      </td><td align="right" class="simulator-wl-column">
+                        <b>
+                        <span class="team1color simulator-record" id="team1record"></span>
+                        </b>
+                      </td></tr></table>
+                  </li>
+
+                  <li class="list-group-item" id="team2record-container">
+                      <table width="100%"><tr><td>
+                        <span class="team2color"><span class="team2name"></span> WL:</span>
+                      </td><td align="right" class="simulator-wl-column">
+                        <b>
+                        <span class="team2color simulator-record" id="team2record"></span>
+                        </b>
                       </td></tr></table>
                   </li>
   
