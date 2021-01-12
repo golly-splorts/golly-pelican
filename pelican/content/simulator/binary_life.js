@@ -319,7 +319,7 @@
           var gameTitleElem = document.getElementById('golly-game-title');
           if (gameApiResult.isPostseason == true) {
             var sp1 = gameApiResult.season + 1;
-            gameTitleElem.innerHTML = "Golly: Season " + sp1 + " " + gameApiResult.description;
+            gameTitleElem.innerHTML = "Golly: " + gameApiResult.description + " (Season " + sp1 + ")";
           } else {
             var sp1 = gameApiResult.season + 1;
             var dp1 = gameApiResult.day + 1;
