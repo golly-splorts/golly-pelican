@@ -147,8 +147,8 @@
       livecells1 : null,
       livecells2 : null,
       victory: null,
-      territory1: null,
-      territory2: null,
+      // territory1: null,
+      // territory2: null,
       team1color: null,
       team1name: null,
       team2color: null,
@@ -318,11 +318,12 @@
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
           if (gameApiResult.isPostseason == true) {
-            gameTitleElem.innerHTML = "Golly: " + gameApiResult.description;
+            var sp1 = gameApiResult.season + 1;
+            gameTitleElem.innerHTML = "Golly: Season " + sp1 + " " + gameApiResult.description;
           } else {
             var sp1 = gameApiResult.season + 1;
             var dp1 = gameApiResult.day + 1;
-            var descr = "Golly: Season " + sp1 + ' Day ' + dp1;
+            var descr = "Golly: Season " + sp1 + " Day " + dp1;
             gameTitleElem.innerHTML = descr;
           }
 
@@ -359,6 +360,7 @@
 
           this.updateMapLabels();
           this.updateTeamNamesColors();
+          this.updateTeamRecords();
           this.updateGameInitCounts();
           this.updateGameControls();
           this.updateWinLossLabels();
@@ -402,6 +404,7 @@
 
           this.updateMapLabels();
           this.updateTeamNamesColors();
+          this.updateTeamRecords();
           this.updateGameInitCounts();
           this.updateGameControls();
 
@@ -463,6 +466,7 @@
 
         this.updateMapLabels();
         this.updateTeamNamesColors();
+        this.updateTeamRecords();
         this.updateGameInitCounts();
         this.updateGameControls();
 
@@ -643,11 +647,11 @@
             var mysvg = $('#' + elemId).getSVG();
             mysvg.find("g path:first-child()").attr('fill', color);
             $('#' + elemId).removeClass('invisible');
-          }, 100, teamColors[i], iconId);
+          }, 250, teamColors[i], iconId);
         }
 
       })
-      .catch(err => { throw err });
+      .catch();
 
     },
 
@@ -854,8 +858,8 @@
       this.element.livecells1.innerHTML = liveCounts.liveCells1;
       this.element.livecells2.innerHTML = liveCounts.liveCells2;
       this.element.victory.innerHTML    = liveCounts.victoryPct.toFixed(1) + "%";
-      this.element.territory1.innerHTML = liveCounts.territory1.toFixed(2) + "%";
-      this.element.territory2.innerHTML = liveCounts.territory2.toFixed(2) + "%";
+      // this.element.territory1.innerHTML = liveCounts.territory1.toFixed(2) + "%";
+      // this.element.territory2.innerHTML = liveCounts.territory2.toFixed(2) + "%";
     },
 
     /**
@@ -871,6 +875,32 @@
       if (this.autoplay) { // Next Flow
         this.autoplay = false;
         this.handlers.buttons.run();
+      }
+    },
+
+    updateTeamRecords : function() {
+      if (this.gameMode === true) {
+        var game = this.gameApiResult;
+        if (game.hasOwnProperty('team1WinLoss') && game.hasOwnProperty('team2WinLoss')) {
+          // Season: win-loss record to date
+          var wlstr1 = game.team1WinLoss[0] + "-" + game.team1WinLoss[1];
+          var wlstr2 = game.team2WinLoss[0] + "-" + game.team2WinLoss[1];
+          this.element.team1wlrec.innerHTML = wlstr1;
+          this.element.team2wlrec.innerHTML = wlstr2;
+        } else if (game.hasOwnProperty('team1SeriesWinLoss') && game.hasOwnProperty('team2SeriesWinLoss')) {
+          // Postseason: win-loss record in current series
+          var swlstr1 = game.team1SeriesWinLoss[0] + "-" + game.team1SeriesWinLoss[1];
+          var swlstr2 = game.team2SeriesWinLoss[0] + "-" + game.team2SeriesWinLoss[1];
+          this.element.team1wlrec.innerHTML = swlstr1;
+          this.element.team2wlrec.innerHTML = swlstr2;
+        } else {
+          // Remove the two rows containing the team records (no info)
+          this.element.team1wlrecCont.remove();
+          this.element.team2wlrecCont.remove();
+        }
+      } else {
+        this.element.team1wlrecCont.remove();
+        this.element.team2wlrecCont.remove();
       }
     },
 
@@ -909,12 +939,18 @@
       this.element.livecells1 = document.getElementById('livecells1');
       this.element.livecells2 = document.getElementById('livecells2');
 
+      this.element.team1wlrec = document.getElementById("team1record");
+      this.element.team2wlrec = document.getElementById("team2record");
+      this.element.team1wlrecCont = document.getElementById("team1record-container");
+      this.element.team2wlrecCont = document.getElementById("team2record-container");
+
       this.element.victory    = document.getElementById('victoryPct');
-      this.element.territory1 = document.getElementById('territory1');
-      this.element.territory2 = document.getElementById('territory2');
+      // this.element.territory1 = document.getElementById('territory1');
+      // this.element.territory2 = document.getElementById('territory2');
 
       this.element.team1color = document.getElementsByClassName("team1color");
       this.element.team1name  = document.getElementsByClassName("team1name");
+
       this.element.team2color = document.getElementsByClassName("team2color");
       this.element.team2name  = document.getElementsByClassName("team2name");
 
@@ -1510,18 +1546,18 @@
 
         var totalArea = GOL.columns * GOL.rows;
 
-        var territory1 = liveCells1/(1.0*totalArea);
-        territory1 = territory1 * 100;
-        var territory2 = liveCells2/(1.0*totalArea);
-        territory2 = territory2 * 100;
+        // var territory1 = liveCells1/(1.0*totalArea);
+        // territory1 = territory1 * 100;
+        // var territory2 = liveCells2/(1.0*totalArea);
+        // territory2 = territory2 * 100;
 
         return {
           liveCells: liveCells,
           liveCells1 : liveCells1,
           liveCells2 : liveCells2,
           victoryPct : victoryPct,
-          territory1 : territory1,
-          territory2 : territory2,
+          // territory1 : territory1,
+          // territory2 : territory2,
         };
       },
 
