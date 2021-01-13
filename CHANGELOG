@@ -1,3 +1,14 @@
+Version 6.0:
+
+* Significant changeset
+* Add icons to main page (champion header)
+* Add icons to postseason page (champion header)
+* Add icons to league standings page
+* Add icons to simulator
+* Updates to theme to account for new icons
+* Updates to simulator statistics on scoreboard (show W-L instead of territory %)
+* Updates to simulator game titles - include season number for postseason games
+
 Version 5.0:
 
 * Fix bug in player viewer indexing
