@@ -341,7 +341,7 @@
       var champs = document.getElementById('champion-team');
       var champsIcon = document.getElementById('champion-icon');
 
-      // get current day/season info from API /today
+      // get current champion from API
       let url = this.baseApiUrl + '/champion';
       fetch(url)
       .then(res => res.json())
@@ -351,7 +351,6 @@
           champs.innerHTML = apiResult.champion;
           champs.style.color = apiResult.color;
 
-          var winTeamAbbr;
           if (apiResult.hasOwnProperty('abbr')) {
 
             var iconSize = "200";
@@ -386,7 +385,7 @@
       .catch(err => {
         console.log(err);
         this.error(-1);
-      });
+      }); // end /champion api call
 
     },
 

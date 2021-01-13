@@ -196,7 +196,7 @@
                   mysvg.find("g path:first-child()").attr('fill', color);
                   $('#' + elemId).removeClass('invisible');
 
-                }, 250, teamStandings.teamColor, iconId);
+                }, 350, teamStandings.teamColor, iconId);
               }
 
               // Name next
