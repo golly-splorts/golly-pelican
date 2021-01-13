@@ -359,7 +359,7 @@
             var icontainer = document.getElementById(icontainerId);
             var svg = document.createElement("object");
             svg.setAttribute('type', 'image/svg+xml');
-            svg.setAttribute('data', '../img/' + apiResult.abbr + '.svg');
+            svg.setAttribute('data', '../img/' + apiResult.abbr.toLowerCase() + '.svg');
             svg.setAttribute('height', iconSize);
             svg.setAttribute('width', iconSize);
             svg.setAttribute('id', iconId);
