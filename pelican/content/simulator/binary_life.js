@@ -632,7 +632,7 @@
           var container = document.getElementById(containerId);
           var svg = document.createElement("object");
           svg.setAttribute('type', 'image/svg+xml');
-          svg.setAttribute('data', '../img/' + teamAbbrs[i] + '.svg');
+          svg.setAttribute('data', '../img/' + teamAbbrs[i].toLowerCase() + '.svg');
           svg.setAttribute('height', iconSize);
           svg.setAttribute('width', iconSize);
           svg.setAttribute('id', iconId);
