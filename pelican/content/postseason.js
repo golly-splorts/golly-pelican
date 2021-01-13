@@ -385,11 +385,20 @@
 
             // Wait a little bit for the data to load,
             // then modify the color and make it visible
-            setTimeout(function(color, elemId) {
+            var paint = function(color, elemId) {
               var mysvg = $('#' + elemId).getSVG();
-              mysvg.find("g path:first-child()").attr('fill', color);
-              $('#' + elemId).removeClass('invisible');
-            }, 250, winTeamColor, iconId);
+              var child = mysvg.find("g path:first-child()");
+              if (child.length > 0) {
+                child.attr('fill', color);
+                $('#' + elemId).removeClass('invisible');
+              }
+            }
+            // This fails pretty often, so try a few times.
+            setTimeout(paint, 100,  winTeamColor, iconId);
+            setTimeout(paint, 250,  winTeamColor, iconId);
+            setTimeout(paint, 500,  winTeamColor, iconId);
+            setTimeout(paint, 1000, winTeamColor, iconId);
+            setTimeout(paint, 1500, winTeamColor, iconId);
 
           } // end if found winning team abbr
         } // end if found winning team name/color
