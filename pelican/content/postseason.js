@@ -374,7 +374,7 @@
             var svg = document.createElement("object");
 
             svg.setAttribute('type', 'image/svg+xml');
-            svg.setAttribute('data', '../img/' + winTeamAbbr + '.svg');
+            svg.setAttribute('data', '../img/' + winTeamAbbr.toLowerCase() + '.svg');
             svg.setAttribute('height', iconSize);
             svg.setAttribute('width', iconSize);
             svg.setAttribute('id', iconId);
@@ -432,7 +432,7 @@
             var icontainer = document.getElementById(icontainerId);
             var svg = document.createElement("object");
             svg.setAttribute('type', 'image/svg+xml');
-            svg.setAttribute('data', '../img/' + winTeamAbbr + '.svg');
+            svg.setAttribute('data', '../img/' + winTeamAbbr.toLowerCase() + '.svg');
             svg.setAttribute('height', iconSize);
             svg.setAttribute('width', iconSize);
             svg.setAttribute('id', iconId);
