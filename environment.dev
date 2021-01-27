@@ -2,4 +2,7 @@
 
 export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
 export GOLLY_STAGE="dev"
-export GOLLY_URL="dev.golly123.life"
+
+export GOLLY_TLD="golly123.life"
+export GOLLY_BASE_UI="dev.${GOLLY_TLD}"
+export GOLLY_BASE_API="api.${GOLLY_TLD}"
