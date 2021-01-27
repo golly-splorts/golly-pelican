@@ -2,6 +2,4 @@
 
 export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
 export GOLLY_STAGE="dev"
-
-# Not setting BASE_UI or BASE_API
-# js will figure it out from domain
+export GOLLY_URL="dev.golly123.life"
