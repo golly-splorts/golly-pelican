@@ -4,5 +4,5 @@ export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
 export GOLLY_STAGE="integration"
 
 export GOLLY_TLD="golly456.life"
-export GOLLY_BASE_UI="integration.${GOLLY_TLD}"
-export GOLLY_BASE_API="api.${GOLLY_TLD}"
+export GOLLY_BASE_UI="https://integration.${GOLLY_TLD}"
+export GOLLY_BASE_API="https://api.${GOLLY_TLD}"
