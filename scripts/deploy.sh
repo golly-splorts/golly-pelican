@@ -36,15 +36,15 @@ fi
 # Figure out the domain for the given stage
 case ${GOLLY_STAGE} in
     dev)
-    DOM="golly123.life"
+    DOM="${GOLLY_BASE_UI}"
     REPO="golly.life-dev"
     ;;
     integration)
-    DOM="golly456.life"
+    DOM="${GOLLY_BASE_UI}"
     REPO="golly.life-integration"
     ;;
     prod)
-    DOM="golly.life"
+    DOM="${GOLLY_BASE_UI}"
     REPO="golly.life"
     ;;
     *)
