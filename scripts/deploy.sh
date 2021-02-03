@@ -35,10 +35,10 @@ fi
 
 # Figure out the domain for the given stage
 case ${GOLLY_STAGE} in
-    dev)
-    DOM="${GOLLY_BASE_UI}"
-    REPO="golly.life-dev"
-    ;;
+    ### dev)
+    ### DOM="${GOLLY_BASE_UI}"
+    ### REPO="golly.life-dev"
+    ### ;;
     integration)
     DOM="${GOLLY_BASE_UI}"
     REPO="golly.life-integration"
@@ -49,7 +49,7 @@ case ${GOLLY_STAGE} in
     ;;
     *)
     echo "Unrecognized stage: ${GOLLY_STAGE}"
-    echo "Must be: dev, integration, prod"
+    echo "Must be: integration, prod"
     exit 1
     ;;
 esac

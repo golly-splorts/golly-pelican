@@ -12,9 +12,9 @@ AUTHOR = u'Ch4zm of Hellmouth'
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 stage = os.environ.get('GOLLY_STAGE', '')
-if stage=="dev":
-    SITENAME = u'Golly123'
-elif stage=="integration":
+### if stage=="dev":
+###     SITENAME = u'Golly123'
+if stage=="integration":
     SITENAME = u'Golly456'
 else:
     SITENAME = u'Golly'
