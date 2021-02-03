@@ -28,15 +28,15 @@ test:
 # - if found, source it and run make deploy
 
 release_main:
+	@echo "Releasing current branch $(CB) to main"
 	scripts/release.sh $(CB) main
 
-release_dev:
-	scripts/release.sh $(CB) dev
-
 release_integration:
-	scripts/release.sh dev integration
+	@echo "Releasing current branch $(CB) to integration"
+	scripts/release.sh $(CB) integration
 
 release_prod:
+	@echo "Releasing branch integration to prod"
 	scripts/release.sh integration prod
 
 test_deploy:
