@@ -1,3 +1,9 @@
+Version 11.0:
+
+* Update maps page to include season badge, new badge
+* Update maps page to get descriptions from maps API
+* Add images for new maps
+
 Version 9.0:
 
 * Add hotfixes from version 8
