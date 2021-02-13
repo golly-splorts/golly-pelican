@@ -1,20 +1,5 @@
 (function () {
 
-  mapDescriptions = {
-    'random' : 'A completely random map layout, territory split 50/50.',
-    'randompartition' : 'Randomly partitioned random maps, with teams placed in alternating partitions.',
-    'quadjustyna' : 'Four justyna metheuselas, randomly oriented.',
-    'spaceshipcluster' : 'Glider clouds all aiming for the origin.',
-    'spaceshipcrash' : 'Glider clouds aimed at quadruple burloaferimeters.',
-    'twoacorn': 'Two fast-growing acorn metheuselas placed in the top and bottom halves of the grid.',
-    'timebomb': 'Three quadruple burloaferimeters holding defensive positions against a timebomb metheusela.',
-    'fourrabbits': 'Four fast-growing rabbits, one in each quadrant.',
-    'twospaceshipgenerators': 'Two spaceship generators sending spaceships across fields of boxes.',
-    'eightr': 'A row of eight R pentominos with some vertical jitter.',
-    'eightpi': 'A row of eight Pi pentominos with some vertical jitter.',
-    'twomultum': 'Two <i>multum in parvo</i> metheuselas performing acts of reverse disappearing.',
-  };
-
   var MapsPage = {
 
     baseApiUrl : getBaseApiUrl(),
@@ -112,15 +97,25 @@
           var iD;
           for (iD = 0; iD < descElems.length; iD++) {
             var descElem = descElems[iD];
-            descElem.innerHTML = mapDescriptions[thisMap.patternName];
+            if (thisMap.hasOwnProperty('mapDescription')) {
+              descElem.innerHTML = thisMap.mapDescription;
+            } else {
+              descElem.innerHTML = "(No description found)";
+            }
           }
+
+          /*
+           * set inner html of map season badge, and make it visible
+           */
 
           // Set simulate button
           var simElems = mapCard.getElementsByClassName('simulate');
           var iS;
           for (iS = 0; iS < simElems.length; iS++) {
             var simElem = simElems[iS];
-            simElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName);
+            if (thisMap.hasOwnProperty('patternName')) {
+              simElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName);
+            }
           }
 
         }
