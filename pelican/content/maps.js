@@ -104,9 +104,34 @@
             }
           }
 
-          /*
-           * set inner html of map season badge, and make it visible
-           */
+          // Add the NEW label to any map newer than Season 10
+          var newBadgeElems = mapCard.getElementsByClassName('map-badge-new');
+          var iNew;
+          for (iNew = 0; iNew < newBadgeElems.length; iNew++) {
+            var newBadgeElem = newBadgeElems[iNew];
+            if (thisMap.hasOwnProperty('mapSeason')) {
+              if (thisMap.mapSeason>=10) {
+                newBadgeElem.classList.remove('invisible');
+              } else {
+                newBadgeElem.remove();
+              }
+            }
+          }
+
+          // Add the season label to all maps
+          var seaBadgeElems = mapCard.getElementsByClassName('map-badge-season');
+          var iSea;
+          for (iSea = 0; iSea < seaBadgeElems.length; iSea++) {
+            var seaBadgeElem = seaBadgeElems[iSea];
+            if (thisMap.hasOwnProperty('mapSeason')) {
+              seaBadgeElem.innerHTML = "Season " + (thisMap.mapSeason+1);
+              seaBadgeElem.classList.remove('invisible');
+            }
+          }
+
+          // set inner html of map season badge, and make it visible
+          var mapsContainer = document.getElementById('container-maps');
+          mapsContainer.classList.remove('invisible');
 
           // Set simulate button
           var simElems = mapCard.getElementsByClassName('simulate');
