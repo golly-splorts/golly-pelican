@@ -66,10 +66,6 @@ THEME_TEMPLATES_OVERRIDES.append('simulator')
 TEMPLATE_PAGES['simulator/binary_life.html'] = 'simulator/index.html'
 TEMPLATE_PAGES['simulator/binary_life.js']   = 'simulator/binary_life.js'
 
-THEME_TEMPLATES_OVERRIDES.append('player_viewer')
-TEMPLATE_PAGES['player_viewer/player_viewer.html'] = 'player_viewer/index.html'
-TEMPLATE_PAGES['player_viewer/player_viewer.js']   = 'player_viewer/player_viewer.js'
-
 # minilife app is used on multiple pages,
 # so it lives in golly-pelican-theme
 
