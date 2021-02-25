@@ -85,29 +85,6 @@
       ],
     },
 
-    // Zoom level
-    //
-    // columns/rows/cellSize are either set by the map (game mode)
-    // or set by the user via the schemes (sandbox mode)
-    zoom : {
-      current : 0,
-      schedule : false,
-
-      // Only used in sandbox mode
-      schemes : [
-        {
-          columns : 120,
-          rows : 100,
-          cellSize : 7
-        },
-        {
-          columns : 400,
-          rows : 300,
-          cellSize : 1
-        },
-      ],
-    },
-
     // Grid style
     grid : {
       current : 0,
@@ -375,8 +352,12 @@
 
       } else if (this.patternName != null) {
 
+        // Get user-specified rows/cols, if any
+        var rows = this.getRowsFromUrlSafely();
+        var cols = this.getColsFromUrlSafely();
+
         // Load a random map from the /map API endpoint
-        let url = this.baseApiUrl + '/map/' + this.patternName;
+        let url = this.baseApiUrl + '/map/' + this.patternName + '/r/' + this.getRowsFromUrlSafely() + '/c/' + this.getColsFromUrlSafely();
         fetch(url)
         .then(res => res.json())
         .then((mapApiResult) => {
@@ -667,6 +648,39 @@
 
     },
 
+    getRowsFromUrlSafely : function() {
+      // Get the number of rows from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      rows = parseInt(this.helpers.getUrlParameter('rows'));
+      if (isNaN(rows) || rows < 0 || rows > 1000) {
+        rows = 100;
+      }
+      return rows;
+    },
+
+    getColsFromUrlSafely : function() {
+      // Get the number of cols from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      cols = parseInt(this.helpers.getUrlParameter('cols'));
+      if (isNaN(cols) || cols < 0 || cols > 1000) {
+        cols = 100;
+      }
+      return cols;
+    },
+
+    getCellSizeFromUrlSafely : function() {
+      // Get the cell size from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      cellSize = parseInt(this.helpers.getUrlParameter('cellSize'));
+      if (isNan(cellSize) || cellSize < 1 || cellSize > 10) {
+        cellSize = 7;
+      }
+      return cellSize;
+    },
+
     /**
      * Set number of rows/columns and cell size.
      */
@@ -677,14 +691,9 @@
         this.rows     = this.mapApiResult.rows;
         this.cellSize = this.mapApiResult.cellSize;
       } else {
-        zoom = parseInt(this.helpers.getUrlParameter('zoom'));
-        if (isNaN(zoom) || zoom < 1 || zoom > GOL.zoom.schemes.length) {
-          zoom = 1;
-        }
-        this.zoom.current = zoom - 1;
-        this.columns = this.zoom.schemes[this.zoom.current].columns;
-        this.rows = this.zoom.schemes[this.zoom.current].rows;
-        this.cellSize = this.zoom.schemes[this.zoom.current].cellSize;
+        this.columns = this.getColsFromUrlSafely();
+        this.rows = this.getRowsFromUrlSafely();
+        this.cellSize = this.getCellSizeFromUrlSafely();
       }
     },
 
