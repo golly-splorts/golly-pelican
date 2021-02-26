@@ -139,7 +139,7 @@
           for (iS = 0; iS < simElems.length; iS++) {
             var simElem = simElems[iS];
             if (thisMap.hasOwnProperty('patternName')) {
-              simElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName);
+              simElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName + '&rows=200&cols=240');
             }
           }
 
