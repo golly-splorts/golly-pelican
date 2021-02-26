@@ -279,6 +279,8 @@
 
       if (this.gameId != null) {
 
+        // ~~~~~~~~~~ GAME MODE ~~~~~~~~~~
+
         // Load a game from the /game API endpoint
         let url = this.baseApiUrl + '/game/' + this.gameId;
         fetch(url)
@@ -352,6 +354,8 @@
 
       } else if (this.patternName != null) {
 
+        // ~~~~~~~~~~ MAP MODE ~~~~~~~~~~
+
         // Get user-specified rows/cols, if any
         var rows = this.getRowsFromUrlSafely();
         var cols = this.getColsFromUrlSafely();
@@ -398,6 +402,8 @@
         // Done loading pattern from /map API endpoint
 
       } else {
+
+        // ~~~~~~~~~~ PLAIN OL SANDBOX MODE ~~~~~~~~~~
 
         this.setTeamNames();
         this.setColors();
@@ -656,6 +662,10 @@
       if (isNaN(rows) || rows < 0 || rows > 1000) {
         rows = 100;
       }
+      if (rows >= 200) {
+        // Turn off the grid
+        this.grid.current = 1;
+      }
       return rows;
     },
 
@@ -665,7 +675,11 @@
       // if invalid or not specified
       cols = parseInt(this.helpers.getUrlParameter('cols'));
       if (isNaN(cols) || cols < 0 || cols > 1000) {
-        cols = 100;
+        cols = 120;
+      }
+      if (cols >= 200) {
+        // Turn off the grid
+        this.grid.current = 1;
       }
       return cols;
     },
@@ -675,8 +689,12 @@
       // checking the specified value and setting to default
       // if invalid or not specified
       cellSize = parseInt(this.helpers.getUrlParameter('cellSize'));
-      if (isNan(cellSize) || cellSize < 1 || cellSize > 10) {
+      if (isNaN(cellSize) || cellSize < 1 || cellSize > 10) {
         cellSize = 7;
+      }
+      if (cellSize <= 5) {
+        // Turn off the grid
+        this.grid.current = 1;
       }
       return cellSize;
     },
