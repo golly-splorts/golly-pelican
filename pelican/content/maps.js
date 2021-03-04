@@ -171,9 +171,7 @@
                 simElem.setAttribute('href', this.baseUIUrl + '/simulator/index.html?patternName=' + thisMap.patternName);
               }
             }
-
           }
-
         })
         .catch(err => {
           console.log(err);
