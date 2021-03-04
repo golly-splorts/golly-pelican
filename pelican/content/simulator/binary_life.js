@@ -85,29 +85,6 @@
       ],
     },
 
-    // Zoom level
-    //
-    // columns/rows/cellSize are either set by the map (game mode)
-    // or set by the user via the schemes (sandbox mode)
-    zoom : {
-      current : 0,
-      schedule : false,
-
-      // Only used in sandbox mode
-      schemes : [
-        {
-          columns : 120,
-          rows : 100,
-          cellSize : 7
-        },
-        {
-          columns : 400,
-          rows : 300,
-          cellSize : 1
-        },
-      ],
-    },
-
     // Grid style
     grid : {
       current : 0,
@@ -269,7 +246,9 @@
       }
 
       // Initialize the victor percent running average window array
-      for (var i = 0; i < Math.max(2*this.columns, 2*this.rows); i++) {
+      var maxDim = 240;
+      // var maxDim = Math.max(2*this.columns, 2*this.rows);
+      for (var i = 0; i < maxDim; i++) {
         this.runningAvgWindow[i] = 0;
       }
 
@@ -301,6 +280,8 @@
     loadState : function() {
 
       if (this.gameId != null) {
+
+        // ~~~~~~~~~~ GAME MODE ~~~~~~~~~~
 
         // Load a game from the /game API endpoint
         let url = this.baseApiUrl + '/game/' + this.gameId;
@@ -375,8 +356,14 @@
 
       } else if (this.patternName != null) {
 
+        // ~~~~~~~~~~ MAP MODE ~~~~~~~~~~
+
+        // Get user-specified rows/cols, if any
+        var rows = this.getRowsFromUrlSafely();
+        var cols = this.getColsFromUrlSafely();
+
         // Load a random map from the /map API endpoint
-        let url = this.baseApiUrl + '/map/' + this.patternName;
+        let url = this.baseApiUrl + '/map/' + this.patternName + '/r/' + this.getRowsFromUrlSafely() + '/c/' + this.getColsFromUrlSafely();
         fetch(url)
         .then(res => res.json())
         .then((mapApiResult) => {
@@ -417,6 +404,8 @@
         // Done loading pattern from /map API endpoint
 
       } else {
+
+        // ~~~~~~~~~~ PLAIN OL SANDBOX MODE ~~~~~~~~~~
 
         this.setTeamNames();
         this.setColors();
@@ -667,6 +656,51 @@
 
     },
 
+    getRowsFromUrlSafely : function() {
+      // Get the number of rows from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      rows = parseInt(this.helpers.getUrlParameter('rows'));
+      if (isNaN(rows) || rows < 0 || rows > 1000) {
+        rows = 100;
+      }
+      if (rows >= 200) {
+        // Turn off the grid
+        this.grid.current = 1;
+      }
+      return rows;
+    },
+
+    getColsFromUrlSafely : function() {
+      // Get the number of cols from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      cols = parseInt(this.helpers.getUrlParameter('cols'));
+      if (isNaN(cols) || cols < 0 || cols > 1000) {
+        cols = 120;
+      }
+      if (cols >= 200) {
+        // Turn off the grid
+        this.grid.current = 1;
+      }
+      return cols;
+    },
+
+    getCellSizeFromUrlSafely : function() {
+      // Get the cell size from the URL parameters,
+      // checking the specified value and setting to default
+      // if invalid or not specified
+      cellSize = parseInt(this.helpers.getUrlParameter('cellSize'));
+      if (isNaN(cellSize) || cellSize < 1 || cellSize > 10) {
+        cellSize = 7;
+      }
+      if (cellSize <= 5) {
+        // Turn off the grid
+        this.grid.current = 1;
+      }
+      return cellSize;
+    },
+
     /**
      * Set number of rows/columns and cell size.
      */
@@ -677,14 +711,9 @@
         this.rows     = this.mapApiResult.rows;
         this.cellSize = this.mapApiResult.cellSize;
       } else {
-        zoom = parseInt(this.helpers.getUrlParameter('zoom'));
-        if (isNaN(zoom) || zoom < 1 || zoom > GOL.zoom.schemes.length) {
-          zoom = 1;
-        }
-        this.zoom.current = zoom - 1;
-        this.columns = this.zoom.schemes[this.zoom.current].columns;
-        this.rows = this.zoom.schemes[this.zoom.current].rows;
-        this.cellSize = this.zoom.schemes[this.zoom.current].cellSize;
+        this.columns = this.getColsFromUrlSafely();
+        this.rows = this.getRowsFromUrlSafely();
+        this.cellSize = this.getCellSizeFromUrlSafely();
       }
     },
 
@@ -809,7 +838,8 @@
         return;
       }
       if (this.foundVictor==false) {
-        var maxDim = Math.max(2*this.columns, 2*this.rows);
+        var maxDim = 240;
+        // var maxDim = Math.max(2*this.columns, 2*this.rows);
         // update running average window
         if (this.generation < maxDim) {
           // keep populating the window with victory pct
