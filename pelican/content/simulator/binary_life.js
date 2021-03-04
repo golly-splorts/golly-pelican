@@ -246,7 +246,9 @@
       }
 
       // Initialize the victor percent running average window array
-      for (var i = 0; i < Math.max(2*this.columns, 2*this.rows); i++) {
+      var maxDim = 240;
+      // var maxDim = Math.max(2*this.columns, 2*this.rows);
+      for (var i = 0; i < maxDim; i++) {
         this.runningAvgWindow[i] = 0;
       }
 
@@ -836,7 +838,8 @@
         return;
       }
       if (this.foundVictor==false) {
-        var maxDim = Math.max(2*this.columns, 2*this.rows);
+        var maxDim = 240;
+        // var maxDim = Math.max(2*this.columns, 2*this.rows);
         // update running average window
         if (this.generation < maxDim) {
           // keep populating the window with victory pct
