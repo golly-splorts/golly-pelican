@@ -35,17 +35,23 @@
       .then(res => res.json())
       .then((modeApiResult) => {
 
-        if (!modeApiResult.hasOwnProperty('mode') || !modeApiResult.hasOwnProperty('start') || !modeApiResult.hasOwnProperty('season')) {
-          throw;
+        if (!modeApiResult.hasOwnProperty('mode') || !modeApiResult.hasOwnProperty('season')) {
+          console.log(modeApiResult);
+          throw "Error with required keys (mode, season) in /mode response";
         }
 
         var mode;
         mode = this.mode = modeApiResult.mode;
 
-        var start = modeApiResult.start;
-
         var season;
         season = this.season = modeApiResult.season;
+
+        var start;
+        if (modeApiResult.hasOwnProperty('start')) {
+          start = modeApiResult.start;
+        } else {
+          start = 0;
+        }
 
         try {
 
@@ -228,7 +234,7 @@
 
       // Update the season number
       var seasonNumber = document.getElementById('landing-header-season-number');
-      if (this.season > 0) {
+      if (this.season >= 0) {
         seasonNumber.innerHTML = this.season + 1;
       } else {
         throw "Error using season from /mode endpoint: invalid season " + this.season;
@@ -300,58 +306,42 @@
         var leagues = Array.from(leaguesSet);
         leagues.sort();
 
-        // Load team win/loss records from the API /records endpoint
-        let recordsUrl = this.baseApiUrl + '/records';
-        fetch(recordsUrl)
-        .then(res => res.json())
-        .then((recordsApiResult) => {
-
+        // Loop over each seed table tag set (should just be one)
+        for (s = 0; s < seedtables.length; s++) {
           // Loop over each league, populate league headers and seeds
-          for (s = 0; s < seedtables.length; s++) {
-            seedTableElem = seedtables[s];
-            var l;
-            for (l = 0; l < leagues.length; l++) {
-              // Populate league headers
-              var lp1 = l+1;
-              var leagueHead = document.getElementById('seed-table-league-'+lp1+'-name');
-              var leagueName = leagues[l];
-              var leagueSeeds = seedsApiResult[leagueName];
-              leagueHead.innerHTML = leagueName;
+          seedTableElem = seedtables[s];
+          var iL;
+          for (iL = 0; iL < leagues.length; iL++) {
+            // Populate league headers
+            var iLp1 = iL+1;
+            var leagueHead = document.getElementById('seed-table-league-'+iLp1+'-name');
+            var leagueName = leagues[iL];
+            var leagueSeedList = seedsApiResult[leagueName];
 
-              // Populate seeds with the team name and win-loss record
-              var seed;
-              for (seed = 0; seed < leagueSeeds.length; seed++) {
-                var seedp1 = seed + 1;
+            // Populate seeds with the team name and win-loss record
+            var iSeed;
+            for (iSeed = 0; iSeed < leagueSeedList.length; iSeed++) {
+              var iSp1 = iSeed + 1;
 
-                var seedTeamName, seedTeamRecord, seedTeamRecordStr;
-                var nameElemId, nameElem;
-                var recordElemId, recordElem;
+              var seedTeamObject = leagueSeedList[iSeed];
+              var seedTeamName = seedTeamObject['teamName'];
+              var seedTeamRecord = seedTeamObject['teamWinLoss'];
+              var seedTeamRecordStr = "(" + seedTeamRecord[0] + "-" + seedTeamRecord[1] + ")";
 
-                seedTeamName = leagueSeeds[seed];
-                // assume the team name exists as a key, add check later
-                seedTeamRecord = recordsApiResult[seedTeamName];
-                seedTeamRecordStr = "(" + seedTeamRecord[0] + "-" + seedTeamRecord[1] + ")";
+              var nameElemId = 'league-'+iLp1+'-seed-'+iSp1;
+              var nameElem = document.getElementById(nameElemId);
 
-                nameElemId = 'league-'+lp1+'-seed-'+seedp1;
-                nameElem = document.getElementById(nameElemId);
+              var recordElemId = nameElemId + '-record';
+              var recordElem = document.getElementById(recordElemId);
 
-                recordElemId = nameElemId + '-record';
-                recordElem = document.getElementById(recordElemId);
-
-                nameElem.innerHTML = seedTeamName;
-                recordElem.innerHTML = seedTeamRecordStr;
-
-              } // end each seed team loop
-            } // end leagues loop
-          } // end loop over each seed table
-        })
-        .catch(err => {
-          console.log(err);
-          this.error(-1);
-        }); // end /records endpoint
-
+              nameElem.innerHTML = seedTeamName;
+              recordElem.innerHTML = seedTeamRecordStr;
+            }
+          }
+        }
       })
       .catch(err => {
+        console.log("Error while calling /seeds API")
         console.log(err);
         this.error(-1);
       }); // end /seeds api call
