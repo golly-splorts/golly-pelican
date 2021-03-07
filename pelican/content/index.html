@@ -35,6 +35,19 @@
 
 
 
+<!--
+<div class="container invisible" id="container-loading">
+
+    <div class="row text-center notify-header">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
+      </div>
+    </div>
+
+</div>
+-->
+
+
 <div class="container invisible" id="container-mode0009">
 
     <div class="row text-offwhite text-center landing-header justify-content-lg-center">
@@ -64,7 +77,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span> Day <span id="landing-header-day">_</span>: Current Golly Games</h2>
+        <h2>Season <span id="landing-header-season-number">_</span><span id="landing-header-day"> Day <span id="landing-header-day-number">_</span></span>: Current Golly Games</h2>
       </div>
     </div>
 
@@ -86,7 +99,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Golly League Division Series</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Golly League Division Series</h2>
         <h4>This best of 5 series will begin soon!</h4>
       </div>
     </div>
@@ -117,7 +130,7 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Golly League Championship Series</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Golly League Championship Series</h2>
         <h4>This best of 5 series will begin soon!</h4>
       </div>
     </div>
@@ -145,10 +158,9 @@
 
 <div class="container container-mode2029 invisible" id="container-mode23">
 
-
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Hellmouth Cup</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Hellmouth Cup</h2>
         <h4>This best of 7 series will begin soon!</h4>
       </div>
     </div>
@@ -157,12 +169,12 @@
       <div id="flipdown" class="flipdown"></div>
     </div>
 
-    <div class="row justify-content-md-center waiting-container" id="ws-waiting-container">
-      <div class="col-md-5 league-container" id="ws-league-waiting-container">
+    <div class="row justify-content-md-center waiting-container" id="hcs-waiting-container">
+      <div class="col-md-5 league-container" id="hcs-league-waiting-container">
       </div>
     </div>
 
-    <div class="seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
+    <div class="seed-table ongoing-seed-table" id="hcs-ongoing-seed-table">
     </div>
 
 </div>
@@ -171,11 +183,16 @@
 
 <div class="container container-mode3039 invisible" id="container-mode31">
 
-
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Golly League Division Series</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Golly League Division Series</h2>
         <h4>Best of 5</h4>
+      </div>
+    </div>
+
+    <div class="row text-center notify-header invisible loading-message" id="mode31-loading-message">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
       </div>
     </div>
 
@@ -201,8 +218,14 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Golly League Championship Series</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Golly League Championship Series</h2>
         <h4>Best of 5</h4>
+      </div>
+    </div>
+
+    <div class="row text-center notify-header invisible loading-message" id="mode32-loading-message">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
       </div>
     </div>
 
@@ -227,17 +250,23 @@
 
     <div class="row text-center landing-header">
       <div class="col-md-12">
-        <h2>Season <span id="landing-header-season">_</span>: Hellmouth Cup</h2>
+        <h2>Season <span id="landing-header-season-number">_</span>: Hellmouth Cup</h2>
         <h4>Best of 7</h4>
       </div>
     </div>
 
-    <div class="row justify-content-md-center ongoing-container" id="ws-ongoing-container">
-      <div class="col-md-5 league-container" id="ws-league-ongoing-container">
+    <div class="row text-center notify-header invisible loading-message" id="mode33-loading-message">
+      <div class="col-md-12">
+        <h4 class="text-success">The site is currently loading...</h4>
       </div>
     </div>
 
-    <div class="seed-table ongoing-seed-table" id="ws-ongoing-seed-table">
+    <div class="row justify-content-md-center ongoing-container" id="hcs-ongoing-container">
+      <div class="col-md-5 league-container" id="hcs-league-ongoing-container">
+      </div>
+    </div>
+
+    <div class="seed-table ongoing-seed-table" id="hcs-ongoing-seed-table">
     </div>
 
 </div>
@@ -263,17 +292,6 @@
 
   <div class="minilife" id="minilife-player">
   </div>
-
-</div>
-
-
-<div class="container invisible" id="container-loading">
-
-    <div class="row text-center notify-header">
-      <div class="col-md-12">
-        <h4 class="text-success">The site is currently loading...</h4>
-      </div>
-    </div>
 
 </div>
 

@@ -35,24 +35,45 @@
       .then(res => res.json())
       .then((modeApiResult) => {
 
-        var mode = modeApiResult.mode;
+        if (!modeApiResult.hasOwnProperty('mode') || !modeApiResult.hasOwnProperty('start') || !modeApiResult.hasOwnProperty('season')) {
+          throw;
+        }
+
+        var mode;
+        mode = this.mode = modeApiResult.mode;
+
         var start = modeApiResult.start;
 
-        if (mode < 0) {
-          this.error(mode);
-        } else if (mode < 10) {
-          this.mode0009(mode, start);
-        } else if (mode < 20) {
-          this.mode1019(mode);
-        } else if (mode < 30) {
-          this.mode2029(mode, start);
-        } else if (mode < 40) {
-          this.mode3039(mode);
-        } else {
-          this.mode40plus(mode);
+        var season;
+        season = this.season = modeApiResult.season;
+
+        try {
+
+          if (mode < 0) {
+            this.error(mode);
+          } else if (mode < 10) {
+            this.mode0009(mode, start);
+          } else if (mode < 20) {
+            this.mode1019(mode);
+          } else if (mode < 30) {
+            this.mode2029(mode, start);
+          } else if (mode < 40) {
+            this.mode3039(mode);
+          } else {
+            this.mode40plus(mode);
+          }
+
+        } catch(err) {
+
+          console.log('Encountered an error setting up page for specified mode ' + mode);
+          console.log(err);
+          this.error(-1);
+
         }
+
       })
       .catch(err => {
+        console.log('Encountered an error while calling /mode');
         console.log(err);
         this.error(-1);
       });
@@ -65,7 +86,10 @@
     error : function(mode) {
 
       // Hide elements
+      this.loading(false);
+      /*
       this.loadingElem.classList.add('invisible');
+      */
       for (var c in this.landingDivIds) {
         try {
           var elem = document.getElementById(this.landingDivIds[c]);
@@ -84,9 +108,19 @@
     /**
      * Show the site loading message while waiting for the API response
      */
-    loading : function() {
-      this.loadingElem = document.getElementById('container-loading');
-      this.loadingElem.classList.remove('invisible');
+    loading : function(show = true) {
+      var loadingMessages = document.getElementsByClassName("loading-message");
+      var m;
+      for (m = 0; m < loadingMessages.length; m++) {
+        var elem = loadingMessages[m];
+        if (show) {
+          // Reveal the loading message
+          elem.classList.remove('invisible');
+        } else {
+          // Remove the loading message
+          elem.remove();
+        }
+      }
     },
 
     /**
@@ -187,48 +221,45 @@
     },
 
     /**
-     * Update the "Season X" or "Season X Day Y" header with information
-     * from the API /today endpoint.
+     * Use the stored site mode and current season to update the Season X header.
+     * If we need to add Day Y information, call the /today endpoint.
      */
     updateSeasonHeader : function() {
 
-      var seasonHeadTitle = document.getElementById('landing-header-season').parentNode;
-      seasonHeadTitle.classList.add('invisible');
+      // Update the season number
+      var seasonNumber = document.getElementById('landing-header-season-number');
+      if (this.season > 0) {
+        seasonNumber.innerHTML = this.season + 1;
+      } else {
+        throw "Error using season from /mode endpoint: invalid season " + this.season;
+      }
 
-      // get current day/season info from API /today
-      let url = this.baseApiUrl + '/today';
-      fetch(url)
-      .then(res => res.json())
-      .then((apiResult) => {
+      if ((this.mode >= 10) && (this.mode < 20)) {
+        // Regular season days require us to look up the current day with the /today endpoint
+        // #landing-header-day contains the Day Y text
+        // #landing-header-day-number contains just Y
 
-        var season;
-        if (apiResult[0]==-1) {
-          season = 1;
-        } else {
-          var season = apiResult[0] + 1;
-        }
+        // Hide Day Y while we're looking it up
+        var dayText = document.getElementById('landing-header-day');
+        dayText.classList.add('invisible');
+      
+        // Get current day info from API /today
+        let url = this.baseApiUrl + '/today';
+        fetch(url)
+        .then(res => res.json())
+        .then((todayApiResult) => {
+          var day = apiResult[1] + 1;
+          var dayNumber = document.getElementById('landing-header-day-number');
+          dayNumber.innerHTML = day;
+          dayText.classList.remove('invisible');
+        })
+        .catch(err => {
+          console.log('Encountered an error while calling /today:');
+          console.log(err);
+          this.error(-1);
+        });
+      }
 
-        var day = apiResult[1] + 1;
-
-        // get element by id "landing-header-season" and change innerHTML to current season
-        var seasonHead = document.getElementById('landing-header-season');
-        if (seasonHead != null) {
-          seasonHead.innerHTML = season;
-        }
-
-        // get element by id "landing-header-day", if it exists, and change innerHTML to curr day
-        var dayHead = document.getElementById('landing-header-day');
-        if (dayHead != null) {
-          dayHead.innerHTML = day;
-        }
-        
-        seasonHeadTitle.classList.remove('invisible');
-
-      })
-      .catch(err => {
-        console.log(err);
-        this.error(-1);
-      });
     },
 
     updateCountdownClock : function(countdownSeconds) {
@@ -859,6 +890,12 @@
      * Populate the list of ongoing postseason games.
      */
     populatePostseasonOngoing : function(mode, container) {
+
+
+      // Todo: split the API calls so they are separate
+
+
+
       // get the league names from the games
       let url = this.baseApiUrl + '/currentGames';
 
@@ -872,7 +909,8 @@
         .then(res => res.json())
         .then((seedsApiResult) => {
 
-          this.loadingElem.classList.add('invisible');
+          this.loading(false);
+          //this.loadingElem.classList.add('invisible');
 
           // Assemble a sorted list of leagues
           var leaguesSet = new Set();
@@ -992,7 +1030,7 @@
                       }
                     }
 
-                    // Update map pattern name
+                    // Update map name
                     if (game.hasOwnProperty('mapName')) {
                       var mapName = game.mapName;
                       var mapTags = elem.getElementsByClassName('map-name');
@@ -1038,8 +1076,8 @@
           } else if(mode==33) {
             // begin if mode 33
 
-            // World Series has no league, single-column
-            var leagueContainerElem = document.getElementById('ws-league-ongoing-container');
+            // HCS has no league, single-column
+            var leagueContainerElem = document.getElementById('hcs-league-ongoing-container');
             var g;
             for (g = 0; g < currGamesApiResult.length; g++) {
               var game = currGamesApiResult[g];
