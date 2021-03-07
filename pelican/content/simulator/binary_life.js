@@ -329,12 +329,17 @@
           // otherwise, use updated neighbor color rules
           this.neighborColorLegacyMode = (this.gameApiResult.season < 3);
 
-          // Store map data as its own variable, for code re-use
-          this.mapApiResult = this.gameApiResult.map;
-
           // Map initial conditions
-          this.initialState1 = this.mapApiResult.initialConditions1;
-          this.initialState2 = this.mapApiResult.initialConditions2;
+          this.initialState1 = this.gameApiResult.initialConditions1;
+          this.initialState2 = this.gameApiResult.initialConditions2;
+          this.columns = this.gameApiResult.columns;
+          this.rows = this.gameApiResult.rows;
+          this.cellSize = this.gameApiResult.cellSize;
+          this.mapName = this.gameApiResult.mapName;
+          this.mapZone1Name = this.gameApiResult.mapZone1Name;
+          this.mapZone2Name = this.gameApiResult.mapZone2Name;
+          this.mapZone3Name = this.gameApiResult.mapZone3Name;
+          this.mapZone4Name = this.gameApiResult.mapZone4Name;
 
           this.setZoomState();
           this.setInitialState();
@@ -380,11 +385,12 @@
           this.setTeamNames();
           this.setColors();
 
-          this.mapApiResult = mapApiResult;
-
           // Initial conditions
-          this.initialState1 = this.mapApiResult.initialConditions1;
-          this.initialState2 = this.mapApiResult.initialConditions2;
+          this.initialState1 = mapApiResult.initialConditions1;
+          this.initialState2 = mapApiResult.initialConditions2;
+          this.columns = mapApiResult.columns;
+          this.rows = mapApiResult.rows;
+          this.cellSize = mapApiResult.cellSize;
 
           this.setZoomState();
           this.setInitialState();
@@ -518,11 +524,11 @@
      */
     updateMapLabels : function() {
       if (this.grid.mapOverlay===true) {
-        this.element.mapName.innerHTML = this.mapApiResult['mapName'];
-        this.element.z1lab.innerHTML = this.mapApiResult['mapZone1Name'];
-        this.element.z2lab.innerHTML = this.mapApiResult['mapZone2Name'];
-        this.element.z3lab.innerHTML = this.mapApiResult['mapZone3Name'];
-        this.element.z4lab.innerHTML = this.mapApiResult['mapZone4Name'];
+        this.element.mapName.innerHTML = this.mapName;
+        this.element.z1lab.innerHTML = this.mapZone1Name;
+        this.element.z2lab.innerHTML = this.mapZone2Name;
+        this.element.z3lab.innerHTML = this.mapZone3Name;
+        this.element.z4lab.innerHTML = this.mapZone4Name;
       } else {
         // Remove the Map line from the scoreboard
         this.element.mapScoreboardPanel.remove();
@@ -706,10 +712,11 @@
      */
     setZoomState : function() {
       if (this.gameMode === true || this.mapMode === true) {
-        // Set zoom info from map
+        /* we are all good
         this.columns  = this.mapApiResult.columns;
         this.rows     = this.mapApiResult.rows;
         this.cellSize = this.mapApiResult.cellSize;
+         */
       } else {
         this.columns = this.getColsFromUrlSafely();
         this.rows = this.getRowsFromUrlSafely();
