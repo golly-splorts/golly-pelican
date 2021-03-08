@@ -263,10 +263,11 @@
           fetch(url)
           .then(res => res.json())
           .then((todayApiResult) => {
-            var day = apiResult[1] + 1;
+            var day = todayApiResult[1] + 1;
             var dayNumber = document.getElementById('landing-header-day-number');
             dayNumber.innerHTML = day;
             dayText.classList.remove('invisible');
+            dayText.style="display: inline";
           })
           .catch(err => {
             console.log('Encountered an error while calling /today:');
@@ -480,6 +481,7 @@
             cloneFragment.querySelector(".card").setAttribute("id", game.gameid);
           } else {
             console.log("Malformed season game data");
+            this.error(-1);
           }
 
           // Add the template game div to the page
@@ -555,6 +557,7 @@
 
             // Update simulate game button link
             if (game.hasOwnProperty('gameid')) {
+              console.log('line 560');
               var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
               var btnTags = elem.getElementsByClassName('simulate');
               var bt;
@@ -582,7 +585,7 @@
       .then(res => res.json())
       .then((currGamesApiResult) => {
 
-        this.loadingElem.classList.add('invisible');
+        this.loading(false);
 
         // Assemble a sorted list of leagues
         var leaguesSet = new Set();
@@ -592,14 +595,27 @@
         var leagues = Array.from(leaguesSet);
         leagues.sort();
 
-        var leagueContainers = [
-          document.getElementById("league-1-container"),
-          document.getElementById("league-2-container"),
-        ];
-        var leagueNames = [
-          document.getElementById("league-1-name"),
-          document.getElementById("league-2-name"),
-        ]
+        // Get references to league containers and name labels
+        var leagueContainers = Array();
+        var leagueNames = Array();
+        var iL;
+        for (iL = 0; iL < leagues.length; iL++) {
+          var iLp1 = iL + 1;
+
+          var containerId = "league-" + iLp1 + "-container";
+          var c = document.getElementById(containerId);
+          if (c == null) {
+            throw "Could not find " + containerId + " for current games";
+          }
+          leagueContainers.push(c);
+
+          var nameId = "league-" + iLp1 + "-name";
+          var n = document.getElementById(nameId);
+          if (n == null) {
+            throw "Could not find " + nameId + " for current games";
+          }
+          leagueNames.push(n);
+        }
 
         // Loop over each league and populate its coresponding div with games
         for (let i in leagues) {
@@ -627,7 +643,6 @@
 
       // get the league names from the games
       let url = this.baseApiUrl + '/currentGames';
-
       fetch(url)
       .then(res => res.json())
       .then((currGamesApiResult) => {
@@ -650,6 +665,7 @@
 
           /////////////////////////////////////////////
           // Division Series and Championship Series
+          // Scheduled
 
           // Get references to league containers and name labels
           var leagueContainers = Array();
@@ -689,7 +705,7 @@
               }
               if (game.league==leagues[i]) {
                 // Create a clone of the postgame template
-                var postTemplate = document.getElementById('inprogress-postgame-template');
+                var postTemplate = document.getElementById('scheduled-postgame-template');
                 var cloneFragment = postTemplate.content.cloneNode(true);
 
                 // Add the game id to the template game id
@@ -702,10 +718,11 @@
 
             // Now populate each div
             for (let g in currGamesApiResult) {
+
               var game = currGamesApiResult[g];
               if (game.league==leagues[i]) {
                 var t1tags, t2tags, t, elem;
-                elem = document.getElementById(game.gameid);
+                var elem = document.getElementById(game.gameid);
                 if (elem!=null) {
 
                   // Team names and records
@@ -764,14 +781,17 @@
                   if (game.hasOwnProperty('team1Color') && game.hasOwnProperty('team2Color')) {
                     t1tags = elem.getElementsByClassName('team1color');
                     t2tags = elem.getElementsByClassName('team2color');
-                    for (let t in t1tags) {
-                      var teamColorElem = t1tags[t];
+
+                    var iT;
+                    for (iT = 0; iT < t1tags.length; iT++) {
+                      var teamColorElem = t1tags[iT];
                       teamColorElem.style.color = game.team1Color;
                     }
-                    for (let t in t2tags) {
-                      var teamColorElem = t2tags[t];
+                    for (iT = 0; iT < t2tags.length; iT++) {
+                      var teamColorElem = t2tags[iT];
                       teamColorElem.style.color = game.team2Color;
                     }
+
                   }
 
                 } else {
@@ -785,6 +805,7 @@
 
           ////////////////////////////
           // Hellmouth Cup Series
+          // Scheduled
 
           // Hellmouth Cup has no league, single-column
           var leagueContainerElem = document.getElementById('hcs-league-waiting-container');
@@ -923,6 +944,10 @@
 
         if ((mode==31) || (mode==32)) {
 
+          /////////////////////////////////////////////
+          // Division Series and Championship Series
+          // In progress
+
           // Get references to league containers and name labels
           var leagueContainers = Array();
           var leagueNames = Array();
@@ -1048,6 +1073,7 @@
 
                   // Update simulate game button link
                   if (game.hasOwnProperty('gameid')) {
+                    console.log('line 1070');
                     var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
                     var btnTags = elem.getElementsByClassName('simulate');
                     var bt;
@@ -1065,6 +1091,10 @@
           } // end for each league
 
         } else if (mode==33) {
+
+          ////////////////////////////
+          // Hellmouth Cup Series
+          // In progress
 
           // HCS has no league, single-column
           var leagueContainerElem = document.getElementById('hcs-league-ongoing-container');
@@ -1165,6 +1195,7 @@
 
             // Update simulate game button link
             if (game.hasOwnProperty('gameid')) {
+              console.log('line 1186');
               var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
               var btnTags = elem.getElementsByClassName('simulate');
               var bt;
