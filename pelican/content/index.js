@@ -14,6 +14,7 @@
     loadingElem : null,
 
     landingDivIds : [
+      'container-loading',
       'container-mode0009',
       'container-mode1019',
       'container-mode21',
@@ -135,6 +136,7 @@
     filterContainers : function(saveid) {
       var ix = this.landingDivIds.indexOf(saveid);
       if (ix<0) {
+        console.log("Could not find container with ID " + saveid);
         this.error(-1);
       }
       var i;
@@ -312,10 +314,12 @@
           seedTableElem = seedtables[s];
           var iL;
           for (iL = 0; iL < leagues.length; iL++) {
-            // Populate league headers
             var iLp1 = iL+1;
+
+            // Populate league headers
             var leagueHead = document.getElementById('seed-table-league-'+iLp1+'-name');
             var leagueName = leagues[iL];
+            leagueHead.innerHTML = leagueName;
             var leagueSeedList = seedsApiResult[leagueName];
 
             // Populate seeds with the team name and win-loss record
@@ -605,78 +609,91 @@
      * Populate the list of upcoming postseason games.
      */
     populatePostseasonWaiting : function(mode, container) {
+
       // get the league names from the games
       let url = this.baseApiUrl + '/currentGames';
+
       fetch(url)
       .then(res => res.json())
       .then((currGamesApiResult) => {
 
-        // Load the seeds from the API
-        let seedsUrl = this.baseApiUrl + '/seeds';
-        fetch(seedsUrl)
-        .then(res => res.json())
-        .then((seedsApiResult) => {
+        this.loading(false);
 
-          this.loadingElem.classList.add('invisible');
-
-          // Assemble a sorted list of leagues
-          var leaguesSet = new Set();
-          for (var league in seedsApiResult) {
+        // Assemble a sorted list of leagues
+        var leaguesSet = new Set();
+        for (let iG in currGamesApiResult) {
+          var game = currGamesApiResult[iG];
+          if (game.hasOwnProperty('league')) {
+            var league = game.league;
             leaguesSet.add(league);
           }
-          var leagues = Array.from(leaguesSet);
-          leagues.sort();
+        }
+        var leagues = Array.from(leaguesSet);
+        leagues.sort();
 
-          if ((mode==21) || (mode==22)) {
+        if ((mode==21) || (mode==22)) {
 
-            // Two leagues, two columns
-            var leagueContainers = [
-              document.getElementById("league-1-container"),
-              document.getElementById("league-2-container"),
-            ];
-            var leagueNames = [
-              document.getElementById("league-1-name"),
-              document.getElementById("league-2-name"),
-            ]
+          /////////////////////////////////////////////
+          // Division Series and Championship Series
 
-            // Loop over each league and populate its coresponding div with games
-            var i;
-            for (i = 0; i < leagues.length; i++) {
+          // Get references to league containers and name labels
+          var leagueContainers = Array();
+          var leagueNames = Array();
+          var iL;
+          for (iL = 0; iL < leagues.length; iL++) {
+            var iLp1 = iL + 1;
 
-              // This is the container we will add each game to
-              var leagueContainerElem = leagueContainers[i];
-              var leagueNameElem = leagueNames[i];
+            var containerId = "league-" + iLp1 + "-container";
+            var c = document.getElementById(containerId);
+            if (c == null) {
+              throw "Could not find " + containerId + " for current games";
+            }
+            leagueContainers.push(c);
 
-              leagueNameElem.innerHTML = leagues[i];
+            var nameId = "league-" + iLp1 + "-name";
+            var n = document.getElementById(nameId);
+            if (n == null) {
+              throw "Could not find " + nameId + " for current games";
+            }
+            leagueNames.push(n);
+          }
 
-              // Create divs for all of the games in this league
-              for (let g in currGamesApiResult) {
-                var game = currGamesApiResult[g];
-                if (game.league==leagues[i]) {
+          // Loop over each league and populate its coresponding div with games
+          for (let i in leagues) {
 
-                  // Create a clone of the template
-                  var postTemplate = document.getElementById('scheduled-postgame-template');
-                  var cloneFragment = postTemplate.content.cloneNode(true);
+            var leagueContainerElem = leagueContainers[i];
+            var leagueNameElem = leagueNames[i];
 
-                  // Add the game id to the template game id
-                  if (game.hasOwnProperty('gameid')) {
-                    cloneFragment.querySelector(".card").setAttribute("id", game.gameid);
-                  }
+            leagueNameElem.innerHTML = leagues[i];
 
-                  // Add the template game div to the page
-                  leagueContainerElem.appendChild(cloneFragment);
-                }
-              } // end loop creating divs for each game in league
+            // Create divs for all of the games in this league
+            for (let g in currGamesApiResult) {
+              var game = currGamesApiResult[g];
+              if (!game.hasOwnProperty('league') || !game.hasOwnProperty('gameid')) {
+                throw "Missing required keys (league, gameid) from result from /currentGames API";
+              }
+              if (game.league==leagues[i]) {
+                // Create a clone of the postgame template
+                var postTemplate = document.getElementById('inprogress-postgame-template');
+                var cloneFragment = postTemplate.content.cloneNode(true);
 
-              // Now populate each div
-              for (let g in currGamesApiResult) {
-                var game = currGamesApiResult[g];
-                if (game.league==leagues[i]) {
+                // Add the game id to the template game id
+                cloneFragment.querySelector(".card").setAttribute("id", game.gameid);
 
-                  var t1tags, t2tags, t, elem;
+                // Add the template game div to the league container
+                leagueContainerElem.appendChild(cloneFragment);
+              }
+            } // end loop creating divs for each game in league
 
-                  elem = document.getElementById(game.gameid);
+            // Now populate each div
+            for (let g in currGamesApiResult) {
+              var game = currGamesApiResult[g];
+              if (game.league==leagues[i]) {
+                var t1tags, t2tags, t, elem;
+                elem = document.getElementById(game.gameid);
+                if (elem!=null) {
 
+                  // Team names and records
                   if (game.hasOwnProperty('team1Name') && game.hasOwnProperty('team2Name')) {
 
                     // Team name labels
@@ -691,28 +708,31 @@
                       teamNameElem.innerHTML = game.team2Name;
                     }
 
-                    // Seed number
-                    var leagueSeedResults = seedsApiResult[leagues[i]];
+                    // Postseason W-L
+                    var t1tags, t2tags;
                     t1tags = elem.getElementsByClassName('team1seed');
                     t2tags = elem.getElementsByClassName('team2seed');
-                    t1seed = leagueSeedResults.indexOf(game.team1Name) + 1;
-                    t2seed = leagueSeedResults.indexOf(game.team2Name) + 1;
-                    for (t = 0; t < t1tags.length; t++) {
-                      t1tags[t].innerHTML = "(" + t1seed + ")";
+
+                    var pwl, t1pwl, t2pwl;
+                    pwl = game['team1PostseasonWinLoss'];
+                    t1pwl = pwl[0] + '-' + pwl[1];
+                    pwl = game['team2PostseasonWinLoss'];
+                    t2pwl = pwl[0] + '-' + pwl[1];
+
+                    for (let t in t1tags) {
+                      t1tags[t].innerHTML = "(" + t1pwl + ")";
                     }
-                    for (t = 0; t < t2tags.length; t++) {
-                      t2tags[t].innerHTML = "(" + t2seed + ")";
+                    for (let t in t2tags) {
+                      t2tags[t].innerHTML = "(" + t2pwl + ")";
                     }
 
-                  }
+                  } // end team names/records
 
                   // Game description
                   if (game.hasOwnProperty('description')) {
                     descrElems = elem.getElementsByClassName('postseason-game-description');
-                    var d;
-                    for (d = 0; d < descrElems.length; d++) {
-                      descrElem = descrElems[d];
-                      descrElem.innerHTML = game.description;
+                    for (let d in descrElems) {
+                      descrElems[d].innerHTML = game.description;
                     }
                   }
 
@@ -720,10 +740,8 @@
                   if (game.hasOwnProperty('mapName')) {
                     var mapName = game.mapName;
                     var mapTags = elem.getElementsByClassName('map-name');
-                    var mt;
-                    for (mt = 0; mt < mapTags.length; mt++) {
-                      mapNameElem = mapTags[mt];
-                      mapNameElem.innerHTML = mapName;
+                    for (let mt in mapTags) {
+                      mapTags[mt].innerHTML = mapName;
                     }
                   }
 
@@ -731,119 +749,108 @@
                   if (game.hasOwnProperty('team1Color') && game.hasOwnProperty('team2Color')) {
                     t1tags = elem.getElementsByClassName('team1color');
                     t2tags = elem.getElementsByClassName('team2color');
-                    for (t = 0; t < t1tags.length; t++) {
-                      teamColorElem = t1tags[t];
+                    for (let t in t1tags) {
+                      var teamColorElem = t1tags[t];
                       teamColorElem.style.color = game.team1Color;
                     }
-                    for (t = 0; t < t2tags.length; t++) {
-                      teamColorElem = t2tags[t];
+                    for (let t in t2tags) {
+                      var teamColorElem = t2tags[t];
                       teamColorElem.style.color = game.team2Color;
                     }
                   }
 
-                } // end if correct league
-              } // end loop updating divs for each game in league
-            } // end for each league
+                } else {
+                  throw "Could not find page element for game id " + game.gameid;
+                } // end if found game id elem
+              } // end if correct league
+            } // end loops updating divs for each game in the league
+          } // end for each league
 
+        } else if(mode==23) {
 
-            // end if mode 21 or 22
-          } else if(mode==23) {
-            // begin if mode 23
+          ////////////////////////////
+          // Hellmouth Cup Series
 
-            // Hellmouth Cup has no league, single-column
-            var leagueContainerElem = document.getElementById('hcs-league-waiting-container');
-            var g;
-            for (g = 0; g < currGamesApiResult.length; g++) {
-              var game = currGamesApiResult[g];
+          // Hellmouth Cup has no league, single-column
+          var leagueContainerElem = document.getElementById('hcs-league-waiting-container');
+          for (let g in currGamesApiResult) {
+            var game = currGamesApiResult[g];
+            if (!game.hasOwnProperty('gameid')) {
+              throw "Missing required key (gameid) from result frmo /currentGames API";
+            }
 
-              // Create a clone of the template
-              var postTemplate = document.getElementById('scheduled-postgame-template');
-              var cloneFragment = postTemplate.content.cloneNode(true);
+            // Create a clone of the template
+            var postTemplate = document.getElementById('scheduled-postgame-template');
+            var cloneFragment = postTemplate.content.cloneNode(true);
 
-              // Add the game id to the template game id
-              if (game.hasOwnProperty('gameid')) {
-                cloneFragment.querySelector(".card").setAttribute("id", game.gameid);
-              }
+            // Add the game id to the template game id
+            if (game.hasOwnProperty('gameid')) {
+              cloneFragment.querySelector(".card").setAttribute("id", game.gameid);
+            }
 
-              // Add the template game div to the page
-              leagueContainerElem.appendChild(cloneFragment);
+            // Add the template game div to the page
+            leagueContainerElem.appendChild(cloneFragment);
 
-            } // end loop creating divs for each game in league
+          } // end loop creating divs for each game in league
 
-            // Now populate the div
-            for (g = 0; g < currGamesApiResult.length; g++) {
-              var game;
-              var t1tags, t2tags, t, elem;
+          // Now populate the div
+          for (let g in currGamesApiResult) {
+            var game = currGamesApiResult[g];
 
-              game = currGamesApiResult[g];
-              elem = document.getElementById(game.gameid);
+            var t1tags, t2tags, t, elem;
+            elem = document.getElementById(game.gameid);
+            if (elem != null) { 
 
+              // Team names and records
               if (game.hasOwnProperty('team1Name') && game.hasOwnProperty('team2Name')) {
 
                 // Team name labels
                 t1tags = elem.getElementsByClassName('team1name');
                 t2tags = elem.getElementsByClassName('team2name');
-                for (t = 0; t < t1tags.length; t++) {
+                for (let t in t1tags) {
                   teamNameElem = t1tags[t];
                   teamNameElem.innerHTML = game.team1Name;
                 }
-                for (t = 0; t < t2tags.length; t++) {
+                for (let t in t2tags) {
                   teamNameElem = t2tags[t];
                   teamNameElem.innerHTML = game.team2Name;
                 }
 
-                // Seed number
+                // Postseason W-L
+                var t1tags, t2tags;
                 t1tags = elem.getElementsByClassName('team1seed');
                 t2tags = elem.getElementsByClassName('team2seed');
-                t1ix = -1;
-                t2ix = -1;
-                var i;
-                for (i = 0; i < leagues.length; i++) {
-                  leagueSeedResults = seedsApiResult[leagues[i]];
-                  t1ix = leagueSeedResults.indexOf(game.team1Name);
-                  console.log(t1ix);
-                  if (t1ix >= 0) {
-                    t1seed = t1ix;
-                  }
-                  t2ix = leagueSeedResults.indexOf(game.team2Name);
-                  console.log(t2ix);
-                  if (t2ix >= 0) {
-                    t2seed = t2ix;
-                  }
+
+                var pwl, t1pwl, t2pwl;
+                pwl = game['team1PostseasonWinLoss'];
+                t1pwl = pwl[0] + '-' + pwl[1];
+                pwl = game['team2PostseasonWinLoss'];
+                t2pwl = pwl[0] + '-' + pwl[1];
+
+                for (let t in t1tags) {
+                  t1tags[t].innerHTML = "(" + t1pwl + ")";
                 }
-                if (t1seed >= 0) {
-                  t1seed += 1;
-                  for (t = 0; t < t1tags.length; t++) {
-                    t1tags[t].innerHTML = "(" + t1seed + ")";
-                  }
+                for (let t in t2tags) {
+                  t2tags[t].innerHTML = "(" + t2pwl + ")";
                 }
-                if (t2seed >= 0) {
-                  t2seed += 1;
-                  for (t = 0; t < t2tags.length; t++) {
-                    t2tags[t].innerHTML = "(" + t2seed + ")";
-                  }
-                }
-              }
+
+              } // end team names/records
 
               // Game description
               if (game.hasOwnProperty('description')) {
-                descTags = elem.getElementsByClassName('postseason-game-description');
-                console.log(descTags);
-                var j;
-                for (j = 0; j < descTags.length; j++) {
-                  descElem = descTags[j];
-                  descElem.innerHTML = game.description;
+                descrElems = elem.getElementsByClassName('postseason-game-description');
+                for (let d in descrElems) {
+                  descrElems[d].innerHTML = game.description;
                 }
               }
+
 
               // Update map pattern name
               if (game.hasOwnProperty('mapName')) {
                 var mapName = game.mapName;
                 var mapTags = elem.getElementsByClassName('map-name');
-                var mt;
-                for (mt = 0; mt < mapTags.length; mt++) {
-                  mapNameElem = mapTags[mt];
-                  mapNameElem.innerHTML = mapName;
+                for (let mt in mapTags) {
+                  mapTags[mt].innerHTML = mapName;
                 }
               }
 
@@ -861,15 +868,11 @@
                 }
               }
 
-            } // end for each game in api result
-
-          } // end if mode 23
-
-        })
-        .catch(err => {
-          console.log(err);
-          this.error(-1);
-        }); // end API /seeds
+            } else {
+              throw "Could not find page element for game id " + game.gameid;
+            } // end if found game id elem
+          } // end loops updating divs for each game
+        } // end if mode 21/22/23
       })
       .catch(err => {
         console.log(err);
@@ -882,7 +885,6 @@
      */
     populatePostseasonOngoing : function(mode, container) {
 
-      // TODO: You are here.
       // get the league names from the games
       let url = this.baseApiUrl + '/currentGames';
 
@@ -969,13 +971,11 @@
                     // Team name labels
                     t1tags = elem.getElementsByClassName('team1name');
                     t2tags = elem.getElementsByClassName('team2name');
-                    for (t = 0; t < t1tags.length; t++) {
-                      teamNameElem = t1tags[t];
-                      teamNameElem.innerHTML = game.team1Name;
+                    for (let t in t1tags) {
+                      t1tags[t].innerHTML = game.team1Name;
                     }
-                    for (t = 0; t < t2tags.length; t++) {
-                      teamNameElem = t2tags[t];
-                      teamNameElem.innerHTML = game.team2Name;
+                    for (let t in t2tags) {
+                      t2tags[t].innerHTML = game.team2Name;
                     }
 
                     // Series W-L
@@ -989,10 +989,10 @@
                     wl = game['team2SeriesWinLoss'];
                     t2wl = wl[0] + '-' + wl[1];
 
-                    for (t = 0; t < t1tags.length; t++) {
+                    for (let t in t1tags) {
                       t1tags[t].innerHTML = "(" + t1wl + ")";
                     }
-                    for (t = 0; t < t2tags.length; t++) {
+                    for (let t in t2tags) {
                       t2tags[t].innerHTML = "(" + t2wl + ")";
                     }
 
@@ -1003,8 +1003,7 @@
                     descrElems = elem.getElementsByClassName('postseason-game-description');
                     var d;
                     for (d = 0; d < descrElems.length; d++) {
-                      descrElem = descrElems[d];
-                      descrElem.innerHTML = game.description;
+                      descrElems[d].innerHTML = game.description;
                     }
                   }
 
@@ -1014,8 +1013,7 @@
                     var mapTags = elem.getElementsByClassName('map-name');
                     var mt;
                     for (mt = 0; mt < mapTags.length; mt++) {
-                      mapNameElem = mapTags[mt];
-                      mapNameElem.innerHTML = mapName;
+                      mapTags[mt].innerHTML = mapName;
                     }
                   }
 
@@ -1024,11 +1022,11 @@
                     t1tags = elem.getElementsByClassName('team1color');
                     t2tags = elem.getElementsByClassName('team2color');
                     for (t = 0; t < t1tags.length; t++) {
-                      teamColorElem = t1tags[t];
+                      var teamColorElem = t1tags[t];
                       teamColorElem.style.color = game.team1Color;
                     }
                     for (t = 0; t < t2tags.length; t++) {
-                      teamColorElem = t2tags[t];
+                      var teamColorElem = t2tags[t];
                       teamColorElem.style.color = game.team2Color;
                     }
                   }
