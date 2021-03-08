@@ -162,7 +162,7 @@
       var container = this.filterContainers('container-mode0009');
       this.updateSeasonHeader();
       this.updateCountdownClock(countdownStart);
-      this.loadingElem.classList.add('invisible');
+      this.loading(false);
       this.minilife();
     },
 
@@ -235,37 +235,47 @@
     updateSeasonHeader : function() {
 
       // Update the season number
-      var seasonNumber = document.getElementById('landing-header-season-number');
-      if (this.season >= 0) {
-        seasonNumber.innerHTML = this.season + 1;
-      } else {
+      var elemId = 'landing-header-season-number';
+      var seasonNumber = document.getElementById(elemId);
+      if (seasonNumber == null) {
+        throw "Error using season from /mode endpoint: could not find element " + elemId;
+      } else if (this.season < 0) {
         throw "Error using season from /mode endpoint: invalid season " + this.season;
+      } else {
+        seasonNumber.innerHTML = this.season + 1;
       }
 
+      // handle case where there is a Day to handle
       if ((this.mode >= 10) && (this.mode < 20)) {
         // Regular season days require us to look up the current day with the /today endpoint
         // #landing-header-day contains the Day Y text
         // #landing-header-day-number contains just Y
 
-        // Hide Day Y while we're looking it up
-        var dayText = document.getElementById('landing-header-day');
-        dayText.classList.add('invisible');
+        // Hide Day Y while we're looking it up (if present...)
+        dayTextId = 'landing-header-day';
+        var dayText = document.getElementById(dayTextId);
+        if (dayText != null) {
+
+          dayText.classList.add('invisible');
       
-        // Get current day info from API /today
-        let url = this.baseApiUrl + '/today';
-        fetch(url)
-        .then(res => res.json())
-        .then((todayApiResult) => {
-          var day = apiResult[1] + 1;
-          var dayNumber = document.getElementById('landing-header-day-number');
-          dayNumber.innerHTML = day;
-          dayText.classList.remove('invisible');
-        })
-        .catch(err => {
-          console.log('Encountered an error while calling /today:');
-          console.log(err);
-          this.error(-1);
-        });
+          // Get current day info from API /today
+          let url = this.baseApiUrl + '/today';
+          fetch(url)
+          .then(res => res.json())
+          .then((todayApiResult) => {
+            var day = apiResult[1] + 1;
+            var dayNumber = document.getElementById('landing-header-day-number');
+            dayNumber.innerHTML = day;
+            dayText.classList.remove('invisible');
+          })
+          .catch(err => {
+            console.log('Encountered an error while calling /today:');
+            console.log(err);
+            this.error(-1);
+          });
+        } else {
+          console.log("Could not find element with id " + dayTextId + ", continuing");
+        }
       }
 
     },
@@ -357,8 +367,10 @@
      * using information from the API /champion endpoint.
      */
     updateChampions : function() {
+
       var champs = document.getElementById('champion-team');
       var champsIcon = document.getElementById('champion-icon');
+      var champsName = document.getElementById('champion-name-header');
 
       // get current champion from API
       let url = this.baseApiUrl + '/champion';
@@ -366,49 +378,52 @@
       .then(res => res.json())
       .then((apiResult) => {
 
-        if (apiResult.hasOwnProperty('champion')) {
-          champs.innerHTML = apiResult.champion;
-          champs.style.color = apiResult.color;
+        if (apiResult.hasOwnProperty('teamName') && apiResult.hasOwnProperty('teamAbbr')) {
 
-          if (apiResult.hasOwnProperty('abbr')) {
+          this.loading(false);
 
-            this.loadingElem.classList.add('invisible');
+          champs.innerHTML = apiResult.teamName;
+          champs.style.color = apiResult.teamColor;
 
-            var iconSize = "200";
-            var iconId = "champion-icon";
-            var icontainerId = "champion-icon-container";
-            var icontainer = document.getElementById(icontainerId);
-            var svg = document.createElement("object");
-            svg.setAttribute('type', 'image/svg+xml');
-            svg.setAttribute('data', '../img/' + apiResult.abbr.toLowerCase() + '.svg');
-            svg.setAttribute('height', iconSize);
-            svg.setAttribute('width', iconSize);
-            svg.setAttribute('id', iconId);
-            svg.classList.add('icon');
-            svg.classList.add('team-icon');
-            svg.classList.add('invisible');
-            icontainer.appendChild(svg);
+          // Make champion name header visible
+          champsName.classList.remove('invisible');
 
-            // Wait a little bit for the data to load,
-            // then modify the color and make it visible
-            var paint = function(color, elemId) {
-              var mysvg = $('#' + elemId).getSVG();
-              var child = mysvg.find("g path:first-child()");
-              if (child.length > 0) {
-                child.attr('fill', color);
-                $('#' + elemId).removeClass('invisible');
-              }
+          var iconSize = "200";
+          var iconId = "champion-icon";
+          var icontainerId = "champion-icon-container";
+          var icontainer = document.getElementById(icontainerId);
+          var svg = document.createElement("object");
+
+          svg.setAttribute('type', 'image/svg+xml');
+          svg.setAttribute('data', '../img/' + apiResult.teamAbbr.toLowerCase() + '.svg');
+          svg.setAttribute('height', iconSize);
+          svg.setAttribute('width', iconSize);
+          svg.setAttribute('id', iconId);
+          svg.classList.add('icon');
+          svg.classList.add('team-icon');
+          svg.classList.add('invisible');
+
+          icontainer.appendChild(svg);
+
+          // Wait a little bit for the data to load,
+          // then modify the color and make it visible
+          var paint = function(color, elemId) {
+            var mysvg = $('#' + elemId).getSVG();
+            var child = mysvg.find("g path:first-child()");
+            if (child.length > 0) {
+              child.attr('fill', apiResult.teamColor);
+              $('#' + elemId).removeClass('invisible');
             }
-            // This fails pretty often, so try a few times.
-            setTimeout(paint, 100,  apiResult.color, iconId);
-            setTimeout(paint, 250,  apiResult.color, iconId);
-            setTimeout(paint, 500,  apiResult.color, iconId);
-            setTimeout(paint, 1000, apiResult.color, iconId);
-            setTimeout(paint, 1500, apiResult.color, iconId);
           }
+          // This fails pretty often, so try a few times.
+          setTimeout(paint, 100,  apiResult.teamColor, iconId);
+          setTimeout(paint, 250,  apiResult.teamColor, iconId);
+          setTimeout(paint, 500,  apiResult.teamColor, iconId);
+          setTimeout(paint, 1000, apiResult.teamColor, iconId);
+          setTimeout(paint, 1500, apiResult.teamColor, iconId);
 
         } else {
-          throw "Missing required key (champion) from /champion API response";
+          throw "Missing required keys (teamName, teamAbbr) from /champion API response";
         }
 
       })
