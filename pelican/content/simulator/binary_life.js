@@ -43,7 +43,7 @@
     rows : 0,
     cellSize: 0,
 
-    waitTime: 0,
+    waitTimeMs: 0,
     generation : 0,
 
     running : false,
@@ -167,7 +167,6 @@
         // They were moved to inside the loadState() function.
       } catch (e) {
         console.log(e);
-        //alert("Error: "+e);
       }
     },
 
@@ -267,6 +266,11 @@
 
       // Add ?trail=1 to the end of the URL to show trails
       this.trail.current = this.helpers.getUrlParameter('trail') === '1' ? true : this.trail.current;
+
+      // Get the current wait time (this is updated when the user changes it)
+      var x = document.getElementById("speed-slider").value;
+      this.waitTimeMs = Math.min(10**x, 1000);
+      this.waitTimeMs = 2000;
 
     },
 
@@ -817,8 +821,6 @@
           this.listLife.addCell(xx, yy, this.listLife.actualState2);
         }
       }
-
-      //this.listLife.nextGeneration();
     },
 
 
@@ -1005,6 +1007,8 @@
       this.element.mapName = document.getElementById('mapname-label');
       this.element.mapScoreboardPanel = document.getElementById('scoreboard-panel-map');
 
+      this.element.speedSlider = document.getElementById('speed-slider');
+
       this.element.z1lab = document.getElementById('zone1label');
       this.element.z2lab = document.getElementById('zone2label');
       this.element.z3lab = document.getElementById('zone3label');
@@ -1033,6 +1037,9 @@
         this.helpers.registerEvent(document.getElementById('buttonClear'), 'click', this.handlers.buttons.clear, false);
       }
 
+      // Speed control slider
+      this.helpers.registerEvent(document.getElementById('speed-slider'), 'input', this.handlers.buttons.speedControl, false);
+
       // Layout
       this.helpers.registerEvent(document.getElementById('buttonTrail'), 'click', this.handlers.buttons.trail, false);
       this.helpers.registerEvent(document.getElementById('buttonGrid'), 'click', this.handlers.buttons.grid, false);
@@ -1043,6 +1050,7 @@
      * Run Next Step
      */
     nextStep : function() {
+
       var i, x, y, r;
       var liveCellNumbers, liveCellNumber, liveCellNumber1, liveCellNumber2;
       var algorithmTime, guiTime;
@@ -1128,6 +1136,7 @@
           GOL.cleanUp();
         }
       }
+
     },
 
 
@@ -1313,6 +1322,27 @@
           }
         },
 
+        /**
+         * Update simulation speed
+         */
+        speedControl : function() {
+          try {
+            var oh = parseInt(document.getElementById("speed-slider").value, 10);
+            // Set the wait time to be the maximum of
+            // 1 s and whatever the slider specifies
+            this.waitTimeMs = Math.min(10**x, 1000);
+            console.log("Updated wait time to " + waitTimeMs);
+
+            this.waitTimeMs = 2000;
+
+          } catch {
+            console.log("Could not read speed-slider value, setting to 100 ms");
+            this.waitTimeMs = 100;
+
+            this.waitTimeMs = 2000;
+          }
+        },
+
       },
 
     },
@@ -1394,7 +1424,6 @@
         this.context.fillStyle = GOL.grid.schemes[GOL.grid.current].color;
         this.context.fillRect(0, 0, this.width, this.height);
 
-
         for (i = 0 ; i < GOL.columns; i++) {
           for (j = 0 ; j < GOL.rows; j++) {
             if (GOL.listLife.isAlive(i, j)) {
@@ -1404,6 +1433,7 @@
             }
           }
         }
+
       },
 
 
