@@ -70,27 +70,23 @@
       .then(res => res.json())
       .then((modeApiResult) => {
 
-        var season0;
         if (!modeApiResult.hasOwnProperty('season')) {
           throw "Could not find required property (season) in API /mode response";
+        } else {
+          this.season0 = modeApiResult.season;
         }
 
         this.loading(false);
 
-        if (todayApiResult[0]==-1) {
-          this.season0 = 1;
-        } else {
-          this.season0 = todayApiResult[0];
-        }
-
         var mapRowElem = document.getElementById('row-maps');
 
-        let mapsUrl = this.baseApiUrl + '/maps';
+        let mapsUrl = this.baseApiUrl + '/maps/' + this.season0;
         fetch(mapsUrl)
         .then(res => res.json())
         .then((mapsApiResult) => {
 
-          this.loadingElem.classList.add('invisible');
+          this.loading(false);
+
           var mapsContainer = document.getElementById('container-maps');
           mapsContainer.classList.remove('invisible');
 
@@ -187,12 +183,14 @@
           }
         })
         .catch(err => {
+          console.log("Encountered an error calling the /maps API endpoint");
           console.log(err);
           this.error(-1);
         }); // end API /maps
 
       })
       .catch(err => {
+        console.log("Encountered an error calling the /mode API endpoint");
         console.log(err);
         this.error(-1);
       });
