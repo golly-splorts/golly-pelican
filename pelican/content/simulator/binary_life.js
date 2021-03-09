@@ -1203,10 +1203,21 @@
           if (GOL.sandboxMode === true || GOL.mapMode === true) {
             GOL.handlers.buttons.clear();
           }
+
         } else if (event.keyCode === 82 ) { // Key: R
           GOL.handlers.buttons.run();
+
         } else if (event.keyCode === 83 ) { // Key: S
-          GOL.handlers.buttons.step();
+          if (GOL.running) {
+            // If running, S will stop the simulation
+            GOL.handlers.buttons.run();
+          } else {
+            GOL.handlers.buttons.step();
+          }
+
+        } else if (event.keyCode === 71 ) { // Key: G
+          GOL.handlers.buttons.grid();
+
         }
       },
 
