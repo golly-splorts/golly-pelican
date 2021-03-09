@@ -94,9 +94,7 @@
 
       // Hide elements
       this.loading(false);
-      /*
-      this.loadingElem.classList.add('invisible');
-      */
+
       for (var c in this.landingDivIds) {
         try {
           var elem = document.getElementById(this.landingDivIds[c]);
