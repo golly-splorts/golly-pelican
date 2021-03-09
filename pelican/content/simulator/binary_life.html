@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <div class="container" id="container-golly-header">
   <div class="row">
     <h1 class="golly-simulator-header" style="color: #eee;"><span id="golly-game-title">Binary Game of Life</span></h1>
@@ -163,6 +164,19 @@
                                   <button type="button" id="buttonColors" class="btn btn-lg btn-default btn-secondary">Colors</button>
                               </div>
                           </form>
+                      </div>
+                  </li>
+                  <li class="list-group-item">
+                      <div class="box controls">
+                          <div class="slidecontainer">
+                            <form>
+                              <div class="form-group">
+                                <label for="formControlRange" class="float-left">Faster</label>
+                                <label for="formControlRange" class="float-right">Slower</label>
+                                <input type="range" class="form-control-range" id="speed-slider" min="1" max="4" step="1" value="2">
+                              </div>
+                            </form>
+                          </div>
                       </div>
                   </li>
               </ul>
