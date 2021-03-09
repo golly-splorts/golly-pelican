@@ -49,7 +49,7 @@
     /**
      * Show the site loading message while waiting for the API response
      */
-    loading : function() {
+    loading : function(show = true) {
       var loadingMessages = document.getElementsByClassName("loading-message");
       var m;
       for (m = 0; m < loadingMessages.length; m++) {
