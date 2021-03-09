@@ -740,22 +740,23 @@
                       teamNameElem.innerHTML = game.team2Name;
                     }
 
-                    // Postseason W-L
+                    // W-L (seed would be better but can't be bothered with another API call)
                     var t1tags, t2tags;
                     t1tags = elem.getElementsByClassName('team1seed');
                     t2tags = elem.getElementsByClassName('team2seed');
 
-                    var pwl, t1pwl, t2pwl;
-                    pwl = game['team1PostseasonWinLoss'];
-                    t1pwl = pwl[0] + '-' + pwl[1];
-                    pwl = game['team2PostseasonWinLoss'];
-                    t2pwl = pwl[0] + '-' + pwl[1];
+                    // Originally we had postseason win/loss, but there were too many different W-L, got confusing
+                    var wl, t1wl, t2wl;
+                    wl = game['team1WinLoss'];
+                    t1wl = wl[0] + '-' + wl[1];
+                    wl = game['team2WinLoss'];
+                    t2wl = wl[0] + '-' + wl[1];
 
                     for (let t in t1tags) {
-                      t1tags[t].innerHTML = "(" + t1pwl + ")";
+                      t1tags[t].innerHTML = "(" + t1wl + ")";
                     }
                     for (let t in t2tags) {
-                      t2tags[t].innerHTML = "(" + t2pwl + ")";
+                      t2tags[t].innerHTML = "(" + t2wl + ")";
                     }
 
                   } // end team names/records
@@ -857,17 +858,17 @@
                 t1tags = elem.getElementsByClassName('team1seed');
                 t2tags = elem.getElementsByClassName('team2seed');
 
-                var pwl, t1pwl, t2pwl;
-                pwl = game['team1PostseasonWinLoss'];
-                t1pwl = pwl[0] + '-' + pwl[1];
-                pwl = game['team2PostseasonWinLoss'];
-                t2pwl = pwl[0] + '-' + pwl[1];
+                var wl, t1wl, t2wl;
+                wl = game['team1WinLoss'];
+                t1wl = wl[0] + '-' + wl[1];
+                wl = game['team2WinLoss'];
+                t2wl = wl[0] + '-' + wl[1];
 
                 for (let t in t1tags) {
-                  t1tags[t].innerHTML = "(" + t1pwl + ")";
+                  t1tags[t].innerHTML = "(" + t1wl + ")";
                 }
                 for (let t in t2tags) {
-                  t2tags[t].innerHTML = "(" + t2pwl + ")";
+                  t2tags[t].innerHTML = "(" + t2wl + ")";
                 }
 
               } // end team names/records
