@@ -14,7 +14,7 @@
       'season-header-container',
       'postseason-toc-container',
       'postseason-champion-container',
-      'postseason-ws-container',
+      'postseason-hcs-container',
       'postseason-lcs-container',
       'postseason-lds-container'
     ],
@@ -153,8 +153,8 @@
                 this.fillLdsSeriesContainer(postseasonApiResult[series]);
               } else if (lower=='lcs') {
                 this.fillLcsSeriesContainer(postseasonApiResult[series]);
-              } else if (lower=='ws') {
-                this.fillWsSeriesContainer(postseasonApiResult[series]);
+              } else if (lower=='hcs') {
+                this.fillHcsSeriesContainer(postseasonApiResult[series]);
                 this.fillChampionsContainer(postseasonApiResult[series], season0, currentSeason);
               }
 
@@ -295,19 +295,19 @@
     },
 
     /**
-     * Fill the WS game container (only one)
+     * Fill the HCS game container (only one)
      */
-    fillWsSeriesContainer : function(miniseason) {
-      var container = document.getElementById('postseason-ws-container');
-      var leagueContainer = document.getElementById('ws-league-container');
-      this.populateWsGames(miniseason, leagueContainer);
+    fillHcsSeriesContainer : function(miniseason) {
+      var container = document.getElementById('postseason-hcs-container');
+      var leagueContainer = document.getElementById('hcs-league-container');
+      this.populateHcsGames(miniseason, leagueContainer);
       container.classList.remove('invisible');
     },
 
     /**
-     * Populate a WS series container with games.
+     * Populate a HCS series container with games.
      */
-    populateWsGames : function(miniseason, seriesContainerElem) {
+    populateHcsGames : function(miniseason, seriesContainerElem) {
       var iDay;
       for (iDay = 0; iDay < miniseason.length; iDay++) {
         var miniday = miniseason[iDay];
@@ -468,120 +468,125 @@
       var gametemplate = document.getElementById('finished-postgame-template');
       var cloneFragment = gametemplate.content.cloneNode(true);
       // Add the game id to the template game id
-      if (minigame.hasOwnProperty('id')) {
-        cloneFragment.querySelector(".card").setAttribute("id", minigame.id);
+      if (minigame.hasOwnProperty('gameid')) {
+        cloneFragment.querySelector(".card").setAttribute("id", minigame.gameid);
       }
       // Add the template game div to the page
       seriesContainerElem.appendChild(cloneFragment);
+
       // Populate this element
-      var elem = document.getElementById(minigame.id);
+      var elem = document.getElementById(minigame.gameid);
 
-      // --------------
-      // Team name labels:
-      if (minigame.hasOwnProperty('team1Name') && minigame.hasOwnProperty('team2Name')) {
-        var t1tags = elem.getElementsByClassName('team1name');
-        var t2tags = elem.getElementsByClassName('team2name');
-        var t;
-        for (t = 0; t < t1tags.length; t++) {
-          teamNameElem = t1tags[t];
-          teamNameElem.innerHTML = minigame.team1Name;
+      if (elem!=null) {
+
+        // --------------
+        // Team name labels:
+        if (minigame.hasOwnProperty('team1Name') && minigame.hasOwnProperty('team2Name')) {
+          var t1tags = elem.getElementsByClassName('team1name');
+          var t2tags = elem.getElementsByClassName('team2name');
+          var t;
+          for (t = 0; t < t1tags.length; t++) {
+            teamNameElem = t1tags[t];
+            teamNameElem.innerHTML = minigame.team1Name;
+          }
+          for (t = 0; t < t2tags.length; t++) {
+            teamNameElem = t2tags[t];
+            teamNameElem.innerHTML = minigame.team2Name;
+          }
         }
-        for (t = 0; t < t2tags.length; t++) {
-          teamNameElem = t2tags[t];
-          teamNameElem.innerHTML = minigame.team2Name;
+
+        // --------------
+        // Team colors
+        if (minigame.hasOwnProperty('team1Color') && minigame.hasOwnProperty('team2Color')) {
+          var t1tags = elem.getElementsByClassName('team1color');
+          var t2tags = elem.getElementsByClassName('team2color');
+          var t;
+          for (t = 0; t < t1tags.length; t++) {
+            teamColorElem = t1tags[t];
+            teamColorElem.style.color = minigame.team1Color;
+          }
+          for (t = 0; t < t2tags.length; t++) {
+            teamColorElem = t2tags[t];
+            teamColorElem.style.color = minigame.team2Color;
+          }
         }
+
+        // Game descriptions
+        if (minigame.hasOwnProperty('description')) {
+          var descElems = elem.getElementsByClassName('postseason-game-description');
+          var iD;
+          for (iD = 0; iD < descElems.length; iD++) {
+            var descElem = descElems[iD];
+            descElem.innerHTML = minigame.description;
+          }
+        }
+
+        // Assemble series W-L records
+        if (minigame.hasOwnProperty('team1SeriesWinLoss') && minigame.hasOwnProperty('team2SeriesWinLoss')) {
+          var wlstr1 = "(" + minigame.team1SeriesWinLoss[0] + "-" + minigame.team1SeriesWinLoss[1] + ")";
+          var wlstr2 = "(" + minigame.team2SeriesWinLoss[0] + "-" + minigame.team2SeriesWinLoss[1] + ")";
+          var t1tags = elem.getElementsByClassName('team1seriesrecord');
+          var t2tags = elem.getElementsByClassName('team2seriesrecord');
+          var t;
+          for (t = 0; t < t1tags.length; t++) {
+            teamWinLossElem = t1tags[t];
+            teamWinLossElem.innerHTML = wlstr1;
+          }
+          for (t = 0; t < t2tags.length; t++) {
+            teamWinLossElem = t2tags[t];
+            teamWinLossElem.innerHTML = wlstr2;
+          }
+        }
+
+        // Update team scores
+        if (minigame.hasOwnProperty('team1Score') && minigame.hasOwnProperty('team2Score')) {
+          var t1s = minigame.team1Score;
+          var t2s = minigame.team2Score;
+          var iE;
+          var t1ScoreElems = elem.getElementsByClassName('livecells1');
+          for (iE = 0; iE < t1ScoreElems.length; iE++) {
+            t1ScoreElems[iE].innerHTML = t1s;
+          }
+          var t2ScoreElems = elem.getElementsByClassName('livecells2');
+          for (iE = 0; iE < t2ScoreElems.length; iE++) {
+            t2ScoreElems[iE].innerHTML = t2s;
+          }
+        }
+
+        // Update number of generations
+        if (minigame.hasOwnProperty('generations')) {
+          var genTags = elem.getElementsByClassName('generations-number');
+          var gt;
+          for (gt = 0; gt < genTags.length; gt++) {
+            genNumberElem = genTags[gt];
+            genNumberElem.innerHTML = minigame.generations;
+          }
+        }
+
+        // Update map pattern name
+        if (minigame.hasOwnProperty('mapName')) {
+          var mapName = minigame.mapName;
+          var mapTags = elem.getElementsByClassName('map-name');
+          var mt;
+          for (mt = 0; mt < mapTags.length; mt++) {
+            mapNameElem = mapTags[mt];
+            mapNameElem.innerHTML = mapName;
+          }
+        }
+
+        // Update simulate game button link
+        if (minigame.hasOwnProperty('gameid')) {
+          var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + minigame.gameid;
+          var btnTags = elem.getElementsByClassName('simulate');
+          var bt;
+          for (bt = 0; bt < btnTags.length; bt++) {
+            btnNameElem = btnTags[bt];
+            btnNameElem.setAttribute('href', btnUrl);
+          }
+        }
+      } else {
+        console.log('Could not find element for game ' + minigame.gameid);
       }
-
-      // --------------
-      // Team colors
-      if (minigame.hasOwnProperty('team1Color') && minigame.hasOwnProperty('team2Color')) {
-        var t1tags = elem.getElementsByClassName('team1color');
-        var t2tags = elem.getElementsByClassName('team2color');
-        var t;
-        for (t = 0; t < t1tags.length; t++) {
-          teamColorElem = t1tags[t];
-          teamColorElem.style.color = minigame.team1Color;
-        }
-        for (t = 0; t < t2tags.length; t++) {
-          teamColorElem = t2tags[t];
-          teamColorElem.style.color = minigame.team2Color;
-        }
-      }
-
-      // Game descriptions
-      if (minigame.hasOwnProperty('description')) {
-        var descElems = elem.getElementsByClassName('postseason-game-description');
-        var iD;
-        for (iD = 0; iD < descElems.length; iD++) {
-          var descElem = descElems[iD];
-          descElem.innerHTML = minigame.description;
-        }
-      }
-
-      // Assemble series W-L records
-      if (minigame.hasOwnProperty('team1SeriesWinLoss') && minigame.hasOwnProperty('team2SeriesWinLoss')) {
-        var wlstr1 = "(" + minigame.team1SeriesWinLoss[0] + "-" + minigame.team1SeriesWinLoss[1] + ")";
-        var wlstr2 = "(" + minigame.team2SeriesWinLoss[0] + "-" + minigame.team2SeriesWinLoss[1] + ")";
-        var t1tags = elem.getElementsByClassName('team1seriesrecord');
-        var t2tags = elem.getElementsByClassName('team2seriesrecord');
-        var t;
-        for (t = 0; t < t1tags.length; t++) {
-          teamWinLossElem = t1tags[t];
-          teamWinLossElem.innerHTML = wlstr1;
-        }
-        for (t = 0; t < t2tags.length; t++) {
-          teamWinLossElem = t2tags[t];
-          teamWinLossElem.innerHTML = wlstr2;
-        }
-      }
-
-      // Update team scores
-      if (minigame.hasOwnProperty('team1Score') && minigame.hasOwnProperty('team2Score')) {
-        var t1s = minigame.team1Score;
-        var t2s = minigame.team2Score;
-        var iE;
-        var t1ScoreElems = elem.getElementsByClassName('livecells1');
-        for (iE = 0; iE < t1ScoreElems.length; iE++) {
-          t1ScoreElems[iE].innerHTML = t1s;
-        }
-        var t2ScoreElems = elem.getElementsByClassName('livecells2');
-        for (iE = 0; iE < t2ScoreElems.length; iE++) {
-          t2ScoreElems[iE].innerHTML = t2s;
-        }
-      }
-
-      // Update number of generations
-      if (minigame.hasOwnProperty('generations')) {
-        var genTags = elem.getElementsByClassName('generations-number');
-        var gt;
-        for (gt = 0; gt < genTags.length; gt++) {
-          genNumberElem = genTags[gt];
-          genNumberElem.innerHTML = minigame.generations;
-        }
-      }
-
-      // Update map pattern name
-      if (minigame.hasOwnProperty('mapName')) {
-        var mapName = minigame.mapName;
-        var mapTags = elem.getElementsByClassName('map-name');
-        var mt;
-        for (mt = 0; mt < mapTags.length; mt++) {
-          mapNameElem = mapTags[mt];
-          mapNameElem.innerHTML = mapName;
-        }
-      }
-
-      // Update simulate game button link
-      if (minigame.hasOwnProperty('id')) {
-        var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + minigame.id;
-        var btnTags = elem.getElementsByClassName('simulate');
-        var bt;
-        for (bt = 0; bt < btnTags.length; bt++) {
-          btnNameElem = btnTags[bt];
-          btnNameElem.setAttribute('href', btnUrl);
-        }
-      }
-
     },
 
     /**
