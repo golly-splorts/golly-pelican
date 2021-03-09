@@ -128,8 +128,8 @@
 
     postseasonWaitingMessage : function() {
       // Hide loading message
-      this.loadingElem.classList.add('invisible');
-      // Show waiting for postseason message
+      this.loading(false);
+      // Show waiting message
       var waitingElem = document.getElementById('container-postseason-waiting');
       waitingElem.classList.remove('invisible');
     },

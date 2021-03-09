@@ -11,8 +11,6 @@
     baseApiUrl : getBaseApiUrl(),
     baseUIUrl : getBaseUIUrl(),
 
-    loadingElem : null,
-
     landingDivIds : [
       'container-loading',
       'container-mode0009',
@@ -555,7 +553,6 @@
 
             // Update simulate game button link
             if (game.hasOwnProperty('gameid')) {
-              console.log('line 560');
               var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
               var btnTags = elem.getElementsByClassName('simulate');
               var bt;
@@ -729,32 +726,29 @@
                     // Team name labels
                     t1tags = elem.getElementsByClassName('team1name');
                     t2tags = elem.getElementsByClassName('team2name');
-                    for (t = 0; t < t1tags.length; t++) {
+                    for (var t = 0; t < t1tags.length; t++) {
                       teamNameElem = t1tags[t];
                       teamNameElem.innerHTML = game.team1Name;
                     }
-                    for (t = 0; t < t2tags.length; t++) {
+                    for (var t = 0; t < t2tags.length; t++) {
                       teamNameElem = t2tags[t];
                       teamNameElem.innerHTML = game.team2Name;
                     }
 
-                    // W-L (seed would be better but can't be bothered with another API call)
                     var t1tags, t2tags;
                     t1tags = elem.getElementsByClassName('team1seed');
                     t2tags = elem.getElementsByClassName('team2seed');
 
-                    // Originally we had postseason win/loss, but there were too many different W-L, got confusing
-                    var wl, t1wl, t2wl;
-                    wl = game['team1WinLoss'];
-                    t1wl = wl[0] + '-' + wl[1];
-                    wl = game['team2WinLoss'];
-                    t2wl = wl[0] + '-' + wl[1];
-
-                    for (let t in t1tags) {
-                      t1tags[t].innerHTML = "(" + t1wl + ")";
+                    // Originally, we had seed, but that requires an extra API call
+                    // Then we tried postseason win/loss, but that was too confusing
+                    // Then we tried season win/loss and had errrors.
+                    // So just forget it.
+                    // TODO: Put seed number instead
+                    for (var t = 0; t < t1tags.length; t++) {
+                      t1tags[t].remove();
                     }
-                    for (let t in t2tags) {
-                      t2tags[t].innerHTML = "(" + t2wl + ")";
+                    for (var t = 0; t < t2tags.length; t++) {
+                      t2tags[t].remove();
                     }
 
                   } // end team names/records
@@ -851,22 +845,20 @@
                   teamNameElem.innerHTML = game.team2Name;
                 }
 
-                // Postseason W-L
                 var t1tags, t2tags;
                 t1tags = elem.getElementsByClassName('team1seed');
                 t2tags = elem.getElementsByClassName('team2seed');
 
-                var wl, t1wl, t2wl;
-                wl = game['team1WinLoss'];
-                t1wl = wl[0] + '-' + wl[1];
-                wl = game['team2WinLoss'];
-                t2wl = wl[0] + '-' + wl[1];
-
-                for (let t in t1tags) {
-                  t1tags[t].innerHTML = "(" + t1wl + ")";
+                // Originally, we had seed, but that requires an extra API call
+                // Then we tried postseason win/loss, but that was too confusing
+                // Then we tried season win/loss and had errrors.
+                // So just forget it.
+                // TODO: Put seed number instead
+                for (var t = 0; t < t1tags.length; t++) {
+                  t1tags[t].remove();
                 }
-                for (let t in t2tags) {
-                  t2tags[t].innerHTML = "(" + t2wl + ")";
+                for (var t = 0; t < t2tags.length; t++) {
+                  t2tags[t].remove();
                 }
 
               } // end team names/records
@@ -878,7 +870,6 @@
                   descrElems[d].innerHTML = game.description;
                 }
               }
-
 
               // Update map pattern name
               if (game.hasOwnProperty('mapName')) {
@@ -1072,7 +1063,6 @@
 
                   // Update simulate game button link
                   if (game.hasOwnProperty('gameid')) {
-                    console.log('line 1070');
                     var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
                     var btnTags = elem.getElementsByClassName('simulate');
                     var bt;
@@ -1194,7 +1184,6 @@
 
             // Update simulate game button link
             if (game.hasOwnProperty('gameid')) {
-              console.log('line 1186');
               var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
               var btnTags = elem.getElementsByClassName('simulate');
               var bt;
