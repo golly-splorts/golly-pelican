@@ -5,5 +5,6 @@ export GOLLY_API_PORT="8989"
 
 export GOLLY_BASE_UI="http://192.168.30.20:${GOLLY_UI_PORT}"
 export GOLLY_BASE_API="http://192.168.30.20:${GOLLY_API_PORT}"
+#export GOLLY_BASE_API="https://cloud.golly456.life"
 
 export GOLLY_PELICAN_HOME="${HOME}/golly/golly-pelican"
