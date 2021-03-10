@@ -170,7 +170,7 @@
         var tocElem = document.getElementById(tocId);
         tocElem.classList.remove('invisible');
 
-        if (this.mode >= 40) {
+        if (this.mode >= 40 || season0 < this.currentSeason) {
           this.fillChampionsContainer(season0);
         }
 
