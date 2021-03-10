@@ -1,3 +1,11 @@
+Version 14.0:
+
+* Huge overhaul to speed up page loading times
+* Swap out backend to dynamo
+* Implement multiple schema changes/improvements
+* Add icon for new team
+* Update simulator defaults
+
 Version 13.0:
 
 * Update maps page to reflect S13 changes to map metadata
