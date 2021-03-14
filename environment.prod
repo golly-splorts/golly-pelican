@@ -5,4 +5,4 @@ export GOLLY_STAGE="prod"
 
 export GOLLY_TLD="golly.life"
 export GOLLY_BASE_UI="https://${GOLLY_TLD}"
-export GOLLY_BASE_API="https://api.${GOLLY_TLD}"
+export GOLLY_BASE_API="https://cloud.${GOLLY_TLD}"

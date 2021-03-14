@@ -394,6 +394,12 @@
           this.rows = mapApiResult.rows;
           this.cellSize = mapApiResult.cellSize;
 
+          this.mapName = mapApiResult.mapName;
+          this.mapZone1Name = mapApiResult.mapZone1Name;
+          this.mapZone2Name = mapApiResult.mapZone2Name;
+          this.mapZone3Name = mapApiResult.mapZone3Name;
+          this.mapZone4Name = mapApiResult.mapZone4Name;
+
           this.setZoomState();
           this.setInitialState();
 
