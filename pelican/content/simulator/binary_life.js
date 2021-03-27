@@ -1718,7 +1718,7 @@
             // if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {
             // // amoeba life (good)
             // if ((neighbors === 1) || (neighbors === 3) || (neighbors === 5) || (neighbors === 8)) {
-            // high life (good, but some oscillators blow up)
+            // // high life (good, but some oscillators blow up)
             // if ((neighbors===2)||(neighbors===3)) {
             // // 2x2 (good, but victory conditions *may* need to change)
             // if ((neighbors===1)||(neighbors===2)||(neighbors===5)){
