@@ -1834,7 +1834,7 @@
         for (i = 0; i < state1.length; i++) {
           var yy = state1[i][0];
 
-          if (yy <= ystencilmin) {
+          if (yy >= ystencilmin) {
 
             if (yy === ym1) {
               // Top row
@@ -1911,7 +1911,7 @@
         for (i = 0; i < state2.length; i++) {
           var yy = state2[i][0];
 
-          if (yy <= ystencilmin) {
+          if (yy >= ystencilmin) {
 
             if (yy === ym1) {
               // Top row
@@ -2005,6 +2005,12 @@
         var ym1 = (y-1);
         var yp1 = (y+1);
 
+        var xstencilmin = Math.min(xm1, x, xp1);
+        var xstencilmax = Math.max(xm1, x, xp1);
+
+        var ystencilmin = Math.min(ym1, y, yp1);
+        var ystencilmax = Math.max(ym1, y, yp1);
+
         var neighbors = 0, k;
         var neighbors1 = 0, neighbors2 = 0;
 
@@ -2013,7 +2019,7 @@
           if (state[i-1][0] === ym1) {
             for (k = this.topPointer; k < state[i-1].length; k++) {
 
-              if (state[i-1][k] >= xm1 ) {
+              if (state[i-1][k] >= xstencilmin ) {
 
                 // NW
                 if (state[i-1][k] === xm1) {
@@ -2067,7 +2073,7 @@
                   }
                 }
 
-                if (state[i-1][k] > (x + 1)) {
+                if (state[i-1][k] > xstencilmax) {
                   break;
                 }
               }
@@ -2077,7 +2083,7 @@
 
         // Middle
         for (k = 1; k < state[i].length; k++) {
-          if (state[i][k] >= xm1) {
+          if (state[i][k] >= xstencilmin) {
 
             if (state[i][k] === xm1) {
               possibleNeighborsList[3] = undefined;
@@ -2105,7 +2111,7 @@
               }
             }
 
-            if (state[i][k] > (x + 1)) {
+            if (state[i][k] > xstencilmax) {
               break;
             }
           }
@@ -2115,7 +2121,7 @@
         if (state[i+1] !== undefined) {
           if (state[i+1][0] === yp1) {
             for (k = this.bottomPointer; k < state[i+1].length; k++) {
-              if (state[i+1][k] >= (x - 1)) {
+              if (state[i+1][k] >= xstencilmin) {
 
                 if (state[i+1][k] === xm1) {
                   possibleNeighborsList[5] = undefined;
@@ -2165,7 +2171,7 @@
                   }
                 }
 
-                if (state[i+1][k] > (x + 1)) {
+                if (state[i+1][k] > xstencilmax) {
                   break;
                 }
               }
