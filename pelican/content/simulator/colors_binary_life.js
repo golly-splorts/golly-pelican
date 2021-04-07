@@ -28,11 +28,8 @@
     // this may duplicate / between the base url and simulator
     baseSimulatorUrl : getBaseUIUrl() + '/simulator/index.html',
 
-    //s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
-    //s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
-
-    s1Default: '[{"0":[10,20]}]',
-    s2Default: '[{"0":[11,21]}]',
+    s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
+    s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
 
     gameMode : false,
     mapMode : false,
@@ -64,11 +61,82 @@
       trail: grays,
       alive: null,
 
+      // #fefe62    light yellow
+      // #d41199    ruby pink
+      // #777777    generic gray for eaves
+
       schemes : [
         {
-          alive: ['#1a85ff', '#d41159'],
-          alive_labels: ['Blue', 'Pink']
+          alive: ['#e7d7c1', '#fefe67'],
+          alive_labels: ['San Francisco Boat Shoes', 'Sugar Grove Eavesdroppers'],
         },
+        {
+          alive: ['#ff66cc', '#fefe67'], 
+          alive_labels: ['Milawukee Flamingos', 'Sugar Grove Eavesdroppers'], 
+        },
+        {
+          alive: ['#9963ab', '#fefe67'], 
+          alive_labels: ['Detroit Grape Chews', 'Sugar Grove Eavesdroppers'], 
+        },
+        {
+          alive: ['#b0b0b0', '#fefe67'], 
+          alive_labels: ['Delaware Corporate Shells', 'Sugar Grove Eavesdroppers'], 
+        },
+        {
+          alive: ['#ffb627', '#d41199'],
+          alive_labels: ['Sacramento Boot Lickers', 'Albuquerque Solarpunks'],
+        },
+        {
+          alive: ['#0dab76', '#d41199'], 
+          alive_labels: ['Orlando Business Majors', 'Albuquerque Solarpunks'], 
+        },
+        {
+          alive: ['#ff1717', '#d41199'], 
+          alive_labels: ['Alewife Arsonists', 'Albuquerque Solarpunks'], 
+        },
+        {
+          alive: ['#697a21', '#d41199'], 
+          alive_labels: ['Boylston Boogers', 'Albuquerque Solarpunks'], 
+        },
+        {
+          alive: ['#ff66cc', '#d41199'], 
+          alive_labels: ['Milawukee Flamingos', 'Albuquerque Solarpunks'], 
+        },
+        {
+          alive: ['#e86215', '#00cc44'],
+          alive_labels: ['Seattle Sneakers', 'Salt Lake Turbulence']
+        },
+        {
+          alive: ['#f2c57c', '#00cc44'],
+          alive_labels: ['Long Beach Flightless Birds', 'Salt Lake Turbulence']
+        },
+        {
+          alive: ['#a0e7e5', '#00cc44'],
+          alive_labels: ['Elko Astronauts', 'Salt Lake Turbulence']
+        },
+        {
+          alive: ['#3e92cc', '#00cc44'],
+          alive_labels: ['Baltimore Texas', 'Salt Lake Turbulence']
+        },
+        {
+          alive: ['#BB0000', '#B0B0B0'],
+          alive_labels: ["Tucson Butchers", "Phoenix Freshrolls"]
+        },
+        {
+          alive: ['#f08700', '#B0B0B0'],
+          alive_labels: ["San Diego Balloon Animals", "Phoenix Freshrolls"]
+        },
+        {
+          alive: ['#ef6f6c', '#B0B0B0'],
+          alive_labels: ["Ft. Worth Piano Tuners", "Phoenix Freshrolls"]
+        },
+        {
+          alive: ['#53917e', '#B0B0B0'],
+          alive_labels: ["Jersey OSHA Violations", "Phoenix Freshrolls"]
+        },
+
+
+        /*
         {
           alive: ['#ffc20a', '#0c7bdc'],
           alive_labels: ['Yellow', 'Blue']
@@ -84,7 +152,12 @@
         {
           alive: ['#3b9dff', '#dc3220'],
           alive_labels: ['Blue', 'Red']
+        },
+        {
+          alive: ['#1a85ff', '#d41159'],
+          alive_labels: ['Blue', 'Pink']
         }
+        */
       ],
     },
 
@@ -126,7 +199,7 @@
       livecells : null,
       livecells1 : null,
       livecells2 : null,
-      // victory: null,
+      victory: null,
       // territory1: null,
       // territory2: null,
       team1color: null,
@@ -247,12 +320,12 @@
 
       }
 
-      // // Initialize the victor percent running average window array
-      // var maxDim = 240;
-      // // var maxDim = Math.max(2*this.columns, 2*this.rows);
-      // for (var i = 0; i < maxDim; i++) {
-      //   this.runningAvgWindow[i] = 0;
-      // }
+      // Initialize the victor percent running average window array
+      var maxDim = 240;
+      // var maxDim = Math.max(2*this.columns, 2*this.rows);
+      for (var i = 0; i < maxDim; i++) {
+        this.runningAvgWindow[i] = 0;
+      }
 
       // The following configuration/user variables can always be set,
       // regardless of whether in game mode, map mode, or sandbox mode
@@ -750,76 +823,85 @@
     setInitialState : function() {
 
       // state 1 parameter
-      state1 = jsonParse(decodeURI(this.initialState1));
-      var irow, icol, y;
-      for (irow = 0; irow < state1.length; irow++) {
-        for (y in state1[irow]) {
-          for (icol = 0 ; icol < state1[irow][y].length ; icol++) {
-            var yy = parseInt(y);
-            var xx = state1[irow][yy][icol];
-            this.listLife.addCell(xx, yy, this.listLife.actualState);
-            this.listLife.addCell(xx, yy, this.listLife.actualState1);
+      //if (true) {
+      if (this.initialState1 === 'random') {
+        this.randomState(1);
+      } else {
+        state1 = jsonParse(decodeURI(this.initialState1));
+        var irow, icol, y;
+        for (irow = 0; irow < state1.length; irow++) {
+          for (y in state1[irow]) {
+            for (icol = 0 ; icol < state1[irow][y].length ; icol++) {
+              var yy = parseInt(y);
+              var xx = state1[irow][yy][icol];
+              this.listLife.addCell(xx, yy, this.listLife.actualState);
+              this.listLife.addCell(xx, yy, this.listLife.actualState1);
+            }
           }
         }
       }
 
       // state 2 parameter
       //if (true) {
-      state2 = jsonParse(decodeURI(this.initialState2));
-      var irow, icol, y;
-      for (irow = 0; irow < state2.length; irow++) {
-        for (y in state2[irow]) {
-          for (icol = 0 ; icol < state2[irow][y].length ; icol++) {
-            var yy = parseInt(y);
-            var xx = state2[irow][yy][icol];
-            this.listLife.addCell(xx, yy, this.listLife.actualState);
-            this.listLife.addCell(xx, yy, this.listLife.actualState2);
+      if (this.initialState2 === 'random') {
+        this.randomState(2);
+      } else {
+        state2 = jsonParse(decodeURI(this.initialState2));
+        var irow, icol, y;
+        for (irow = 0; irow < state2.length; irow++) {
+          for (y in state2[irow]) {
+            for (icol = 0 ; icol < state2[irow][y].length ; icol++) {
+              var yy = parseInt(y);
+              var xx = state2[irow][yy][icol];
+              this.listLife.addCell(xx, yy, this.listLife.actualState);
+              this.listLife.addCell(xx, yy, this.listLife.actualState2);
+            }
           }
         }
       }
     },
 
 
-    // /**
-    //  * Create a random pattern for the given color.
-    //  *
-    //  * color parameter:
-    //  *   0: set random pattern for both colors
-    //  *   1: set random pattern for team/color 1
-    //  *   2: set random pattern for team/color 2
-    //  */
-    // randomState : function(color) {
-    //   // original pct was 12%, for binary we split 5%
-    //   var i, liveCells = (this.rows * this.columns) * 0.05;
+    /**
+     * Create a random pattern for the given color.
+     *
+     * color parameter:
+     *   0: set random pattern for both colors
+     *   1: set random pattern for team/color 1
+     *   2: set random pattern for team/color 2
+     */
+    randomState : function(color) {
+      // original pct was 12%, for binary we split 5%
+      var i, liveCells = (this.rows * this.columns) * 0.05;
 
-    //   if (color===0 || color===1) {
-    //     // Color 1
-    //     for (i = 0; i < liveCells; i++) {
-    //       var xx = this.helpers.random(0, this.columns - 1);
-    //       var yy = this.helpers.random(0, this.rows - 1);
-    //       while (this.listLife.isAlive(xx, yy)) {
-    //           xx = this.helpers.random(0, this.columns - 1);
-    //           yy = this.helpers.random(0, this.rows - 1);
-    //       }
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState);
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState1);
-    //     }
-    //   }
+      if (color===0 || color===1) {
+        // Color 1
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = this.helpers.random(0, this.rows - 1);
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = this.helpers.random(0, this.rows - 1);
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState1);
+        }
+      }
 
-    //   if (color===0 || color===2) {
-    //     // Color 2
-    //     for (i = 0; i < liveCells; i++) {
-    //       var xx = this.helpers.random(0, this.columns - 1);
-    //       var yy = this.helpers.random(0, this.rows - 1);
-    //       while (this.listLife.isAlive(xx, yy)) {
-    //           xx = this.helpers.random(0, this.columns - 1);
-    //           yy = this.helpers.random(0, this.rows - 1);
-    //       }
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState);
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState2);
-    //     }
-    //   }
-    // },
+      if (color===0 || color===2) {
+        // Color 2
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = this.helpers.random(0, this.rows - 1);
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = this.helpers.random(0, this.rows - 1);
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState2);
+        }
+      }
+    },
 
 
     /**
@@ -837,67 +919,67 @@
       return Math.abs(a-b)/Math.abs(a + smol) < tol;
     },
 
-    // /**
-    //  * Check for a victor
-    //  */
-    // checkForVictor : function(liveCounts) {
-    //   if (this.zeroStart===true) {
-    //     return;
-    //   }
-    //   if (this.foundVictor==false) {
-    //     var maxDim = 240;
-    //     // var maxDim = Math.max(2*this.columns, 2*this.rows);
-    //     // update running average window
-    //     if (this.generation < maxDim) {
-    //       // keep populating the window with victory pct
-    //       this.runningAvgWindow[this.generation] = parseFloat(liveCounts.victoryPct);
+    /**
+     * Check for a victor
+     */
+    checkForVictor : function(liveCounts) {
+      if (this.zeroStart===true) {
+        return;
+      }
+      if (this.foundVictor==false) {
+        var maxDim = 240;
+        // var maxDim = Math.max(2*this.columns, 2*this.rows);
+        // update running average window
+        if (this.generation < maxDim) {
+          // keep populating the window with victory pct
+          this.runningAvgWindow[this.generation] = parseFloat(liveCounts.victoryPct);
 
-    //     } else {
-    //       // update running average window with next victory pct
-    //       var removed = this.runningAvgWindow.shift();
-    //       this.runningAvgWindow.push(parseFloat(liveCounts.victoryPct));
+        } else {
+          // update running average window with next victory pct
+          var removed = this.runningAvgWindow.shift();
+          this.runningAvgWindow.push(parseFloat(liveCounts.victoryPct));
 
-    //       // compute running average
-    //       var sum = 0.0;
-    //       for (var i = 0; i < this.runningAvgWindow.length; i++) {
-    //         sum += this.runningAvgWindow[i];
-    //       }
-    //       var runningAvg = sum/this.runningAvgWindow.length;
+          // compute running average
+          var sum = 0.0;
+          for (var i = 0; i < this.runningAvgWindow.length; i++) {
+            sum += this.runningAvgWindow[i];
+          }
+          var runningAvg = sum/this.runningAvgWindow.length;
 
-    //       // update running average last 3
-    //       removed = this.runningAvgLast3.shift();
-    //       this.runningAvgLast3.push(runningAvg);
+          // update running average last 3
+          removed = this.runningAvgLast3.shift();
+          this.runningAvgLast3.push(runningAvg);
 
-    //       var tol = 1e-8;
-    //       if (!this.approxEqual(removed, 0.0, tol)) {
-    //         // we have not found a victor yet, so check for one now
-    //         var bool0eq1 = this.approxEqual(this.runningAvgLast3[0], this.runningAvgLast3[1], tol);
-    //         var bool1eq2 = this.approxEqual(this.runningAvgLast3[1], this.runningAvgLast3[2], tol);
-    //         var zerocells = ((liveCounts.liveCells1 == 0) || (liveCounts.liveCells2 == 0));
-    //         if ((bool0eq1 && bool1eq2) || zerocells) {
-    //           var zero1 = this.approxEqual(this.runningAvgLast3[0], 50.0, tol)
-    //           var zero2 = this.approxEqual(this.runningAvgLast3[1], 50.0, tol)
-    //           var zero3 = this.approxEqual(this.runningAvgLast3[2], 50.0, tol)
-    //           if ((!(zero1 || zero2 || zero3)) || zerocells) {
-    //             if (liveCounts.liveCells1 > liveCounts.liveCells2) {
-    //               this.whoWon = 1;
-    //               this.foundVictor = true;
-    //               this.showWinnersLosers = true;
-    //               this.handlers.buttons.run();
-    //               this.running = false;
-    //             } else if (liveCounts.liveCells1 < liveCounts.liveCells2) {
-    //               this.whoWon = 2;
-    //               this.foundVictor = true;
-    //               this.showWinnersLosers = true;
-    //               this.handlers.buttons.run();
-    //               this.running = false;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
+          var tol = 1e-8;
+          if (!this.approxEqual(removed, 0.0, tol)) {
+            // we have not found a victor yet, so check for one now
+            var bool0eq1 = this.approxEqual(this.runningAvgLast3[0], this.runningAvgLast3[1], tol);
+            var bool1eq2 = this.approxEqual(this.runningAvgLast3[1], this.runningAvgLast3[2], tol);
+            var zerocells = ((liveCounts.liveCells1 == 0) || (liveCounts.liveCells2 == 0));
+            if ((bool0eq1 && bool1eq2) || zerocells) {
+              var zero1 = this.approxEqual(this.runningAvgLast3[0], 50.0, tol)
+              var zero2 = this.approxEqual(this.runningAvgLast3[1], 50.0, tol)
+              var zero3 = this.approxEqual(this.runningAvgLast3[2], 50.0, tol)
+              if ((!(zero1 || zero2 || zero3)) || zerocells) {
+                if (liveCounts.liveCells1 > liveCounts.liveCells2) {
+                  this.whoWon = 1;
+                  this.foundVictor = true;
+                  this.showWinnersLosers = true;
+                  this.handlers.buttons.run();
+                  this.running = false;
+                } else if (liveCounts.liveCells1 < liveCounts.liveCells2) {
+                  this.whoWon = 2;
+                  this.foundVictor = true;
+                  this.showWinnersLosers = true;
+                  this.handlers.buttons.run();
+                  this.running = false;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 
     /**
      * Update the statistics
@@ -1589,7 +1671,7 @@
         var state = GOL.listLife.actualState;
         var liveCells = 0;
         for (i = 0; i < state.length; i++) {
-          if ((state[i][0] >= 0) && (state[i][0] < GOL.rows)) {
+         if ((state[i][0] >= 0) && (state[i][0] < GOL.rows)) {
             for (j = 1; j < state[i].length; j++) {
               if ((state[i][j] >= 0) && (state[i][j] < GOL.columns)) {
                 liveCells++;
@@ -1649,26 +1731,6 @@
 
 
       nextGeneration : function() {
-
-        // get the last value of y
-        var lastIndex = this.actualState.length - 1;
-        var lastRow = this.actualState[lastIndex];
-        var lasty = lastRow[0];
-
-
-
-        for (j = 1; j < this.lastRow.length; j++) {
-
-        }
-
-
-
-
-
-
-
-
-
         var x, y, i, j, m, n, key, t1, t2;
         var alive = 0, alive1 = 0, alive2 = 0;
         var deadNeighbors;
@@ -1713,35 +1775,7 @@
               }
             }
 
-            // survive counts
-            //
-            // // 34 life (too slow)
-            // if ((neighbors == 3) || (neighbors == 4)) {
-            // // coagulations (blows up)
-            // if (!(neighbors === 1)) {
-            // // gnarl (way too slow/chaotic)
-            // if (neighbors === 1) {
-            // // long life (boring)
-            // if (neighbors===5) {
-            // // stains (too slow)
-            // if (!((neighbors===1)||(neighbors===4))) {
-            // // walled cities
-            // if ((neighbors > 1) && (neighbors < 6)) {
-            //
-            // // conway's life
-            // if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {
-            // // amoeba life (good)
-            // if ((neighbors === 1) || (neighbors === 3) || (neighbors === 5) || (neighbors === 8)) {
-            // // high life (good, but some oscillators blow up)
-            // if ((neighbors===2)||(neighbors===3)) {
-            // // 2x2 (good, but victory conditions *may* need to change)
-            // if ((neighbors===1)||(neighbors===2)||(neighbors===5)){
-            // // // pseudo life (good)
-            // if ((neighbors===2)||(neighbors===3)||(neighbors===8)) {
-
-            // conway's life
-            if ((neighbors===2)||(neighbors===3)) {
-
+            if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {
               this.addCell(x, y, newState);
               if (color==1) {
                 this.addCell(x, y, newState1);
@@ -1757,36 +1791,7 @@
 
         // Process dead neighbors
         for (key in allDeadNeighbors) {
-
-          // birth counts
-          //
-          // // 34 life (too slow)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4)) {
-          // coagulations
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 7) || (allDeadNeighbors[key] === 8)) {
-          // // gnarl (way too slow/chaotic)
-          // if (allDeadNeighbors[key] === 1) {
-          // // long life (boring)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4) || (allDeadNeighbors[key] === 5)) {
-          // // stains (too slow)
-          // if ((allDeadNeighbors[key]===3)||(allDeadNeighbors[key]>5)) {
-          // // walled cities (boring)
-          // if (allDeadNeighbors[key] > 3) {
-          //
-          // // conway's life
-          // if (allDeadNeighbors[key] === 3) {
-          // // amoeba life (good)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 5) || (allDeadNeighbors[key] === 7)) {
-          // // high life (good, but some oscillators blow up)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 6)) {
-          // // 2x2 (good, but victory conditions *may* need to change)
-          // if ((allDeadNeighbors[key]===3) || (allDeadNeighbors[key]===6)) {
-          // // // pseudo life (good)
-          // if ((allDeadNeighbors[key]==3)||(allDeadNeighbors[key]==5)||(allDeadNeighbors[key]==7)) {
-
-          // conway's life
           if (allDeadNeighbors[key] === 3) {
-
             // This cell is dead, but has enough neighbors
             // that are alive that it will make new life.
             key = key.split(',');
