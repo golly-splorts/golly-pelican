@@ -1827,73 +1827,83 @@
         var xstencilmin = Math.min(xm1, x, xp1);
         var xstencilmax = Math.max(xm1, x, xp1);
 
+        var ystencilmin = Math.min(ym1, y, yp1);
+        var ystencilmax = Math.max(ym1, y, yp1);
+
         // color1
         for (i = 0; i < state1.length; i++) {
           var yy = state1[i][0];
 
-          if (yy === ym1) {
-            // Top row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
+          if (yy <= ystencilmin) {
 
-              // Slight difference with periodic algorithm,
-              // checking minimum of x values in the stencil
-              if (xx >= xstencilmin) {
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
 
-                if (xx === xm1) {
-                  // top left
-                  color1++;
-                } else if (xx === x) {
-                  // top middle
-                  color1++;
-                } else if (xx === xp1) {
-                  // top right
-                  color1++;
+                // Slight difference with periodic algorithm,
+                // checking minimum of x values in the stencil
+                if (xx >= xstencilmin) {
+
+                  if (xx === xm1) {
+                    // top left
+                    color1++;
+                  } else if (xx === x) {
+                    // top middle
+                    color1++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
                 }
               }
-              if (xx >= xstencilmax) {
-                break;
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color1++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color1++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color1++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
               }
             }
 
-          } else if (yy === y) {
-            // Middle row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
-              if (xx >= xstencilmin) {
-                if (xx === xm1) {
-                  // top left
-                  color1++;
-                } else if (xx === xp1) {
-                  // top right
-                  color1++;
-                }
-              }
-              if (xx >= xstencilmax) {
-                break;
-              }
-            }
-
-          } else if (yy === yp1) {
-            // Bottom row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
-              if (xx >= xstencilmin) {
-                if (xx === xm1) {
-                  // bottom left
-                  color1++;
-                } else if (xx === x) {
-                  // bottom middle
-                  color1++;
-                } else if (xx === xp1) {
-                  // bottom right
-                  color1++;
-                }
-              }
-              if (xx >= xstencilmax) {
-                break;
-              }
-            }
+          }
+          if (yy >= ystencilmax) {
+            break;
           }
         }
 
@@ -1901,65 +1911,72 @@
         for (i = 0; i < state2.length; i++) {
           var yy = state2[i][0];
 
-          if (yy === ym1) {
-            // Top row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= xstencilmin) {
-                if (xx === xm1) {
-                  // top left
-                  color2++;
-                } else if (xx === x) {
-                  // top middle
-                  color2++;
-                } else if (xx === xp1) {
-                  // top right
-                  color2++;
+          if (yy <= ystencilmin) {
+
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color2++;
+                  } else if (xx === x) {
+                    // top middle
+                    color2++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
                 }
               }
-              if (xx >= xstencilmax) {
-                break;
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // left
+                    color2++;
+                  } else if (xx === xp1) {
+                    // right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color2++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color2++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
               }
             }
 
-          } else if (yy === y) {
-            // Middle row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= xstencilmin) {
-                if (xx === xm1) {
-                  // left
-                  color2++;
-                } else if (xx === xp1) {
-                  // right
-                  color2++;
-                }
-              }
-              if (xx >= xstencilmax) {
-                break;
-              }
-            }
-
-          } else if (yy === yp1) {
-            // Bottom row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= xstencilmin) {
-                if (xx === xm1) {
-                  // bottom left
-                  color2++;
-                } else if (xx === x) {
-                  // bottom middle
-                  color2++;
-                } else if (xx === xp1) {
-                  // bottom right
-                  color2++;
-                }
-              }
-              if (xx >= xstencilmax) {
-                break;
-              }
-            }
+          }
+          if (yy >= ystencilmax) {
+            break;
           }
         }
 
