@@ -1823,6 +1823,10 @@
         var ym1 = (y-1);
         var yp1 = (y+1);
 
+        // Periodic boundary conditions complicate any checks that end the loops early.
+        var xstencilmin = Math.min(xm1, x, xp1);
+        var xstencilmax = Math.max(xm1, x, xp1);
+
         // color1
         for (i = 0; i < state1.length; i++) {
           var yy = state1[i][0];
@@ -1831,7 +1835,11 @@
             // Top row
             for (j = 1; j < state1[i].length; j++) {
               var xx = state1[i][j];
-              if (xx >= xm1) {
+
+              // Slight difference with periodic algorithm,
+              // checking minimum of x values in the stencil
+              if (xx >= xstencilmin) {
+
                 if (xx === xm1) {
                   // top left
                   color1++;
@@ -1843,7 +1851,7 @@
                   color1++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
@@ -1852,7 +1860,7 @@
             // Middle row
             for (j = 1; j < state1[i].length; j++) {
               var xx = state1[i][j];
-              if (xx >= xm1) {
+              if (xx >= xstencilmin) {
                 if (xx === xm1) {
                   // top left
                   color1++;
@@ -1861,7 +1869,7 @@
                   color1++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
@@ -1870,7 +1878,7 @@
             // Bottom row
             for (j = 1; j < state1[i].length; j++) {
               var xx = state1[i][j];
-              if (xx >= xm1) {
+              if (xx >= xstencilmin) {
                 if (xx === xm1) {
                   // bottom left
                   color1++;
@@ -1882,7 +1890,7 @@
                   color1++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
@@ -1897,7 +1905,7 @@
             // Top row
             for (j = 1; j < state2[i].length; j++) {
               var xx = state2[i][j];
-              if (xx >= (x-1)) {
+              if (xx >= xstencilmin) {
                 if (xx === xm1) {
                   // top left
                   color2++;
@@ -1909,7 +1917,7 @@
                   color2++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
@@ -1918,7 +1926,7 @@
             // Middle row
             for (j = 1; j < state2[i].length; j++) {
               var xx = state2[i][j];
-              if (xx >= xm1) {
+              if (xx >= xstencilmin) {
                 if (xx === xm1) {
                   // left
                   color2++;
@@ -1927,7 +1935,7 @@
                   color2++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
@@ -1936,7 +1944,7 @@
             // Bottom row
             for (j = 1; j < state2[i].length; j++) {
               var xx = state2[i][j];
-              if (xx >= xm1) {
+              if (xx >= xstencilmin) {
                 if (xx === xm1) {
                   // bottom left
                   color2++;
@@ -1948,7 +1956,7 @@
                   color2++;
                 }
               }
-              if (xx >= xp1) {
+              if (xx >= xstencilmax) {
                 break;
               }
             }
