@@ -1,3 +1,11 @@
+Version 19.1:
+
+* Fix broken sandbox mode in map mode
+
+Version 18.1:
+
+* Fix minor simulator bugs, update syntax in simulator calculations
+
 Version 18.0:
 
 * Routine deploy
