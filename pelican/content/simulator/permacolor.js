@@ -449,7 +449,7 @@
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          gameTitleElem.innerHTML = "Golly Sandbox";
+          gameTitleElem.innerHTML = "Permacolor Sandbox";
 
         } else {
           this.initialState1 = this.s1Default;
@@ -457,7 +457,7 @@
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          gameTitleElem.innerHTML = "Golly Sandbox";
+          gameTitleElem.innerHTML = "Permacolor Sandbox";
 
         }
 
@@ -1686,7 +1686,6 @@
             // Get number of live neighbors and remove alive neighbors from deadNeighbors
             result = this.getNeighborsFromAlive(x, y, i, this.actualState, deadNeighbors);
             neighbors = result['neighbors'];
-            color = result['color'];
 
             // Join dead neighbors to check list
             for (m = 0; m < 8; m++) {
@@ -1735,11 +1734,16 @@
             if ((neighbors===2)||(neighbors===3)) {
 
               this.addCell(x, y, newState);
+
+              //color = result['color'];
+              color = this.getCellColor(x, y);
+
               if (color==1) {
                 this.addCell(x, y, newState1);
               } else if (color==2) {
                 this.addCell(x, y, newState2);
               }
+
               this.redrawList.push([x, y, 2]); // Keep alive
             } else {
               this.redrawList.push([x, y, 0]); // Kill cell
