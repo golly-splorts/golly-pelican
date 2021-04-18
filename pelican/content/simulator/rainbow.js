@@ -29,7 +29,7 @@
     baseSimulatorUrl : getBaseUIUrl() + '/simulator/index.html',
 
     s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
-    s2Default: '[{"80":[60]},{"81":[62]},{"82":[59,60,63,64,65]}]',
+    s2Default: '[{"60":[60]},{"61":[62]},{"62":[59,60,63,64,65]}]',
     s3Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
     s4Default: '[{"61":[29,30,33,34,35]},{"62":[32]},{"63":[30]}]',
 
@@ -115,7 +115,7 @@
       livecells2 : null,
       livecells3 : null,
       livecells4 : null,
-      victory: null,
+      livepct: null,
       // territory1: null,
       // territory2: null,
       team1color: null,
@@ -516,17 +516,17 @@
      */
     updateWinLossLabels : function() {
 
-      // TODO: Fix this
-
       if (this.gameMode === true) {
         // Indicate winner/loser, if we know
         if (this.showWinnersLosers) {
-          if (this.whoWon == 1) {
+          if (this.whoWon === 1) {
             this.element.team1winner.innerHTML = 'W';
-            this.element.team2loser.innerHTML = 'L';
-          } else if (this.whoWon == 2) {
+          } else if (this.whoWon === 2) {
             this.element.team2winner.innerHTML = 'W';
-            this.element.team1loser.innerHTML = 'L';
+          } else if (this.whoWon === 3) {
+            this.element.team2winner.innerHTML = 'W';
+          } else if (this.whoWon === 4) {
+            this.element.team2winner.innerHTML = 'W';
           } else {
             // huh? should not be here
             this.showWinnersLosers = false;
@@ -572,8 +572,7 @@
     setTeamNames : function() {
       if (this.gameMode === true) {
         // If game mode, get team names from game API result
-        this.teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name];
-        // TODO: fix api methods
+        this.teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name, this.gameApiResult.team3Name, this.gameApiResult.team4Name];
       } else {
         // Use color labels
         this.teamNames = this.colors.schemes[this.colors.current].alive_labels;
@@ -588,13 +587,12 @@
      */
     setColors : function() {
       if (this.gameMode === true) {
-        // TODO: fix api mode
         // Modify the color schemes available:
         // - insert the two teams' original color schemes in front
         // - update the labels for each color scheme to be the team names
         this.colors.schemes.unshift({
-          alive : [this.gameApiResult.team1Color, this.gameApiResult.team2Color],
-          alive_labels : [this.gameApiResult.team1Name, this.gameApiResult.team2Name]
+          alive : [this.gameApiResult.team1Color, this.gameApiResult.team2Color, this.gameApiResult.team3Color, this.gameApiResult.team4Color],
+          alive_labels : [this.gameApiResult.team1Name, this.gameApiResult.team2Name, this.gameApiResult.team3Name, this.gameApiResult.team4Name]
         });
         this.colors.current = 0;
         this.colors.alive = this.colors.schemes[this.colors.current].alive;
@@ -618,8 +616,6 @@
      */
     drawIcons : function() {
 
-      // TODO: fix api mode
-
       // Get team abbreviations from /teams endpoint
       // (abbreviations are used to get svg filename)
       let url = this.baseApiUrl + '/teams/' + this.gameApiResult.season;
@@ -629,27 +625,30 @@
 
         this.teamApiResult = teamApiResult;
 
-        // Assemble team1/2 abbreviations
-        var teamAbbrs = ['', ''];
+        // Assemble team1/2/3/4 abbreviations
+        var teamAbbrs = ['', '', '', ''];
         var k;
         for (k = 0; k < teamApiResult.length; k++) {
-          if (teamApiResult[k].teamName == this.gameApiResult.team1Name) {
+          if (teamApiResult[k].teamName === this.gameApiResult.team1Name) {
             teamAbbrs[0] = teamApiResult[k].teamAbbr.toLowerCase();
-          }
-          if (teamApiResult[k].teamName == this.gameApiResult.team2Name) {
+          } else if (teamApiResult[k].teamName === this.gameApiResult.team2Name) {
             teamAbbrs[1] = teamApiResult[k].teamAbbr.toLowerCase();
+          } else if (teamApiResult[k].teamName === this.gameApiResult.team3Name) {
+            teamAbbrs[2] = teamApiResult[k].teamAbbr.toLowerCase();
+          } else if (teamApiResult[k].teamName === this.gameApiResult.team4Name) {
+            teamAbbrs[3] = teamApiResult[k].teamAbbr.toLowerCase();
           }
         }
 
         // Assemble team1/2 colors/names
-        var teamColors = [this.gameApiResult.team1Color, this.gameApiResult.team2Color];
-        var teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name];
+        var teamColors = [this.gameApiResult.team1Color, this.gameApiResult.team2Color, his.gameApiResult.team3Color, this.gameApiResult.team4Color];
+        var teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name, this.gameApiResult.team3Name, this.gameApiResult.team4Name];
 
         // For each team, make a new <object> tag
         // that gets data from an svg file.
         var iconSize = "25";
         var i;
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < 4; i++) {
           var ip1 = i + 1;
           var containerId = "team" + ip1 + "-icon-container";
           var iconId = "team" + ip1 + "-icon";
@@ -942,13 +941,13 @@
         // var maxDim = Math.max(2*this.columns, 2*this.rows);
         // update running average window
         if (this.generation < maxDim) {
-          // keep populating the window with victory pct
-          this.runningAvgWindow[this.generation] = parseFloat(liveCounts.victoryPct);
+          // keep populating the window with victory/live pct
+          this.runningAvgWindow[this.generation] = parseFloat(liveCounts.livePct);
 
         } else {
-          // update running average window with next victory pct
+          // update running average window with next victory/live pct
           var removed = this.runningAvgWindow.shift();
-          this.runningAvgWindow.push(parseFloat(liveCounts.victoryPct));
+          this.runningAvgWindow.push(parseFloat(liveCounts.livePct));
 
           // compute running average
           var sum = 0.0;
@@ -966,27 +965,17 @@
             // we have not found a victor yet, so check for one now
             var bool0eq1 = this.approxEqual(this.runningAvgLast3[0], this.runningAvgLast3[1], tol);
             var bool1eq2 = this.approxEqual(this.runningAvgLast3[1], this.runningAvgLast3[2], tol);
-            var zerocells = ((liveCounts.liveCells1 == 0) || (liveCounts.liveCells2 == 0));
-            if ((bool0eq1 && bool1eq2) || zerocells) {
-              var zero1 = this.approxEqual(this.runningAvgLast3[0], 50.0, tol)
-              var zero2 = this.approxEqual(this.runningAvgLast3[1], 50.0, tol)
-              var zero3 = this.approxEqual(this.runningAvgLast3[2], 50.0, tol)
-              // TODO: Fix this!
-              if ((!(zero1 || zero2 || zero3)) || zerocells) {
-                if (liveCounts.liveCells1 > liveCounts.liveCells2) {
-                  this.whoWon = 1;
-                  this.foundVictor = true;
-                  this.showWinnersLosers = true;
-                  this.handlers.buttons.run();
-                  this.running = false;
-                } else if (liveCounts.liveCells1 < liveCounts.liveCells2) {
-                  this.whoWon = 2;
-                  this.foundVictor = true;
-                  this.showWinnersLosers = true;
-                  this.handlers.buttons.run();
-                  this.running = false;
-                }
-              }
+            var zerocells = (liveCounts.liveCells1 == 0) || (liveCounts.liveCells2 == 0) || (liveCounts.liveCells3 == 0) || (liveCounts.liveCells4 == 0);
+            //if ((bool0eq1 && bool1eq2) || zerocells) {
+            if (bool0eq1 && bool1eq2) {
+
+              // TODO: fix this
+              this.whoWon = 1;
+
+              this.foundVictor = true;
+              this.showWinnersLosers = true;
+              this.handlers.buttons.run();
+              this.running = false;
             }
           }
         }
@@ -1001,7 +990,9 @@
       this.element.livecells.innerHTML  = liveCounts.liveCells;
       this.element.livecells1.innerHTML = liveCounts.liveCells1;
       this.element.livecells2.innerHTML = liveCounts.liveCells2;
-      this.element.victory.innerHTML    = liveCounts.victoryPct.toFixed(1) + "%";
+      this.element.livecells3.innerHTML = liveCounts.liveCells3;
+      this.element.livecells4.innerHTML = liveCounts.liveCells4;
+      this.element.livepct.innerHTML    = liveCounts.livePct.toFixed(1) + "%";
       // this.element.territory1.innerHTML = liveCounts.territory1.toFixed(2) + "%";
       // this.element.territory2.innerHTML = liveCounts.territory2.toFixed(2) + "%";
     },
@@ -1097,13 +1088,16 @@
       this.element.livecells  = document.getElementById('livecells');
       this.element.livecells1 = document.getElementById('livecells1');
       this.element.livecells2 = document.getElementById('livecells2');
+      this.element.livecells3 = document.getElementById('livecells3');
+      this.element.livecells4 = document.getElementById('livecells4');
 
       this.element.team1wlrec = document.getElementById("team1record");
       this.element.team2wlrec = document.getElementById("team2record");
+
       this.element.team1wlrecCont = document.getElementById("team1record-container");
       this.element.team2wlrecCont = document.getElementById("team2record-container");
 
-      this.element.victory    = document.getElementById('victoryPct');
+      this.element.livepct    = document.getElementById('livePct');
       // this.element.territory1 = document.getElementById('territory1');
       // this.element.territory2 = document.getElementById('territory2');
 
@@ -1135,8 +1129,8 @@
 
       this.element.team1winner = document.getElementById('team1winner');
       this.element.team2winner = document.getElementById('team2winner');
-      this.element.team1loser = document.getElementById('team1loser');
-      this.element.team2loser = document.getElementById('team2loser');
+      this.element.team2winner = document.getElementById('team3winner');
+      this.element.team2winner = document.getElementById('team4winner');
     },
 
 
@@ -1778,21 +1772,8 @@
           }
         }
 
-        // TODO: fix this
-        var victoryPct;
-        if (liveCells1 > liveCells2) {
-          victoryPct = liveCells1/(1.0*liveCells1 + liveCells2);
-        } else {
-          victoryPct = liveCells2/(1.0*liveCells1 + liveCells2);
-        }
-        victoryPct = victoryPct * 100;
-
         var totalArea = GOL.columns * GOL.rows;
-
-        // var territory1 = liveCells1/(1.0*totalArea);
-        // territory1 = territory1 * 100;
-        // var territory2 = liveCells2/(1.0*totalArea);
-        // territory2 = territory2 * 100;
+        var livePct = ((liveCells1 + liveCells2 + liveCells3 + liveCells4)/(totalArea))*100.0;
 
         return {
           liveCells: liveCells,
@@ -1800,7 +1781,7 @@
           liveCells2 : liveCells2,
           liveCells3 : liveCells3,
           liveCells4 : liveCells4,
-          victoryPct : victoryPct,
+          livePct : livePct,
           // territory1 : territory1,
           // territory2 : territory2,
         };
@@ -1946,24 +1927,24 @@
             // This cell is dead, but has enough neighbors
             // that are alive that it will make new life.
             key = key.split(',');
-            t1 = parseInt(key[0], 10);
-            t2 = parseInt(key[1], 10);
+            tx = parseInt(key[0], 10);
+            ty = parseInt(key[1], 10);
 
             // Get color from neighboring parent cells
-            color = this.getColorFromAlive(t1, t2);
+            color = this.getColorFromAlive(tx, ty);
 
-            this.addCell(t1, t2, newState);
+            this.addCell(tx, ty, newState);
             if (color == 1) {
-              this.addCell(t1, t2, newState1);
+              this.addCell(tx, ty, newState1);
             } else if (color == 2) {
-              this.addCell(t1, t2, newState2);
+              this.addCell(tx, ty, newState2);
             } else if (color == 3) {
-              this.addCell(t1, t2, newState3);
+              this.addCell(tx, ty, newState3);
             } else if (color == 4) {
-              this.addCell(t1, t2, newState4);
+              this.addCell(tx, ty, newState4);
             }
 
-            this.redrawList.push([t1, t2, 1]);
+            this.redrawList.push([tx, ty, 1]);
           }
         }
 
