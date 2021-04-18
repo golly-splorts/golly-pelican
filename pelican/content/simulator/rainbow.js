@@ -29,7 +29,9 @@
     baseSimulatorUrl : getBaseUIUrl() + '/simulator/index.html',
 
     s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
-    s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
+    s2Default: '[{"80":[60]},{"81":[62]},{"82":[59,60,63,64,65]}]',
+    s3Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
+    s4Default: '[{"61":[29,30,33,34,35]},{"62":[32]},{"63":[30]}]',
 
     gameMode : false,
     mapMode : false,
@@ -63,24 +65,12 @@
 
       schemes : [
         {
-          alive: ['#ffc20a', '#0c7bdc'],
-          alive_labels: ['Yellow', 'Blue']
+          alive: ['#ffc20a', '#0c7bdc', '#e66100', '#9963ab'],
+          alive_labels: ['Yellow', 'Blue', 'Orange', 'Purple']
         },
         {
-          alive: ['#e66100', '#9963ab'],
-          alive_labels: ['Orange', 'Purple']
-        },
-        {
-          alive: ['#3b9dff', '#dc3220'],
-          alive_labels: ['Blue', 'Red']
-        },
-        {
-          alive: ['#1a85ff', '#d41159'],
-          alive_labels: ['Blue', 'Pink']
-        },
-        {
-          alive: ['#fefe62', '#d35fb7'],
-          alive_labels: ['Yellow', 'Pink']
+          alive: ['#3b9dff', '#dc3220', '#fefe62', '#d41159'],
+          alive_labels: ['Blue', 'Red', 'Yellow', 'Pink']
         }
       ],
     },
@@ -123,13 +113,19 @@
       livecells : null,
       livecells1 : null,
       livecells2 : null,
+      livecells3 : null,
+      livecells4 : null,
       victory: null,
       // territory1: null,
       // territory2: null,
       team1color: null,
-      team1name: null,
       team2color: null,
-      tam2name: null,
+      team3color: null,
+      team4color: null,
+      team1name: null,
+      team2name: null,
+      team3name: null,
+      team4name: null,
       z1lab: null,
       z2lab: null,
       z3lab: null,
@@ -142,6 +138,8 @@
     // Set in loadConfig()
     initialState1 : null,
     initialState2 : null,
+    initialState3 : null,
+    initialState4 : null,
 
     // Trail state
     trail : {
@@ -216,6 +214,8 @@
       // Or specify the states of the two colors
       this.s1user = this.helpers.getUrlParameter('s1');
       this.s2user = this.helpers.getUrlParameter('s2');
+      this.s3user = this.helpers.getUrlParameter('s3');
+      this.s4user = this.helpers.getUrlParameter('s4');
 
       if (this.gameId != null) {
         // Game simulation mode with map overlay
@@ -233,7 +233,7 @@
         this.sandboxMode = true;
         this.grid.mapOverlay = false;
 
-      } else if ((this.s1user != null) || (this.s2user != null)) {
+      } else if ((this.s1user != null) || (this.s2user != null) || (this.s3user != null) || (this.s4user != null)) {
         // User-provided patterns
         this.sandboxMode = true;
         this.grid.mapOverlay = false;
@@ -430,6 +430,8 @@
           // Load a random configuration for each state
           this.initialState1 = 'random';
           this.initialState2 = 'random';
+          this.initialState3 = 'random';
+          this.initialState4 = 'random';
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
@@ -446,18 +448,30 @@
           } else {
             this.initialState2 = [{}];
           }
+          if (this.s3user != null) {
+            this.initialState3 = this.s3user;
+          } else {
+            this.initialState3 = [{}];
+          }
+          if (this.s4user != null) {
+            this.initialState4 = this.s4user;
+          } else {
+            this.initialState4 = [{}];
+          }
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          gameTitleElem.innerHTML = "Permacolor Sandbox";
+          gameTitleElem.innerHTML = "Rainbow Sandbox";
 
         } else {
           this.initialState1 = this.s1Default;
           this.initialState2 = this.s2Default;
+          this.initialState3 = this.s3Default;
+          this.initialState4 = this.s4Default;
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          gameTitleElem.innerHTML = "Permacolor Sandbox";
+          gameTitleElem.innerHTML = "Rainbow Sandbox";
 
         }
 
@@ -491,7 +505,7 @@
       this.updateStatisticsElements(liveCounts);
       // If either cell count is 0 to begin with, disable victory check
       this.zeroStart = false;
-      if (liveCounts.liveCells1==0 || liveCounts.liveCells2==0) {
+      if ((liveCounts.liveCells1===0) || (liveCounts.liveCells2===0) || (liveCounts.liveCells3===0) || (liveCounts.liveCells4===0)) {
         this.zeroStart = true;
       }
     },
@@ -501,6 +515,9 @@
      * indicators, if this is a game and we know the score.
      */
     updateWinLossLabels : function() {
+
+      // TODO: Fix this
+
       if (this.gameMode === true) {
         // Indicate winner/loser, if we know
         if (this.showWinnersLosers) {
@@ -556,6 +573,7 @@
       if (this.gameMode === true) {
         // If game mode, get team names from game API result
         this.teamNames = [this.gameApiResult.team1Name, this.gameApiResult.team2Name];
+        // TODO: fix api methods
       } else {
         // Use color labels
         this.teamNames = this.colors.schemes[this.colors.current].alive_labels;
@@ -570,6 +588,7 @@
      */
     setColors : function() {
       if (this.gameMode === true) {
+        // TODO: fix api mode
         // Modify the color schemes available:
         // - insert the two teams' original color schemes in front
         // - update the labels for each color scheme to be the team names
@@ -598,6 +617,8 @@
      * This is only called when in gameMode.
      */
     drawIcons : function() {
+
+      // TODO: fix api mode
 
       // Get team abbreviations from /teams endpoint
       // (abbreviations are used to get svg filename)
@@ -782,6 +803,42 @@
           }
         }
       }
+
+      // state 3 parameter
+      if (this.initialState3 === 'random') {
+        this.randomState(3);
+      } else {
+        state3 = jsonParse(decodeURI(this.initialState3));
+        var irow, icol, y;
+        for (irow = 0; irow < state3.length; irow++) {
+          for (y in state3[irow]) {
+            for (icol = 0 ; icol < state3[irow][y].length ; icol++) {
+              var yy = parseInt(y);
+              var xx = state3[irow][yy][icol];
+              this.listLife.addCell(xx, yy, this.listLife.actualState);
+              this.listLife.addCell(xx, yy, this.listLife.actualState3);
+            }
+          }
+        }
+      }
+
+      // state 4 parameter
+      if (this.initialState4 === 'random') {
+        this.randomState(4);
+      } else {
+        state4 = jsonParse(decodeURI(this.initialState4));
+        var irow, icol, y;
+        for (irow = 0; irow < state4.length; irow++) {
+          for (y in state4[irow]) {
+            for (icol = 0 ; icol < state4[irow][y].length ; icol++) {
+              var yy = parseInt(y);
+              var xx = state4[irow][yy][icol];
+              this.listLife.addCell(xx, yy, this.listLife.actualState);
+              this.listLife.addCell(xx, yy, this.listLife.actualState4);
+            }
+          }
+        }
+      }
     },
 
 
@@ -792,6 +849,8 @@
      *   0: set random pattern for both colors
      *   1: set random pattern for team/color 1
      *   2: set random pattern for team/color 2
+     *   3: set random pattern for team/color 3
+     *   4: set random pattern for team/color 4
      */
     randomState : function(color) {
       // original pct was 12%, for binary we split 5%
@@ -824,6 +883,35 @@
           this.listLife.addCell(xx, yy, this.listLife.actualState2);
         }
       }
+
+      if (color===0 || color===3) {
+        // Color 3
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = this.helpers.random(0, this.rows - 1);
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = this.helpers.random(0, this.rows - 1);
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState3);
+        }
+      }
+
+      if (color===0 || color===4) {
+        // Color 4
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = this.helpers.random(0, this.rows - 1);
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = this.helpers.random(0, this.rows - 1);
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState4);
+        }
+      }
+
     },
 
 
@@ -883,6 +971,7 @@
               var zero1 = this.approxEqual(this.runningAvgLast3[0], 50.0, tol)
               var zero2 = this.approxEqual(this.runningAvgLast3[1], 50.0, tol)
               var zero3 = this.approxEqual(this.runningAvgLast3[2], 50.0, tol)
+              // TODO: Fix this!
               if ((!(zero1 || zero2 || zero3)) || zerocells) {
                 if (liveCounts.liveCells1 > liveCounts.liveCells2) {
                   this.whoWon = 1;
@@ -908,6 +997,7 @@
      * Update the statistics
      */
     updateStatisticsElements : function(liveCounts) {
+      // TODO: fix this
       this.element.livecells.innerHTML  = liveCounts.liveCells;
       this.element.livecells1.innerHTML = liveCounts.liveCells1;
       this.element.livecells2.innerHTML = liveCounts.liveCells2;
@@ -933,6 +1023,7 @@
     },
 
     updateTeamRecords : function() {
+      // TODO: fix this
       if (this.gameMode === true) {
         var game = this.gameApiResult;
         if (game.isPostseason) {
@@ -964,6 +1055,15 @@
         e = this.element.team2color[i];
         e.style.color = this.colors.alive[1];
       }
+      for (i = 0; i < this.element.team3color.length; i++) {
+        e = this.element.team3color[i];
+        e.style.color = this.colors.alive[2];
+      }
+      for (i = 0; i < this.element.team4color.length; i++) {
+        e = this.element.team4color[i];
+        e.style.color = this.colors.alive[3];
+      }
+
       for (i = 0; i < this.element.team1name.length; i++) {
         e = this.element.team1name[i];
         e.innerHTML = this.teamNames[0];
@@ -971,6 +1071,14 @@
       for (i = 0; i < this.element.team2name.length; i++) {
         e = this.element.team2name[i];
         e.innerHTML = this.teamNames[1];
+      }
+      for (i = 0; i < this.element.team3name.length; i++) {
+        e = this.element.team3name[i];
+        e.innerHTML = this.teamNames[2];
+      }
+      for (i = 0; i < this.element.team4name.length; i++) {
+        e = this.element.team4name[i];
+        e.innerHTML = this.teamNames[3];
       }
     },
 
@@ -984,6 +1092,7 @@
      * Save DOM references for this session (one time execution)
      */
     keepDOMElements : function() {
+      // TODO: fix this
       this.element.generation = document.getElementById('generation');
       this.element.livecells  = document.getElementById('livecells');
       this.element.livecells1 = document.getElementById('livecells1');
@@ -1003,6 +1112,13 @@
 
       this.element.team2color = document.getElementsByClassName("team2color");
       this.element.team2name  = document.getElementsByClassName("team2name");
+
+      // TODO html fix this frontend add elements
+      this.element.team3color = document.getElementsByClassName("team3color");
+      this.element.team3name  = document.getElementsByClassName("team3name");
+
+      this.element.team4color = document.getElementsByClassName("team4color");
+      this.element.team4name  = document.getElementsByClassName("team4name");
 
       this.element.clearButton = document.getElementById('buttonClear');
       this.element.colorButton = document.getElementById('buttonColors');
@@ -1117,6 +1233,7 @@
       GOL.checkForVictor(liveCounts);
 
       // Update winner/loser if found
+      // TODO: Fix this 
       if (GOL.showWinnersLosers) {
         if (GOL.whoWon == 1) {
           GOL.element.team1winner.innerHTML = 'W';
@@ -1515,14 +1632,22 @@
       switchCell : function(i, j) {
         if (GOL.sandboxMode===true) {
           if (GOL.listLife.isAlive(i, j)) {
+            // cycle colors
             if (GOL.listLife.getCellColor(i, j) == 1) {
-              // Swap colors
               GOL.listLife.removeCell(i, j, GOL.listLife.actualState1);
               GOL.listLife.addCell(i, j, GOL.listLife.actualState2);
               this.keepCellAlive(i, j);
+            } else if (GOL.listLife.getCellColor(i, j) == 2) {
+              GOL.listLife.removeCell(i, j, GOL.listLife.actualState2);
+              GOL.listLife.addCell(i, j, GOL.listLife.actualState3);
+              this.keepCellAlive(i, j);
+            } else if (GOL.listLife.getCellColor(i, j) == 3) {
+              GOL.listLife.removeCell(i, j, GOL.listLife.actualState3);
+              GOL.listLife.addCell(i, j, GOL.listLife.actualState4);
+              this.keepCellAlive(i, j);
             } else {
               GOL.listLife.removeCell(i, j, GOL.listLife.actualState);
-              GOL.listLife.removeCell(i, j, GOL.listLife.actualState2);
+              GOL.listLife.removeCell(i, j, GOL.listLife.actualState4);
               this.changeCelltoDead(i, j);
             }
           } else {
@@ -1577,6 +1702,8 @@
       actualState : [],
       actualState1 : [],
       actualState2 : [],
+      actualState3 : [],
+      actualState4 : [],
       redrawList : [],
 
 
@@ -1627,6 +1754,31 @@
           }
         }
 
+        var state3 = GOL.listLife.actualState3;
+        var liveCells3 = 0;
+        for (i = 0; i < state3.length; i++) {
+          if ((state3[i][0] >= 0) && (state3[i][0] < GOL.rows)) {
+            for (j = 1; j < state3[i].length; j++) {
+              if ((state3[i][j] >= 0) && (state3[i][j] < GOL.columns)) {
+                liveCells3++;
+              }
+            }
+          }
+        }
+
+        var state4 = GOL.listLife.actualState4;
+        var liveCells4 = 0;
+        for (i = 0; i < state4.length; i++) {
+          if ((state4[i][0] >= 0) && (state4[i][0] < GOL.rows)) {
+            for (j = 1; j < state4[i].length; j++) {
+              if ((state4[i][j] >= 0) && (state4[i][j] < GOL.columns)) {
+                liveCells4++;
+              }
+            }
+          }
+        }
+
+        // TODO: fix this
         var victoryPct;
         if (liveCells1 > liveCells2) {
           victoryPct = liveCells1/(1.0*liveCells1 + liveCells2);
@@ -1646,6 +1798,8 @@
           liveCells: liveCells,
           liveCells1 : liveCells1,
           liveCells2 : liveCells2,
+          liveCells3 : liveCells3,
+          liveCells4 : liveCells4,
           victoryPct : victoryPct,
           // territory1 : territory1,
           // territory2 : territory2,
@@ -1658,10 +1812,12 @@
         var i, j, m, n, key, t1, t2;
         var alive = 0, alive1 = 0, alive2 = 0;
         var deadNeighbors;
-        var newState = [], newState1 = [], newState2 = [];
+        var newState = [], newState1 = [], newState2 = [], newState3 = [], newState4 = [];
         var allDeadNeighbors = {};
         var allDeadNeighbors1 = {};
         var allDeadNeighbors2 = {};
+        var allDeadNeighbors3 = {};
+        var allDeadNeighbors4 = {};
         var neighbors, color;
         this.redrawList = [];
 
@@ -1742,6 +1898,10 @@
                 this.addCell(x, y, newState1);
               } else if (color==2) {
                 this.addCell(x, y, newState2);
+              } else if (color==3) {
+                this.addCell(x, y, newState3);
+              } else if (color==4) {
+                this.addCell(x, y, newState4);
               }
 
               this.redrawList.push([x, y, 2]); // Keep alive
@@ -1797,6 +1957,10 @@
               this.addCell(t1, t2, newState1);
             } else if (color == 2) {
               this.addCell(t1, t2, newState2);
+            } else if (color == 3) {
+              this.addCell(t1, t2, newState3);
+            } else if (color == 4) {
+              this.addCell(t1, t2, newState4);
             }
 
             this.redrawList.push([t1, t2, 1]);
@@ -1806,6 +1970,8 @@
         this.actualState = newState;
         this.actualState1 = newState1;
         this.actualState2 = newState2;
+        this.actualState3 = newState3;
+        this.actualState4 = newState4;
 
         return this.getLiveCounts();
       },
@@ -1818,9 +1984,13 @@
       getColorFromAlive : function(x, y) {
         var state1 = this.actualState1;
         var state2 = this.actualState2;
+        var state3 = this.actualState3;
+        var state4 = this.actualState4;
 
         var color1 = 0;
         var color2 = 0;
+        var color3 = 0;
+        var color4 = 0;
 
         var xm1 = (x-1);
         var xp1 = (x+1);
@@ -1912,6 +2082,7 @@
           }
         }
 
+
         // color2
         for (i = 0; i < state2.length; i++) {
           var yy = state2[i][0];
@@ -1985,17 +2156,176 @@
           }
         }
 
-        if (color1 > color2) {
+
+        // color3
+        for (i = 0; i < state3.length; i++) {
+          var yy = state3[i][0];
+
+          if (yy >= ystencilmin) {
+
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state3[i].length; j++) {
+                var xx = state3[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color3++;
+                  } else if (xx === x) {
+                    // top middle
+                    color3++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color3++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state3[i].length; j++) {
+                var xx = state3[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // left
+                    color3++;
+                  } else if (xx === xp1) {
+                    // right
+                    color3++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state3[i].length; j++) {
+                var xx = state3[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color3++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color3++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color3++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+            }
+
+          }
+          if (yy >= ystencilmax) {
+            break;
+          }
+        }
+
+
+        // color4
+        for (i = 0; i < state4.length; i++) {
+          var yy = state4[i][0];
+
+          if (yy >= ystencilmin) {
+
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state4[i].length; j++) {
+                var xx = state4[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color4++;
+                  } else if (xx === x) {
+                    // top middle
+                    color4++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color4++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state4[i].length; j++) {
+                var xx = state4[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // left
+                    color4++;
+                  } else if (xx === xp1) {
+                    // right
+                    color4++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state4[i].length; j++) {
+                var xx = state4[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color4++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color4++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color4++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+            }
+
+          }
+          if (yy >= ystencilmax) {
+            break;
+          }
+        }
+
+        // If any color has the majority, new cell becomes that color
+        if (color1 > 1) {
           return 1;
-        } else if (color2 > color1) {
+        } else if (color2 > 1) {
           return 2;
+        } else if (color3 > 1) {
+          return 3;
+        } else if (color4 > 1) {
+          return 4;
         } else {
-          if (GOL.gameMode && GOL.neighborColorLegacyMode) {
+
+          // In case of a tie, figure out which color is missing
+          if (color1===0) {
             return 1;
-          } else if (x%2==y%2) {
-            return 1;
-          } else {
+          } else if (color2===0) {
             return 2;
+          } else if (color3===0) {
+            return 3;
+          } else if (color4===0) {
+            return 4;
+          } else {
+            return 0;
           }
         }
       },
@@ -2017,7 +2347,7 @@
         var ystencilmax = Math.max(ym1, y, yp1);
 
         var neighbors = 0, k;
-        var neighbors1 = 0, neighbors2 = 0;
+        var neighbors1 = 0, neighbors2 = 0, neighbors3 = 0, neighbors4 = 0;
 
         // Top
         if (state[i-1] !== undefined) {
@@ -2033,11 +2363,15 @@
                   neighbors++;
                   var xx = state[i-1][k];
                   var yy = state[i-1][0];
-                  if (this.getCellColor(xx, yy) == 1) {
+                  var cellcol = this.getCellColor(xx, yy);
+                  if (cellcol == 1) {
                     neighbors1++;
-                  }
-                  if (this.getCellColor(xx, yy) == 2) {
+                  } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2053,6 +2387,10 @@
                     neighbors1++;
                   } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2075,6 +2413,10 @@
                     neighbors1++;
                   } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2100,6 +2442,10 @@
                 neighbors1++;
               } else if (cellcol == 2) {
                 neighbors2++;
+              } else if (cellcol == 3) {
+                neighbors3++;
+              } else if (cellcol == 4) {
+                neighbors4++;
               }
             }
 
@@ -2113,6 +2459,10 @@
                 neighbors1++;
               } else if (cellcol == 2) {
                 neighbors2++;
+              } else if (cellcol == 3) {
+                neighbors3++;
+              } else if (cellcol == 4) {
+                neighbors4++;
               }
             }
 
@@ -2139,6 +2489,10 @@
                     neighbors1++;
                   } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2153,6 +2507,10 @@
                     neighbors1++;
                   } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2173,6 +2531,10 @@
                     neighbors1++;
                   } else if (cellcol == 2) {
                     neighbors2++;
+                  } else if (cellcol == 3) {
+                    neighbors3++;
+                  } else if (cellcol == 4) {
+                    neighbors4++;
                   }
                 }
 
@@ -2185,17 +2547,28 @@
         }
 
         var color;
-        if (neighbors1 > neighbors2) {
+
+        // If any color has the majority, new cell becomes that color
+        if (neighbors1 > 1) {
           color = 1;
-        } else if (neighbors2 > neighbors1) {
+        } else if (neighbors2 > 1) {
           color = 2;
+        } else if (neighbors3 > 1) {
+          color = 3;
+        } else if (neighbors4 > 1) {
+          color = 4;
         } else {
-          if (GOL.neighborColorLegacyMode) {
+          // In case of a tie, figure out which color is missing
+          if (neighbors1===0) {
             color = 1;
-          } else if (x%2==y%2) {
-            color = 1;
-          } else {
+          } else if (neighbors2===0) {
             color = 2;
+          } else if (neighbors3===0) {
+            color = 3;
+          } else if (neighbors4===0) {
+            color = 4;
+          } else {
+            color = 0;
           }
         }
 
@@ -2246,6 +2619,24 @@
             for (j = 1; j < this.actualState2[i].length; j++) {
               if (this.actualState2[i][j] === x) {
                 return 2;
+              }
+            }
+          }
+        }
+        for (i = 0; i < this.actualState3.length; i++) {
+          if (this.actualState3[i][0] === y) {
+            for (j = 1; j < this.actualState3[i].length; j++) {
+              if (this.actualState3[i][j] === x) {
+                return 3;
+              }
+            }
+          }
+        }
+        for (i = 0; i < this.actualState4.length; i++) {
+          if (this.actualState4[i][0] === y) {
+            for (j = 1; j < this.actualState4[i].length; j++) {
+              if (this.actualState4[i][j] === x) {
+                return 4;
               }
             }
           }
