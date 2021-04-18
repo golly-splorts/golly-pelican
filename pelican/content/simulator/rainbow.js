@@ -970,7 +970,7 @@
             if (bool0eq1 && bool1eq2) {
 
               // TODO: fix this
-              this.whoWon = 1;
+              this.ranks = this.getRanks(liveCounts);
 
               this.foundVictor = true;
               this.showWinnersLosers = true;
@@ -980,6 +980,35 @@
           }
         }
       }
+    },
+
+    getRanks : function(liveCounts) {
+      // Return an array of 4 elements:
+      // The ranks of each taem
+      // [team1rank, team2rank, team3rank, team4rank]
+      var unsortedScores = [
+        liveCounts.liveCells1, 
+        liveCounts.liveCells2, 
+        liveCounts.liveCells3, 
+        liveCounts.liveCells4
+      ];
+      console.log('unsorted scores:');
+      console.log(unsortedScores);
+      var sortedScores = [...unsortedScores];
+      sortedScores.sort(function(a, b){return b-a});
+      console.log('sorted scores:');
+      console.log(sortedScores);
+      var ranks = [3, 3, 3, 3];
+      var i;
+      for (i=0; i<4; i++) {
+        if (unsortedScores[i] > 0) {
+          ranks[i] = sortedScores.indexOf(unsortedScores[i]);
+        }
+      }
+      console.log('sortedScores index of unsortedScores[0]:');
+      console.log(unsortedScores[0]);
+      console.log(sortedScores.indexOf(unsortedScores[0]));
+      return ranks;
     },
 
     /**
@@ -1021,18 +1050,28 @@
           // Postseason: win-loss record in current series
           var swlstr1 = game.team1SeriesWinLoss[0] + "-" + game.team1SeriesWinLoss[1];
           var swlstr2 = game.team2SeriesWinLoss[0] + "-" + game.team2SeriesWinLoss[1];
+          var swlstr3 = game.team3SeriesWinLoss[0] + "-" + game.team3SeriesWinLoss[1];
+          var swlstr4 = game.team4SeriesWinLoss[0] + "-" + game.team4SeriesWinLoss[1];
           this.element.team1wlrec.innerHTML = swlstr1;
           this.element.team2wlrec.innerHTML = swlstr2;
+          this.element.team3wlrec.innerHTML = swlstr3;
+          this.element.team4wlrec.innerHTML = swlstr4;
         } else {
           // Season: win-loss record to date
           var wlstr1 = game.team1WinLoss[0] + "-" + game.team1WinLoss[1];
           var wlstr2 = game.team2WinLoss[0] + "-" + game.team2WinLoss[1];
+          var wlstr3 = game.team3WinLoss[0] + "-" + game.team3WinLoss[1];
+          var wlstr4 = game.team4WinLoss[0] + "-" + game.team4WinLoss[1];
           this.element.team1wlrec.innerHTML = wlstr1;
           this.element.team2wlrec.innerHTML = wlstr2;
+          this.element.team3wlrec.innerHTML = wlstr3;
+          this.element.team4wlrec.innerHTML = wlstr4;
         }
       } else {
         this.element.team1wlrecCont.remove();
         this.element.team2wlrecCont.remove();
+        this.element.team3wlrecCont.remove();
+        this.element.team4wlrecCont.remove();
       }
     },
 
@@ -1093,9 +1132,13 @@
 
       this.element.team1wlrec = document.getElementById("team1record");
       this.element.team2wlrec = document.getElementById("team2record");
+      this.element.team3wlrec = document.getElementById("team3record");
+      this.element.team4wlrec = document.getElementById("team4record");
 
       this.element.team1wlrecCont = document.getElementById("team1record-container");
       this.element.team2wlrecCont = document.getElementById("team2record-container");
+      this.element.team3wlrecCont = document.getElementById("team3record-container");
+      this.element.team4wlrecCont = document.getElementById("team4record-container");
 
       this.element.livepct    = document.getElementById('livePct');
       // this.element.territory1 = document.getElementById('territory1');
@@ -1107,7 +1150,6 @@
       this.element.team2color = document.getElementsByClassName("team2color");
       this.element.team2name  = document.getElementsByClassName("team2name");
 
-      // TODO html fix this frontend add elements
       this.element.team3color = document.getElementsByClassName("team3color");
       this.element.team3name  = document.getElementsByClassName("team3name");
 
@@ -1127,10 +1169,10 @@
       this.element.z3lab = document.getElementById('zone3label');
       this.element.z4lab = document.getElementById('zone4label');
 
-      this.element.team1winner = document.getElementById('team1winner');
-      this.element.team2winner = document.getElementById('team2winner');
-      this.element.team2winner = document.getElementById('team3winner');
-      this.element.team2winner = document.getElementById('team4winner');
+      this.element.team1rank = document.getElementById('team1rank');
+      this.element.team2rank = document.getElementById('team2rank');
+      this.element.team3rank = document.getElementById('team3rank');
+      this.element.team4rank = document.getElementById('team4rank');
     },
 
 
@@ -1229,13 +1271,10 @@
       // Update winner/loser if found
       // TODO: Fix this 
       if (GOL.showWinnersLosers) {
-        if (GOL.whoWon == 1) {
-          GOL.element.team1winner.innerHTML = 'W';
-          GOL.element.team2loser.innerHTML = 'L';
-        } else {
-          GOL.element.team2winner.innerHTML = 'W';
-          GOL.element.team1loser.innerHTML = 'L';
-        }
+        GOL.element.team1rank.innerHTML = this.ranks[0]+1;
+        GOL.element.team2rank.innerHTML = this.ranks[1]+1;
+        GOL.element.team3rank.innerHTML = this.ranks[2]+1;
+        GOL.element.team4rank.innerHTML = this.ranks[3]+1;
       }
 
       r = 1.0/GOL.generation;
