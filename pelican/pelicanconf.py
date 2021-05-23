@@ -43,7 +43,6 @@ PLUGINS = ['render_math']
 TEMPLATE_PAGES = {}
 
 TEMPLATE_PAGES['index.html'] = 'index.html'
-TEMPLATE_PAGES['index.js'] = 'index.js'
 
 TEMPLATE_PAGES['season.html'] = 'season.html'
 TEMPLATE_PAGES['season.js'] = 'season.js'
