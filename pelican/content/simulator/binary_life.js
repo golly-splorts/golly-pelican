@@ -34,6 +34,18 @@
     s1Default: '[{"0":[10,20]}]',
     s2Default: '[{"0":[11,21]}]',
 
+    // Example of a majority left-hand-wins rule:
+    // 002002002001001001220110210 
+
+    rules: {
+      //ruleString: "002002002001001001220110210",
+      //states: getStates(ruleString)
+      //
+      // These are populated in loadState
+      ruleString: "",
+      states: {}
+    },
+
     gameMode : false,
     mapMode : false,
     sandboxMode : false,
@@ -193,6 +205,43 @@
     },
 
     /**
+     * Get the map of different states and their corresponding outcome
+     * for the given rule
+     */
+    getStates : function(ruleString) {
+      var states = {
+        "222": ruleString[0],
+        "221": ruleString[1], 
+        "220": ruleString[2],  
+        "212": ruleString[3],
+        "211": ruleString[4],
+        "210": ruleString[5],
+        "202": ruleString[6],
+        "201": ruleString[7],
+        "200": ruleString[8],
+        "122": ruleString[9],
+        "121": ruleString[10],
+        "120": ruleString[11],
+        "112": ruleString[12],
+        "111": ruleString[13],
+        "110": ruleString[14],
+        "102": ruleString[15],
+        "101": ruleString[16],
+        "100": ruleString[17],
+        "022": ruleString[18],
+        "021": ruleString[19],
+        "020": ruleString[20],
+        "012": ruleString[21],
+        "011": ruleString[22],
+        "010": ruleString[23],
+        "002": ruleString[24],
+        "001": ruleString[25],
+        "000": ruleString[26]
+      };
+      return states;
+    },
+
+    /**
      * Load config from URL
      *
      * This function loads configuration variables for later processing.
@@ -228,6 +277,7 @@
       } else if (this.patternName != null) {
         // Map mode with map overlay
         this.mapMode = true;
+        this.sandboxMode = true;
         this.grid.mapOverlay = true;
 
       } else if (this.random == 1) {
@@ -283,6 +333,10 @@
      * to be loaded before they can be completed.
      */
     loadState : function() {
+
+      // Hard-coding for now
+      this.rules.ruleString = "002002002001001001220110210";
+      this.rules.states = this.getStates(this.rules.ruleString);
 
       if (this.gameId != null) {
 
@@ -835,6 +889,9 @@
       var bb = parseFloat(b);
       var smol = 1e-12;
       return Math.abs(a-b)/Math.abs(a + smol) < tol;
+    },
+
+    checkForVictor : function(liveCounts) {
     },
 
     // /**
@@ -1650,166 +1707,308 @@
 
       nextGeneration : function() {
 
-        // get the last value of y
-        var lastIndex = this.actualState.length - 1;
-        var lastRow = this.actualState[lastIndex];
-        var lasty = lastRow[0];
+        // The generation tells us which row we're on
+        // This is the new row
+        var y = GOL.generation;
+        // This is the previous row
+        var ym1 = y - 1;
 
+        // Shortcuts
+        var state = this.actualState;
+        var state1 = this.actualState1;
+        var state2 = this.actualState2;
 
-
-        for (j = 1; j < this.lastRow.length; j++) {
-
+        // Now, get the index of actualState that corresponds to y-1
+        var actualStatePrevIndex = -1;
+        for (i = 0; i < state.length; i++) {
+          if (state[i]==ym1) {
+            actualStatePrevIndex = i;
+          }
         }
 
+        // Get the actualState x values corresponding to y-1
+        // If we haven't found an index for y-1, it is not in actualState, so row has no x values
+        var actualStatePrevXs;
+        if (actualStatePrevIndex < 0) {
+          actualStatePrevXs = [];
+        } else {
+          var row = state[actualStatePrevIndex];
+          actualStatePrevXs = row.slice(1,row.length);
+        }
 
+        // Next, repeat the above procedure for state1 and state2 (yuck)
+        // State 1:
+        var actualState1PrevIndex = -1;
+        for (i = 0; i < state1.length; i++) {
+          if (state1[i]==ym1) {
+            actualState1PrevIndex = i;
+          }
+        }
+        var actualState1PrevXs;
+        if (actualState1PrevIndex < 0) {
+          actualState1PrevXs = [];
+        } else {
+          actualState1PrevXs = state1[actualState1PrevIndex];
+        }
+        // State 2:
+        var actualState2PrevIndex = -1;
+        for (i = 0; i < state2.length; i++) {
+          if (state2[i]==ym1) {
+            actualState2PrevIndex = i;
+          }
+        }
+        var actualState2PrevXs;
+        if (actualState2PrevIndex < 0) {
+          actualState2PrevXs = [];
+        } else {
+          actualState2PrevXs = state2[actualState2PrevIndex];
+        }
 
+        // Prepare arrays to hold the next row
+        var newRow = [y];
+        var newRow1 = [y];
+        var newRow2 = [y];
 
+        var key = "";
 
-
-
-
-
-        var x, y, i, j, m, n, key, t1, t2;
-        var alive = 0, alive1 = 0, alive2 = 0;
-        var deadNeighbors;
-        var newState = [], newState1 = [], newState2 = [];
-        var allDeadNeighbors = {};
-        var allDeadNeighbors1 = {};
-        var allDeadNeighbors2 = {};
-        var neighbors, color;
-        this.redrawList = [];
-
-        // iterate over each point stored in the actualState list
-        for (i = 0; i < this.actualState.length; i++) {
-          this.topPointer = 1;
-          this.bottomPointer = 1;
-
-          for (j = 1; j < this.actualState[i].length; j++) {
-            x = this.actualState[i][j];
-            y = this.actualState[i][0];
-
-            // Possible dead neighbors
-            deadNeighbors = [[x-1, y-1, 1], [x, y-1, 1], [x+1, y-1, 1], [x-1, y, 1], [x+1, y, 1], [x-1, y+1, 1], [x, y+1, 1], [x+1, y+1, 1]];
-
-            // Get number of live neighbors and remove alive neighbors from deadNeighbors
-            result = this.getNeighborsFromAlive(x, y, i, this.actualState, deadNeighbors);
-            neighbors = result['neighbors'];
-            color = result['color'];
-
-            // Join dead neighbors to check list
-            for (m = 0; m < 8; m++) {
-              if (deadNeighbors[m] !== undefined) {
-                // this cell is dead
-                var xx = deadNeighbors[m][0];
-                var yy = deadNeighbors[m][1];
-                key = xx + ',' + yy; // Create hashtable key
-
-                // count number of dead neighbors
-                if (allDeadNeighbors[key] === undefined) {
-                  allDeadNeighbors[key] = 1;
-                } else {
-                  allDeadNeighbors[key]++;
-                }
-              }
-            }
-
-            // survive counts
-            //
-            // // 34 life (too slow)
-            // if ((neighbors == 3) || (neighbors == 4)) {
-            // // coagulations (blows up)
-            // if (!(neighbors === 1)) {
-            // // gnarl (way too slow/chaotic)
-            // if (neighbors === 1) {
-            // // long life (boring)
-            // if (neighbors===5) {
-            // // stains (too slow)
-            // if (!((neighbors===1)||(neighbors===4))) {
-            // // walled cities
-            // if ((neighbors > 1) && (neighbors < 6)) {
-            //
-            // // conway's life
-            // if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {
-            // // amoeba life (good)
-            // if ((neighbors === 1) || (neighbors === 3) || (neighbors === 5) || (neighbors === 8)) {
-            // // high life (good, but some oscillators blow up)
-            // if ((neighbors===2)||(neighbors===3)) {
-            // // 2x2 (good, but victory conditions *may* need to change)
-            // if ((neighbors===1)||(neighbors===2)||(neighbors===5)){
-            // // // pseudo life (good)
-            // if ((neighbors===2)||(neighbors===3)||(neighbors===8)) {
-
-            // conway's life
-            if ((neighbors===2)||(neighbors===3)) {
-
-              this.addCell(x, y, newState);
-              if (color==1) {
-                this.addCell(x, y, newState1);
-              } else if (color==2) {
-                this.addCell(x, y, newState2);
-              }
-              this.redrawList.push([x, y, 2]); // Keep alive
+        // Left boundary:
+        key = "0";
+        var j;
+        for (j = 0; j < 2; j++) {
+          if (actualStatePrevXs.indexOf(j) != -1) {
+            if (actualState1PrevXs.indexOf(j) != -1) {
+              key += "1";
+            } else if (actualState2PrevXs.indexOf(j) != -1) {
+              key += "2";
             } else {
-              this.redrawList.push([x, y, 0]); // Kill cell
+              key += "0";
             }
+          } else {
+            key += "0";
+          }
+        }
+        var leftBoundaryState = GOL.rules.states[key];
+        if (leftBoundaryState > 0) {
+          this.addCell(0, y, this.actualState);
+          if (leftBoundaryState == 1) {
+            this.addCell(0, y, this.actualState1);
+          } else if (leftBoundaryState == 2) {
+            this.addCell(0, y, this.actualState2);
+          }
+          this.redrawList.push([0, y, 1]);
+        } else {
+          this.redrawList.push([0, y, 0]);
+        }
+
+        // Internal:
+        for (j = 1; j < GOL.columns - 1; j++) {
+          key = "";
+          var k;
+          for (k = j-1; k <= j+1; k++) {
+            if (actualStatePrevXs.indexOf(k) != -1) {
+              if (actualState1PrevXs.indexOf(k) != -1) {
+                key += "1";
+              } else if (actualState2PrevXs.indexOf(j) != -1) {
+                key += "2";
+              } else {
+                key += "0";
+              }
+            } else {
+              key += "0";
+            }
+          }
+          var cellState = GOL.rules.states[key];
+          if (cellState > 0) {
+            this.addCell(j, y, this.actualState);
+            if (cellState == 1) {
+              this.addCell(j, y, this.actualState1);
+            } else if (cellState == 2) {
+              this.addCell(j, y, this.actualState2);
+            }
+            this.redrawList.push([j, y, 1]);
+          } else {
+            this.redrawList.push([j, y, 0]);
           }
         }
 
-        // Process dead neighbors
-        for (key in allDeadNeighbors) {
-
-          // birth counts
-          //
-          // // 34 life (too slow)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4)) {
-          // coagulations
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 7) || (allDeadNeighbors[key] === 8)) {
-          // // gnarl (way too slow/chaotic)
-          // if (allDeadNeighbors[key] === 1) {
-          // // long life (boring)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4) || (allDeadNeighbors[key] === 5)) {
-          // // stains (too slow)
-          // if ((allDeadNeighbors[key]===3)||(allDeadNeighbors[key]>5)) {
-          // // walled cities (boring)
-          // if (allDeadNeighbors[key] > 3) {
-          //
-          // // conway's life
-          // if (allDeadNeighbors[key] === 3) {
-          // // amoeba life (good)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 5) || (allDeadNeighbors[key] === 7)) {
-          // // high life (good, but some oscillators blow up)
-          // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 6)) {
-          // // 2x2 (good, but victory conditions *may* need to change)
-          // if ((allDeadNeighbors[key]===3) || (allDeadNeighbors[key]===6)) {
-          // // // pseudo life (good)
-          // if ((allDeadNeighbors[key]==3)||(allDeadNeighbors[key]==5)||(allDeadNeighbors[key]==7)) {
-
-          // conway's life
-          if (allDeadNeighbors[key] === 3) {
-
-            // This cell is dead, but has enough neighbors
-            // that are alive that it will make new life.
-            key = key.split(',');
-            t1 = parseInt(key[0], 10);
-            t2 = parseInt(key[1], 10);
-
-            // Get color from neighboring parent cells
-            color = this.getColorFromAlive(t1, t2);
-
-            this.addCell(t1, t2, newState);
-            if (color == 1) {
-              this.addCell(t1, t2, newState1);
-            } else if (color == 2) {
-              this.addCell(t1, t2, newState2);
+        // Right boundary:
+        key = "";
+        var j;
+        for (j = GOL.columns - 2; j < GOL.columns; j++) {
+          if (actualStatePrevXs.indexOf(j) != -1) {
+            if (actualState1PrevXs.indexOf(j) != -1) {
+              key += "1";
+            } else if (actualState2PrevXs.indexOf(j) != -1) {
+              key += "2";
+            } else {
+              key += "0";
             }
-
-            this.redrawList.push([t1, t2, 1]);
+          } else {
+            key += "0";
           }
         }
+        key += "0";
+        var rightBoundaryState = GOL.rules.states[key];
+        if (rightBoundaryState > 0) {
+          this.addCell(GOL.columns - 1, y, this.actualState);
+          if (rightBoundaryState == 1) {
+            this.addCell(GOL.columns - 1, y, this.actualState1);
+          } else if (rightBoundaryState == 2) {
+            this.addCell(GOL.columns - 1, y, this.actualState2);
+          }
+          this.redrawList.push([GOL.columns - 1, y, 1]);
+        } else {
+          this.redrawList.push([GOL.columns - 1, y, 0]);
+        }
 
-        this.actualState = newState;
-        this.actualState1 = newState1;
-        this.actualState2 = newState2;
+        // // // var x, xm1, xp1, y, ym1, yp1;
+        // // // var i, j, m, n, key, t1, t2;
+        // // // var alive = 0, alive1 = 0, alive2 = 0;
+        // // // var deadNeighbors;
+        // // // var newState = [], newState1 = [], newState2 = [];
+        // // // var allDeadNeighbors = {};
+        // // // var allDeadNeighbors1 = {};
+        // // // var allDeadNeighbors2 = {};
+        // // // var neighbors, color;
+        // // // this.redrawList = [];
+
+        // // // // iterate over each point stored in the actualState list
+        // // // for (i = 0; i < this.actualState.length; i++) {
+        // // //   this.topPointer = 1;
+        // // //   this.bottomPointer = 1;
+
+        // // //   for (j = 1; j < this.actualState[i].length; j++) {
+        // // //     x = this.actualState[i][j];
+        // // //     y = this.actualState[i][0];
+
+        // // //     xm1 = (x-1);
+        // // //     ym1 = (y-1);
+
+        // // //     xp1 = (x+1);
+        // // //     yp1 = (y+1);
+
+        // // //     // Possible dead neighbors
+        // // //     deadNeighbors = [[xm1, ym1, 1], [x, ym1, 1], [xp1, ym1, 1], [xm1, y, 1], [xp1, y, 1], [xm1, yp1, 1], [x, yp1, 1], [xp1, yp1, 1]];
+
+        // // //     // Get number of live neighbors and remove alive neighbors from deadNeighbors
+        // // //     result = this.getNeighborsFromAlive(x, y, i, this.actualState, deadNeighbors);
+        // // //     neighbors = result['neighbors'];
+        // // //     color = result['color'];
+
+        // // //     // Join dead neighbors to check list
+        // // //     for (m = 0; m < 8; m++) {
+        // // //       if (deadNeighbors[m] !== undefined) {
+        // // //         // this cell is dead
+        // // //         var xx = deadNeighbors[m][0];
+        // // //         var yy = deadNeighbors[m][1];
+        // // //         key = xx + ',' + yy; // Create hashtable key
+
+        // // //         // count number of dead neighbors
+        // // //         if (allDeadNeighbors[key] === undefined) {
+        // // //           allDeadNeighbors[key] = 1;
+        // // //         } else {
+        // // //           allDeadNeighbors[key]++;
+        // // //         }
+        // // //       }
+        // // //     }
+
+        // // //     // survive counts
+        // // //     //
+        // // //     // // 34 life (too slow)
+        // // //     // if ((neighbors == 3) || (neighbors == 4)) {} 
+        // // //     // // coagulations (blows up)
+        // // //     // if (!(neighbors === 1)) {} 
+        // // //     // // gnarl (way too slow/chaotic)
+        // // //     // if (neighbors === 1) {} 
+        // // //     // // long life (boring)
+        // // //     // if (neighbors===5) {} 
+        // // //     // // stains (too slow)
+        // // //     // if (!((neighbors===1)||(neighbors===4))) {} 
+        // // //     // // walled cities
+        // // //     // if ((neighbors > 1) && (neighbors < 6)) {} 
+        // // //     //
+        // // //     // // conway's life
+        // // //     // if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {} 
+        // // //     // // amoeba life (good)
+        // // //     // if ((neighbors === 1) || (neighbors === 3) || (neighbors === 5) || (neighbors === 8)) {} 
+        // // //     // // high life (good, but some oscillators blow up)
+        // // //     // if ((neighbors===2)||(neighbors===3)) {} 
+        // // //     // // 2x2 (good, but victory conditions *may* need to change)
+        // // //     // if ((neighbors===1)||(neighbors===2)||(neighbors===5)){} 
+        // // //     // // // pseudo life (good)
+        // // //     // if ((neighbors===2)||(neighbors===3)||(neighbors===8)) {} 
+
+        // // //     // conway's life
+        // // //     if ((neighbors===2)||(neighbors===3)) {
+
+        // // //       this.addCell(x, y, newState);
+        // // //       if (color==1) {
+        // // //         this.addCell(x, y, newState1);
+        // // //       } else if (color==2) {
+        // // //         this.addCell(x, y, newState2);
+        // // //       }
+        // // //       this.redrawList.push([x, y, 2]); // Keep alive
+        // // //     } else {
+        // // //       this.redrawList.push([x, y, 0]); // Kill cell
+        // // //     }
+        // // //   }
+        // // // }
+
+        // // // // Process dead neighbors
+        // // // for (key in allDeadNeighbors) {
+
+        // // //   // birth counts
+        // // //   //
+        // // //   // // 34 life (too slow)
+        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4)) {} 
+        // // //   // coagulations
+        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 7) || (allDeadNeighbors[key] === 8)) {} 
+        // // //   // // gnarl (way too slow/chaotic)
+        // // //   // if (allDeadNeighbors[key] === 1) {} 
+        // // //   // // long life (boring)
+        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4) || (allDeadNeighbors[key] === 5)) {} 
+        // // //   // // stains (too slow)
+        // // //   // if ((allDeadNeighbors[key]===3)||(allDeadNeighbors[key]>5)) {} 
+        // // //   // // walled cities (boring)
+        // // //   // if (allDeadNeighbors[key] > 3) {} 
+        // // //   //
+        // // //   // // conway's life
+        // // //   // if (allDeadNeighbors[key] === 3) {} 
+        // // //   // // amoeba life (good)
+        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 5) || (allDeadNeighbors[key] === 7)) {}
+        // // //   // // high life (good, but some oscillators blow up)
+        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 6)) {} 
+        // // //   // // 2x2 (good, but victory conditions *may* need to change)
+        // // //   // if ((allDeadNeighbors[key]===3) || (allDeadNeighbors[key]===6)) {} 
+        // // //   // // // pseudo life (good)
+        // // //   // if ((allDeadNeighbors[key]==3)||(allDeadNeighbors[key]==5)||(allDeadNeighbors[key]==7)) {} 
+
+        // // //   // conway's life
+        // // //   if (allDeadNeighbors[key] === 3) {
+
+        // // //     // This cell is dead, but has enough neighbors
+        // // //     // that are alive that it will make new life.
+        // // //     key = key.split(',');
+        // // //     t1 = parseInt(key[0], 10);
+        // // //     t2 = parseInt(key[1], 10);
+
+        // // //     // Get color from neighboring parent cells
+        // // //     color = this.getColorFromAlive(t1, t2);
+
+        // // //     this.addCell(t1, t2, newState);
+        // // //     if (color == 1) {
+        // // //       this.addCell(t1, t2, newState1);
+        // // //     } else if (color == 2) {
+        // // //       this.addCell(t1, t2, newState2);
+        // // //     }
+
+        // // //     this.redrawList.push([t1, t2, 1]);
+        // // //   }
+        // // // }
+
+        // // // this.actualState = newState;
+        // // // this.actualState1 = newState1;
+        // // // this.actualState2 = newState2;
 
         return this.getLiveCounts();
       },
@@ -1826,69 +2025,93 @@
         var color1 = 0;
         var color2 = 0;
 
+        var xm1 = (x-1);
+        var xp1 = (x+1);
+
+        var ym1 = (y-1);
+        var yp1 = (y+1);
+
+        // Periodic boundary conditions complicate any checks that end the loops early.
+        var xstencilmin = Math.min(xm1, x, xp1);
+        var xstencilmax = Math.max(xm1, x, xp1);
+
+        var ystencilmin = Math.min(ym1, y, yp1);
+        var ystencilmax = Math.max(ym1, y, yp1);
+
         // color1
         for (i = 0; i < state1.length; i++) {
           var yy = state1[i][0];
 
-          if (yy === (y-1)) {
-            // Top row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // top left
-                  color1++;
-                } else if (xx === x) {
-                  // top middle
-                  color1++;
-                } else if (xx === (x+1)) {
-                  // top right
-                  color1++;
+          if (yy >= ystencilmin) {
+
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
+
+                // Slight difference with periodic algorithm,
+                // checking minimum of x values in the stencil
+                if (xx >= xstencilmin) {
+
+                  if (xx === xm1) {
+                    // top left
+                    color1++;
+                  } else if (xx === x) {
+                    // top middle
+                    color1++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
                 }
               }
-              if (xx >= (x+1)) {
-                break;
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color1++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state1[i].length; j++) {
+                var xx = state1[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color1++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color1++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color1++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
               }
             }
 
-          } else if (yy === y) {
-            // Middle row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // top left
-                  color1++;
-                } else if (xx === (x+1)) {
-                  // top right
-                  color1++;
-                }
-              }
-              if (xx >= (x+1)) {
-                break;
-              }
-            }
-
-          } else if (yy === (y+1)) {
-            // Bottom row
-            for (j = 1; j < state1[i].length; j++) {
-              var xx = state1[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // bottom left
-                  color1++;
-                } else if (xx === x) {
-                  // bottom middle
-                  color1++;
-                } else if (xx === (x+1)) {
-                  // bottom right
-                  color1++;
-                }
-              }
-              if (xx >= (x+1)) {
-                break;
-              }
-            }
+          }
+          if (yy >= ystencilmax) {
+            break;
           }
         }
 
@@ -1896,65 +2119,72 @@
         for (i = 0; i < state2.length; i++) {
           var yy = state2[i][0];
 
-          if (yy === (y-1)) {
-            // Top row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // top left
-                  color2++;
-                } else if (xx === x) {
-                  // top middle
-                  color2++;
-                } else if (xx === (x+1)) {
-                  // top right
-                  color2++;
+          if (yy >= ystencilmin) {
+
+            if (yy === ym1) {
+              // Top row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // top left
+                    color2++;
+                  } else if (xx === x) {
+                    // top middle
+                    color2++;
+                  } else if (xx === xp1) {
+                    // top right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
                 }
               }
-              if (xx >= (x+1)) {
-                break;
+
+            } else if (yy === y) {
+              // Middle row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // left
+                    color2++;
+                  } else if (xx === xp1) {
+                    // right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
+              }
+
+            } else if (yy === yp1) {
+              // Bottom row
+              for (j = 1; j < state2[i].length; j++) {
+                var xx = state2[i][j];
+                if (xx >= xstencilmin) {
+                  if (xx === xm1) {
+                    // bottom left
+                    color2++;
+                  } else if (xx === x) {
+                    // bottom middle
+                    color2++;
+                  } else if (xx === xp1) {
+                    // bottom right
+                    color2++;
+                  }
+                }
+                if (xx >= xstencilmax) {
+                  break;
+                }
               }
             }
 
-          } else if (yy === y) {
-            // Middle row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // left
-                  color2++;
-                } else if (xx === (x+1)) {
-                  // right
-                  color2++;
-                }
-              }
-              if (xx >= (x+1)) {
-                break;
-              }
-            }
-
-          } else if (yy === (y+1)) {
-            // Bottom row
-            for (j = 1; j < state2[i].length; j++) {
-              var xx = state2[i][j];
-              if (xx >= (x-1)) {
-                if (xx === (x-1)) {
-                  // bottom left
-                  color2++;
-                } else if (xx === x) {
-                  // bottom middle
-                  color2++;
-                } else if (xx === (x+1)) {
-                  // bottom right
-                  color2++;
-                }
-              }
-              if (xx >= (x+1)) {
-                break;
-              }
-            }
+          }
+          if (yy >= ystencilmax) {
+            break;
           }
         }
 
@@ -1977,18 +2207,30 @@
        *
        */
       getNeighborsFromAlive : function (x, y, i, state, possibleNeighborsList) {
+        var xm1 = (x-1);
+        var xp1 = (x+1);
+
+        var ym1 = (y-1);
+        var yp1 = (y+1);
+
+        var xstencilmin = Math.min(xm1, x, xp1);
+        var xstencilmax = Math.max(xm1, x, xp1);
+
+        var ystencilmin = Math.min(ym1, y, yp1);
+        var ystencilmax = Math.max(ym1, y, yp1);
+
         var neighbors = 0, k;
         var neighbors1 = 0, neighbors2 = 0;
 
         // Top
         if (state[i-1] !== undefined) {
-          if (state[i-1][0] === (y - 1)) {
+          if (state[i-1][0] === ym1) {
             for (k = this.topPointer; k < state[i-1].length; k++) {
 
-              if (state[i-1][k] >= (x-1) ) {
+              if (state[i-1][k] >= xstencilmin ) {
 
                 // NW
-                if (state[i-1][k] === (x - 1)) {
+                if (state[i-1][k] === xm1) {
                   possibleNeighborsList[0] = undefined;
                   this.topPointer = k + 1;
                   neighbors++;
@@ -2018,7 +2260,7 @@
                 }
 
                 // NE
-                if (state[i-1][k] === (x + 1)) {
+                if (state[i-1][k] === xp1) {
                   possibleNeighborsList[2] = undefined;
 
                   if (k == 1) {
@@ -2039,7 +2281,7 @@
                   }
                 }
 
-                if (state[i-1][k] > (x + 1)) {
+                if (state[i-1][k] > xstencilmax) {
                   break;
                 }
               }
@@ -2049,9 +2291,9 @@
 
         // Middle
         for (k = 1; k < state[i].length; k++) {
-          if (state[i][k] >= (x - 1)) {
+          if (state[i][k] >= xstencilmin) {
 
-            if (state[i][k] === (x - 1)) {
+            if (state[i][k] === xm1) {
               possibleNeighborsList[3] = undefined;
               neighbors++;
               var xx = state[i][k];
@@ -2064,7 +2306,7 @@
               }
             }
 
-            if (state[i][k] === (x + 1)) {
+            if (state[i][k] === xp1) {
               possibleNeighborsList[4] = undefined;
               neighbors++;
               var xx = state[i][k];
@@ -2077,7 +2319,7 @@
               }
             }
 
-            if (state[i][k] > (x + 1)) {
+            if (state[i][k] > xstencilmax) {
               break;
             }
           }
@@ -2085,11 +2327,11 @@
 
         // Bottom
         if (state[i+1] !== undefined) {
-          if (state[i+1][0] === (y + 1)) {
+          if (state[i+1][0] === yp1) {
             for (k = this.bottomPointer; k < state[i+1].length; k++) {
-              if (state[i+1][k] >= (x - 1)) {
+              if (state[i+1][k] >= xstencilmin) {
 
-                if (state[i+1][k] === (x - 1)) {
+                if (state[i+1][k] === xm1) {
                   possibleNeighborsList[5] = undefined;
                   this.bottomPointer = k + 1;
                   neighbors++;
@@ -2117,7 +2359,7 @@
                   }
                 }
 
-                if (state[i+1][k] === (x + 1)) {
+                if (state[i+1][k] === xp1) {
                   possibleNeighborsList[7] = undefined;
 
                   if (k == 1) {
@@ -2137,7 +2379,7 @@
                   }
                 }
 
-                if (state[i+1][k] > (x + 1)) {
+                if (state[i+1][k] > xstencilmax) {
                   break;
                 }
               }
@@ -2222,7 +2464,6 @@
 
         for (i = 0; i < state.length; i++) {
           if (state[i][0] === y) {
-
             if (state[i].length === 2) { // Remove all Row
               state.splice(i, 1);
             } else { // Remove Element
