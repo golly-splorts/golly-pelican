@@ -31,18 +31,23 @@
     //s1Default: '[{"50":[60]},{"51":[62]},{"52":[59,60,63,64,65]}]',
     //s2Default: '[{"31":[29,30,33,34,35]},{"32":[32]},{"33":[30]}]',
 
-    s1Default: '[{"0":[10,20]}]',
-    s2Default: '[{"0":[11,21]}]',
+    s1Default: '[{"0":[9,21,28,29,31,32,36,38,41,43,44,45,46,47,48,49,50,51,52,53,54,55]}]',
+    s2Default: '[{"0":[0,1,2,7,8,15,16,20,22,33,37,44]}]',
 
     // Example of a majority left-hand-wins rule:
     // 002002002001001001220110210 
 
+    // see getRuleStates function for ruleString to state transform
     rules: {
-      //ruleString: "002002002001001001220110210",
-      //states: getStates(ruleString)
-      //
-      // These are populated in loadState
-      ruleString: "",
+      // // majority left-hand wins rule:
+      // ruleString: "002002002001001001220110210",
+      // // majority right-hand wins rule:
+      // ruleString: "002001002002001001210210210",
+      // majority color-preserving rule:
+      ruleString: "002001002002001001220110210",
+      // 
+      // states is populated in getRuleStates()
+      // called by loadState()
       states: {}
     },
 
@@ -208,7 +213,7 @@
      * Get the map of different states and their corresponding outcome
      * for the given rule
      */
-    getStates : function(ruleString) {
+    getRuleStates : function(ruleString) {
       var states = {
         "222": ruleString[0],
         "221": ruleString[1], 
@@ -334,9 +339,8 @@
      */
     loadState : function() {
 
-      // Hard-coding for now
-      this.rules.ruleString = "002002002001001001220110210";
-      this.rules.states = this.getStates(this.rules.ruleString);
+      // Set the states based on the rules string
+      this.rules.states = this.getRuleStates(this.rules.ruleString);
 
       if (this.gameId != null) {
 
@@ -1709,9 +1713,9 @@
 
         // The generation tells us which row we're on
         // This is the new row
-        var y = GOL.generation;
+        var ym1 = GOL.generation;
         // This is the previous row
-        var ym1 = y - 1;
+        var y = ym1 + 1;
 
         // Shortcuts
         var state = this.actualState;
@@ -1721,7 +1725,7 @@
         // Now, get the index of actualState that corresponds to y-1
         var actualStatePrevIndex = -1;
         for (i = 0; i < state.length; i++) {
-          if (state[i]==ym1) {
+          if (state[i][0]==ym1) {
             actualStatePrevIndex = i;
           }
         }
@@ -1733,14 +1737,14 @@
           actualStatePrevXs = [];
         } else {
           var row = state[actualStatePrevIndex];
-          actualStatePrevXs = row.slice(1,row.length);
+          actualStatePrevXs = row.slice(1, row.length);
         }
 
         // Next, repeat the above procedure for state1 and state2 (yuck)
         // State 1:
         var actualState1PrevIndex = -1;
         for (i = 0; i < state1.length; i++) {
-          if (state1[i]==ym1) {
+          if (state1[i][0]==ym1) {
             actualState1PrevIndex = i;
           }
         }
@@ -1748,12 +1752,13 @@
         if (actualState1PrevIndex < 0) {
           actualState1PrevXs = [];
         } else {
-          actualState1PrevXs = state1[actualState1PrevIndex];
+          var row = state1[actualState1PrevIndex];
+          actualState1PrevXs = row.slice(1, row.length);
         }
         // State 2:
         var actualState2PrevIndex = -1;
         for (i = 0; i < state2.length; i++) {
-          if (state2[i]==ym1) {
+          if (state2[i][0]==ym1) {
             actualState2PrevIndex = i;
           }
         }
@@ -1761,7 +1766,8 @@
         if (actualState2PrevIndex < 0) {
           actualState2PrevXs = [];
         } else {
-          actualState2PrevXs = state2[actualState2PrevIndex];
+          var row = state2[actualState2PrevIndex];
+          actualState2PrevXs = row.slice(1, row.length);
         }
 
         // Prepare arrays to hold the next row
@@ -1788,6 +1794,8 @@
           }
         }
         var leftBoundaryState = GOL.rules.states[key];
+        console.log('left boundary key: ' + key);
+        console.log('left boundary state: ' + leftBoundaryState);
         if (leftBoundaryState > 0) {
           this.addCell(0, y, this.actualState);
           if (leftBoundaryState == 1) {
@@ -1808,7 +1816,7 @@
             if (actualStatePrevXs.indexOf(k) != -1) {
               if (actualState1PrevXs.indexOf(k) != -1) {
                 key += "1";
-              } else if (actualState2PrevXs.indexOf(j) != -1) {
+              } else if (actualState2PrevXs.indexOf(k) != -1) {
                 key += "2";
               } else {
                 key += "0";
@@ -1818,6 +1826,8 @@
             }
           }
           var cellState = GOL.rules.states[key];
+          console.log('cell ' + j + ': ' + key);
+          console.log('cell ' + j + ': ' + cellState);
           if (cellState > 0) {
             this.addCell(j, y, this.actualState);
             if (cellState == 1) {
@@ -1849,6 +1859,8 @@
         }
         key += "0";
         var rightBoundaryState = GOL.rules.states[key];
+        console.log('right boundary key: ' + key);
+        console.log('right boundary state: ' + rightBoundaryState);
         if (rightBoundaryState > 0) {
           this.addCell(GOL.columns - 1, y, this.actualState);
           if (rightBoundaryState == 1) {
