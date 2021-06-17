@@ -34,17 +34,34 @@
     s1Default: '[{"0":[9,21,28,29,31,32,36,38,41,43,44,45,46,47,48,49,50,51,52,53,54,55]}]',
     s2Default: '[{"0":[0,1,2,7,8,15,16,20,22,33,37,44]}]',
 
+    defaultCols: 300,
+    defaultRows: 500,
+    defaultCellSize: 3,
+
     // Example of a majority left-hand-wins rule:
     // 002002002001001001220110210 
 
     // see getRuleStates function for ruleString to state transform
     rules: {
-      // // majority left-hand wins rule:
-      // ruleString: "002002002001001001220110210",
-      // // majority right-hand wins rule:
+      ////////////////
+      // Rule 90:
+      // ruleStringTemplate: "00a00a00b00a00a00bcc0cc0dd0"
+      // Rule 90, majority left-hand wins:
+      ruleString: "002002002001001001220110210",
+      // // Rule 90, majority right-hand wins:
       // ruleString: "002001002002001001210210210",
-      // majority color-preserving rule:
-      ruleString: "002001002002001001220110210",
+      // // Rule 90, majority color-preserving:
+      // ruleString: "002001002002001001220110210",
+      //
+      /////////////////
+      // // Rule 30;
+      // ruleStringTemplate: "000000000b000000000bccdccdee0"
+      // // Rule 30, majority color-preserving:
+      // ruleString: "000000002000000001222111210",
+      // // Rule 30, minority color-swapping:
+      // ruleString: "000000001000000002111222120",
+      // // Rule 30, majority color-swapping:
+      // ruleString: "000000002000000001212211120",
       // 
       // states is populated in getRuleStates()
       // called by loadState()
@@ -430,7 +447,7 @@
         var rows = this.getRowsFromUrlSafely();
         var cols = this.getColsFromUrlSafely();
 
-        // Load a random map from the /map API endpoint
+        // Load a map from the /map API endpoint
         let url = this.baseApiUrl + '/map/' + this.patternName + '/r/' + this.getRowsFromUrlSafely() + '/c/' + this.getColsFromUrlSafely();
         fetch(url)
         .then(res => res.json())
@@ -488,8 +505,10 @@
 
         if (this.random == 1) {
           // Load a random configuration for each state
-          this.initialState1 = 'random';
-          this.initialState2 = 'random';
+          this.initialState1 = [{}];
+          this.randomState(1);
+          this.initialState2 = [{}];
+          this.randomState(2);
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
@@ -737,7 +756,7 @@
       // if invalid or not specified
       rows = parseInt(this.helpers.getUrlParameter('rows'));
       if (isNaN(rows) || rows < 0 || rows > 1000) {
-        rows = 100;
+        rows = this.defaultRows;
       }
       if (rows >= 200) {
         // Turn off the grid
@@ -752,7 +771,7 @@
       // if invalid or not specified
       cols = parseInt(this.helpers.getUrlParameter('cols'));
       if (isNaN(cols) || cols < 0 || cols > 1000) {
-        cols = 120;
+        cols = this.defaultCols;
       }
       if (cols >= 200) {
         // Turn off the grid
@@ -767,7 +786,7 @@
       // if invalid or not specified
       cellSize = parseInt(this.helpers.getUrlParameter('cellSize'));
       if (isNaN(cellSize) || cellSize < 1 || cellSize > 10) {
-        cellSize = 7;
+        cellSize = this.defaultCellSize;
       }
       if (cellSize <= 5) {
         // Turn off the grid
@@ -838,46 +857,45 @@
     },
 
 
-    // /**
-    //  * Create a random pattern for the given color.
-    //  *
-    //  * color parameter:
-    //  *   0: set random pattern for both colors
-    //  *   1: set random pattern for team/color 1
-    //  *   2: set random pattern for team/color 2
-    //  */
-    // randomState : function(color) {
-    //   // original pct was 12%, for binary we split 5%
-    //   var i, liveCells = (this.rows * this.columns) * 0.05;
+    /**
+     * Create a random pattern for the given color.
+     *
+     * color parameter:
+     *   0: set random pattern for both colors
+     *   1: set random pattern for team/color 1
+     *   2: set random pattern for team/color 2
+     */
+    randomState : function(color) {
+      var i, liveCells = this.columns * 0.15;
 
-    //   if (color===0 || color===1) {
-    //     // Color 1
-    //     for (i = 0; i < liveCells; i++) {
-    //       var xx = this.helpers.random(0, this.columns - 1);
-    //       var yy = this.helpers.random(0, this.rows - 1);
-    //       while (this.listLife.isAlive(xx, yy)) {
-    //           xx = this.helpers.random(0, this.columns - 1);
-    //           yy = this.helpers.random(0, this.rows - 1);
-    //       }
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState);
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState1);
-    //     }
-    //   }
+      if (color===0 || color===1) {
+        // Color 1
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = 0;
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = 0;
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState1);
+        }
+      }
 
-    //   if (color===0 || color===2) {
-    //     // Color 2
-    //     for (i = 0; i < liveCells; i++) {
-    //       var xx = this.helpers.random(0, this.columns - 1);
-    //       var yy = this.helpers.random(0, this.rows - 1);
-    //       while (this.listLife.isAlive(xx, yy)) {
-    //           xx = this.helpers.random(0, this.columns - 1);
-    //           yy = this.helpers.random(0, this.rows - 1);
-    //       }
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState);
-    //       this.listLife.addCell(xx, yy, this.listLife.actualState2);
-    //     }
-    //   }
-    // },
+      if (color===0 || color===2) {
+        // Color 2
+        for (i = 0; i < liveCells; i++) {
+          var xx = this.helpers.random(0, this.columns - 1);
+          var yy = 0;
+          while (this.listLife.isAlive(xx, yy)) {
+              xx = this.helpers.random(0, this.columns - 1);
+              yy = 0;
+          }
+          this.listLife.addCell(xx, yy, this.listLife.actualState);
+          this.listLife.addCell(xx, yy, this.listLife.actualState2);
+        }
+      }
+    },
 
 
     /**
@@ -895,70 +913,30 @@
       return Math.abs(a-b)/Math.abs(a + smol) < tol;
     },
 
+    /**
+     * Check for a victor
+     */
     checkForVictor : function(liveCounts) {
+      if (this.zeroStart===true) {
+        return;
+      }
+
+      if (this.generation==this.rows+1) {
+        if (liveCounts.liveCells1 > liveCounts.liveCells2) {
+          this.whoWon = 1;
+          this.foundVictor = true;
+          this.showWinnersLosers = true;
+          this.handlers.buttons.run();
+          this.running = false;
+        } else if (liveCounts.liveCells1 < liveCounts.liveCells2) {
+          this.whoWon = 2;
+          this.foundVictor = true;
+          this.showWinnersLosers = true;
+          this.handlers.buttons.run();
+          this.running = false;
+        }
+      }
     },
-
-    // /**
-    //  * Check for a victor
-    //  */
-    // checkForVictor : function(liveCounts) {
-    //   if (this.zeroStart===true) {
-    //     return;
-    //   }
-    //   if (this.foundVictor==false) {
-    //     var maxDim = 240;
-    //     // var maxDim = Math.max(2*this.columns, 2*this.rows);
-    //     // update running average window
-    //     if (this.generation < maxDim) {
-    //       // keep populating the window with victory pct
-    //       this.runningAvgWindow[this.generation] = parseFloat(liveCounts.victoryPct);
-
-    //     } else {
-    //       // update running average window with next victory pct
-    //       var removed = this.runningAvgWindow.shift();
-    //       this.runningAvgWindow.push(parseFloat(liveCounts.victoryPct));
-
-    //       // compute running average
-    //       var sum = 0.0;
-    //       for (var i = 0; i < this.runningAvgWindow.length; i++) {
-    //         sum += this.runningAvgWindow[i];
-    //       }
-    //       var runningAvg = sum/this.runningAvgWindow.length;
-
-    //       // update running average last 3
-    //       removed = this.runningAvgLast3.shift();
-    //       this.runningAvgLast3.push(runningAvg);
-
-    //       var tol = 1e-8;
-    //       if (!this.approxEqual(removed, 0.0, tol)) {
-    //         // we have not found a victor yet, so check for one now
-    //         var bool0eq1 = this.approxEqual(this.runningAvgLast3[0], this.runningAvgLast3[1], tol);
-    //         var bool1eq2 = this.approxEqual(this.runningAvgLast3[1], this.runningAvgLast3[2], tol);
-    //         var zerocells = ((liveCounts.liveCells1 == 0) || (liveCounts.liveCells2 == 0));
-    //         if ((bool0eq1 && bool1eq2) || zerocells) {
-    //           var zero1 = this.approxEqual(this.runningAvgLast3[0], 50.0, tol)
-    //           var zero2 = this.approxEqual(this.runningAvgLast3[1], 50.0, tol)
-    //           var zero3 = this.approxEqual(this.runningAvgLast3[2], 50.0, tol)
-    //           if ((!(zero1 || zero2 || zero3)) || zerocells) {
-    //             if (liveCounts.liveCells1 > liveCounts.liveCells2) {
-    //               this.whoWon = 1;
-    //               this.foundVictor = true;
-    //               this.showWinnersLosers = true;
-    //               this.handlers.buttons.run();
-    //               this.running = false;
-    //             } else if (liveCounts.liveCells1 < liveCounts.liveCells2) {
-    //               this.whoWon = 2;
-    //               this.foundVictor = true;
-    //               this.showWinnersLosers = true;
-    //               this.handlers.buttons.run();
-    //               this.running = false;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
 
     /**
      * Update the statistics
@@ -1122,6 +1100,7 @@
 
       algorithmTime = (new Date()) - algorithmTime;
 
+      console.log('Algorithm Time: ' + algorithmTime);
 
       // Canvas run
 
@@ -1141,6 +1120,8 @@
       }
 
       guiTime = (new Date()) - guiTime;
+
+      console.log('GUI Time: ' + guiTime);
 
       // Post-run updates
 
@@ -1711,6 +1692,8 @@
 
       nextGeneration : function() {
 
+        this.redrawList = [];
+
         // The generation tells us which row we're on
         // This is the new row
         var ym1 = GOL.generation;
@@ -1722,6 +1705,7 @@
         var state1 = this.actualState1;
         var state2 = this.actualState2;
 
+        // -----
         // Now, get the index of actualState that corresponds to y-1
         var actualStatePrevIndex = -1;
         for (i = 0; i < state.length; i++) {
@@ -1741,6 +1725,8 @@
         }
 
         // Next, repeat the above procedure for state1 and state2 (yuck)
+
+        // -----
         // State 1:
         var actualState1PrevIndex = -1;
         for (i = 0; i < state1.length; i++) {
@@ -1755,6 +1741,8 @@
           var row = state1[actualState1PrevIndex];
           actualState1PrevXs = row.slice(1, row.length);
         }
+
+        // -----
         // State 2:
         var actualState2PrevIndex = -1;
         for (i = 0; i < state2.length; i++) {
@@ -1794,8 +1782,6 @@
           }
         }
         var leftBoundaryState = GOL.rules.states[key];
-        console.log('left boundary key: ' + key);
-        console.log('left boundary state: ' + leftBoundaryState);
         if (leftBoundaryState > 0) {
           this.addCell(0, y, this.actualState);
           if (leftBoundaryState == 1) {
@@ -1826,8 +1812,6 @@
             }
           }
           var cellState = GOL.rules.states[key];
-          console.log('cell ' + j + ': ' + key);
-          console.log('cell ' + j + ': ' + cellState);
           if (cellState > 0) {
             this.addCell(j, y, this.actualState);
             if (cellState == 1) {
@@ -1859,8 +1843,6 @@
         }
         key += "0";
         var rightBoundaryState = GOL.rules.states[key];
-        console.log('right boundary key: ' + key);
-        console.log('right boundary state: ' + rightBoundaryState);
         if (rightBoundaryState > 0) {
           this.addCell(GOL.columns - 1, y, this.actualState);
           if (rightBoundaryState == 1) {
@@ -1871,6 +1853,12 @@
           this.redrawList.push([GOL.columns - 1, y, 1]);
         } else {
           this.redrawList.push([GOL.columns - 1, y, 0]);
+        }
+        
+        if (y==65) {
+          console.log(this.actualState);
+          //console.log(this.actualState1);
+          //console.log(this.actualState2);
         }
 
         // // // var x, xm1, xp1, y, ym1, yp1;
