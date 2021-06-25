@@ -34,7 +34,7 @@
     s1Default: '[{"0":[9,21,28,29,31,32,36,38,41,43,44,45,46,47,48,49,50,51,52,53,54,55]}]',
     s2Default: '[{"0":[0,1,2,7,8,15,16,20,22,33,37,44]}]',
 
-    defaultCols: 300,
+    defaultCols: 200,
     defaultRows: 500,
     defaultCellSize: 3,
 
@@ -43,26 +43,223 @@
 
     // see getRuleStates function for ruleString to state transform
     rules: {
+
       ////////////////
       // Rule 90:
       // ruleStringTemplate: "00a00a00b00a00a00bcc0cc0dd0"
-      // Rule 90, majority left-hand wins:
-      ruleString: "002002002001001001220110210",
+      // // Rule 90, majority left-hand wins:
+      // ruleString: "002002002001001001220110210",
       // // Rule 90, majority right-hand wins:
       // ruleString: "002001002002001001210210210",
       // // Rule 90, majority color-preserving:
       // ruleString: "002001002002001001220110210",
-      //
+
       /////////////////
       // // Rule 30;
       // ruleStringTemplate: "000000000b000000000bccdccdee0"
       // // Rule 30, majority color-preserving:
       // ruleString: "000000002000000001222111210",
+      // // Rule 30, twisted majority color-preserving:
+      // ruleString: "000000001000000002222111210",
       // // Rule 30, minority color-swapping:
       // ruleString: "000000001000000002111222120",
       // // Rule 30, majority color-swapping:
       // ruleString: "000000002000000001212211120",
-      // 
+
+      /////////////////////////////////////////
+      // New Rule Format
+
+
+      // // Rule 14
+      // // Electric Egret
+      // ruleString: "000000000000000000222111210",
+      // // Electric Vulture
+      // ruleString: "000000000000000000222111210",
+      // // Quantum Vulture
+      // ruleString: "000000000000000000212211210",
+      // // Thermophilic Berrypecker
+      // ruleString: "000000000000000000122121210",
+      // // Deep Water Oriole
+      // ruleString: "000000000000000000112221210",
+      // // Swamp Jay
+      // ruleString: "000000000000000000122211210",
+      // // Cave Oriole
+      // ruleString: "000000000000000000212121210",
+      // // Electric Camel Spider
+      // ruleString: "000000000000000000221112120",
+      // // Quantum Pseudoscorpion
+      // ruleString: "000000000000000000211212120",
+      // // Thermophilic Silk Spider
+      // ruleString: "000000000000000000121122120",
+      // // Deep Water Tarantula
+      // ruleString: "000000000000000000111222120",
+      // // Swamp Sun Spider
+      // ruleString: "000000000000000000121212120",
+      // // Cave Cheese Mite
+      // ruleString: "000000000000000000211122120",
+
+      // // Rule 18
+      // // Buzzard
+      // ruleString: "000000002000000001000000210",
+      // // Orb Weaver
+      // ruleString: "000000001000000002000000120",
+
+      // // Rule 30
+      // // Electric Turkey
+      // ruleString: "000000002000000001222111210",
+      // // Quantum Kingfisher
+      // ruleString: "000000002000000001212211210",
+      // // Thermophilic Heron
+      // ruleString: "000000002000000001122121210",
+      // // Deep Water Sandgrouse
+      // ruleString: "000000002000000001112221210",
+      // // Swamp Magpie
+      // ruleString: "000000002000000001122211210",
+      // // Cave Nightjar
+      // ruleString: "000000002000000001212121210",
+      // // Electric Tarantula
+      // ruleString: "000000001000000002221112120",
+      // // Quantum Wind Spider
+      // ruleString: "000000001000000002211212120",
+      // // Thermophilic Tarantula
+      // ruleString: "000000001000000002121122120",
+      // // Deep Water Sea Spider
+      // ruleString: "000000001000000002111222120",
+      // // Swamp Sea Spider
+      // ruleString: "000000001000000002121212120",
+      // // Cave Pseudoscorpion
+      // ruleString: "000000001000000002211122120",
+
+      // Rule 60
+      // // Electric Frogmouth
+      // ruleString: "000000222000000111222111000",
+      // // Quantum Egret
+      // ruleString: "000000212000000211212211000",
+      // Thermophilic Cardinal
+      ruleString: "000000122000000121122121000",
+      // // Deep Water Buttonquail
+      // ruleString: "000000112000000221112221000",
+      // // Swamp Frogmouth
+      // ruleString: "000000122000000211122211000",
+      // // Cave Dove
+      // ruleString: "000000212000000121212121000",
+      // // Electric Armor Spider
+      // ruleString: "000000221000000112221112000",
+      // // Quantum Redberry Mite
+      // ruleString: "000000211000000212211212000",
+      // // Thermophilic Ray Spider
+      // ruleString: "000000121000000122121122000",
+      // // Deep Water Mite
+      // ruleString: "000000111000000222111222000",
+      // // Swamp Tarantula
+      // ruleString: "000000121000000212121212000",
+      // // Cave Armor Spider
+      // ruleString: "000000211000000122211122000",
+
+      // // Rule 62
+      // // Electric Leafbird
+      // ruleString: "000000222000000111222111210",
+      // // Quantum Berrypecker
+      // ruleString: "000000212000000211212211210",
+      // // Thermophilic Woodpecker
+      // ruleString: "000000122000000121122121210",
+      // // Deep Water Broadbill
+      // ruleString: "000000112000000221112221210",
+      // // Swamp Bristlehead
+      // ruleString: "000000122000000211122211210",
+      // // Cave Kingfisher
+      // ruleString: "000000212000000121212121210",
+      // // Electric Mouse Spider
+      // ruleString: "000000221000000112221112120",
+      // // Quantum Spider Mite
+      // ruleString: "000000211000000212211212120",
+      // // Thermophilic Violin Spider
+      // ruleString: "000000121000000122121122120",
+      // // Deep Water Wind Spider
+      // ruleString: "000000111000000222111222120",
+      // // Swamp Ray Spider
+      // ruleString: "000000121000000212121212120",
+      // // Cave Cheese Mite
+      // ruleString: "000000211000000122211122120",
+
+      // // Rule 90
+      // // Electric Cukoo
+      // ruleString: "002002002001001001220110210",
+      // // Quantum Loon
+      // ruleString: "002001002002001001210210210",
+      // // Thermophilic Buttonquail
+      // ruleString: "001002002001002001120120210",
+      // // Deep Water Drongo
+      // ruleString: "001001002002002001110220210",
+      // // Swamp Dove
+      // ruleString: "001002002002001001120210210",
+      // // Cave Buttonquail
+      // ruleString: "002001002001002001210120210",
+      // // Electric Mite
+      // ruleString: "002002001001001002220110120",
+      // // Quantum Pseudoscorpion
+      // ruleString: "002001001002001002210210120",
+      // // Thermophilic Tick
+      // ruleString: "001002001001002002120120120",
+      // // Deep Water Ground Spider
+      // ruleString: "001001001002002002110220120",
+      // // Swamp Wolf Spider
+      // ruleString: "001002001002001002120210120",
+      // // Cave Lampshade Spider
+      // ruleString: "002001001001002002210120120",
+
+      // // Rule 122
+      // // Electric Eagle
+      // ruleString: "002002222001001111220110210",
+      // // Quantum Buttonquail
+      // ruleString: "002001212002001211210210210",
+      // // Thermophilic Magpie
+      // ruleString: "001002122001002121120120210",
+      // // Deep Water Songbird
+      // ruleString: "001001112002002221110220210",
+      // // Swamp Cardinal
+      // ruleString: "001002122002001211120210210",
+      // // Cave Moa
+      // ruleString: "002001212001002121210120210",
+      // // Electric Tube Spider
+      // ruleString: "002002221001001112220110120",
+      // // Quantum Pseudoscorpion
+      // ruleString: "002001211002001212210210120",
+      // Thermophilic Mouse Spider
+      ruleString: "001002121001002122120120120",
+      // // Deep Water Endeostigmata
+      // ruleString: "001001111002002222110220120",
+      // // Swamp Pseudoscorpion
+      // ruleString: "001002121002001212120210120",
+      // // Cave Armor Spider
+      // ruleString: "002001211001002122210120120",
+
+      // // Rule 124
+      // // Electric Finch
+      // ruleString: "002002222001001111222111000",
+      // // Quantum Heron
+      // ruleString: "002001212002001211212211000",
+      // // Thermophilic Wagtail
+      // ruleString: "001002122001002121122121000",
+      // // Deep Water Sparrow
+      // ruleString: "001001112002002221112221000",
+      // // Swamp Ploughbill
+      // ruleString: "001002122002001211122211000",
+      // // Cave Frogmouth
+      // ruleString: "002001212001002121212121000",
+      // // Electric Camel Spider
+      // ruleString: "002002221001001112221112000",
+      // // Quantum Pseudoscorpion
+      // ruleString: "002001211002001212211212000",
+      // // Thermophilic Claw Spider
+      // ruleString: "001002121001002122121122000",
+      // // Deep Water Shepherd Spider
+      // ruleString: "001001111002002222111222000",
+      // // Swamp Sea Spider
+      // ruleString: "001002121002001212121212000",
+      // // Cave Wolf Spider
+      // ruleString: "002001211001002122211122000",
+
       // states is populated in getRuleStates()
       // called by loadState()
       states: {}
@@ -921,7 +1118,8 @@
         return;
       }
 
-      if (this.generation==this.rows+1) {
+      var finalGeneration = this.rows - 1;
+      if (this.generation==this.finalGeneration) {
         if (liveCounts.liveCells1 > liveCounts.liveCells2) {
           this.whoWon = 1;
           this.foundVictor = true;
@@ -1100,7 +1298,7 @@
 
       algorithmTime = (new Date()) - algorithmTime;
 
-      console.log('Algorithm Time: ' + algorithmTime);
+      //console.log('Algorithm Time: ' + algorithmTime);
 
       // Canvas run
 
@@ -1371,18 +1569,10 @@
          * Update simulation speed
          */
         speedControl : function() {
-          console.log('updated speed slider');
-          //var x = 0;
-          //try {
-          //  x = parseInt(document.getElementById("speed-slider").value);
-          //} catch {
-          //  console.log("Could not read speed-slider value, setting to default of 10 ms");
-          //  x = 10;
-          //}
-          // Set the wait time to be the maximum of
-          // 1s and whatever the slider specifies
-          //this.waitTimeMs = Math.min(10**x, 1000);
-          //console.log("Updated wait time to " + this.waitTimeMs);
+          // We don't need to do anything with the
+          // speed slider value here.
+          // The getWaitTimeMs function will read
+          // the value of the speed slider directly.
         },
 
       },
@@ -1855,12 +2045,6 @@
           this.redrawList.push([GOL.columns - 1, y, 0]);
         }
         
-        if (y==65) {
-          console.log(this.actualState);
-          //console.log(this.actualState1);
-          //console.log(this.actualState2);
-        }
-
         // // // var x, xm1, xp1, y, ym1, yp1;
         // // // var i, j, m, n, key, t1, t2;
         // // // var alive = 0, alive1 = 0, alive2 = 0;
@@ -2649,8 +2833,8 @@
         try {
           j = GOL.element.speedSlider.value;
         } catch {
-          console.log("Could not read speed-slider value, using default value of 25 ms");
-          return 250;
+          console.log("Could not read speed-slider value, using default value of 20 ms");
+          return 200;
         }
         if (j<=0) {
           return 0;
