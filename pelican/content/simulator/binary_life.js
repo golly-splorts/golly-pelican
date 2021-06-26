@@ -1462,7 +1462,7 @@
           if (GOL.running) {
             // If running, S will stop the simulation
             GOL.handlers.buttons.run();
-          } else {
+          } else if (!GOL.foundVictor) {
             GOL.handlers.buttons.step();
           }
 
@@ -1480,7 +1480,11 @@
          */
         run : function() {
 
-          GOL.running = !GOL.running;
+          if (!GOL.foundVictor) {
+            GOL.running = !GOL.running;
+          } else {
+            GOL.running = false;
+          }
           // Update run/stop button state
           if (GOL.running) {
             GOL.nextStep();
@@ -1499,7 +1503,7 @@
          * Button Handler - Next Step - One Step only
          */
         step : function() {
-          if (!GOL.running) {
+          if (!GOL.running && !GOL.foundVictor) {
             GOL.nextStep();
           }
         },
