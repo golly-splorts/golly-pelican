@@ -775,6 +775,7 @@
     /**
      * Update the Game of Life scoreboard with winner/loser
      * indicators, if this is a game and we know the score.
+     * This is only done once @ beginning when we load state.
      */
     updateWinLossLabels : function() {
       if (this.gameMode === true) {
@@ -787,7 +788,8 @@
             this.element.team2winner.innerHTML = 'W';
             this.element.team1loser.innerHTML = 'L';
           } else {
-            // huh? should not be here
+            // should only be here if already a victor,
+            // but the user pressed clear
             this.showWinnersLosers = false;
           }
         }
@@ -1342,6 +1344,7 @@
 
       // Running Information
       GOL.generation++;
+              // This should probably be in an updateGeneration() function
       GOL.element.generation.innerHTML = GOL.generation;
 
       // Update statistics
@@ -1522,6 +1525,28 @@
               document.getElementById('buttonRun').classList.add("btn-success");
             } else {
               GOL.cleanUp();
+
+              //////////////////////////////////////////
+              // DO IT (CLEAR BUTTON CLEANUP) HERE
+
+              // If we found a victor and the user pressed clear, reset foundVictor
+              GOL.foundVictor = false;
+              GOL.whoWon = 0;
+              GOL.showWinnersLosers = false;
+              GOL.element.team1winner.innerHTML = '';
+              GOL.element.team2winner.innerHTML = '';
+              GOL.element.team1loser.innerHTML = '';
+              GOL.element.team2loser.innerHTML = '';
+
+              // GOL.listLife.actualState{1,2} should now be empty
+              liveCounts = GOL.getCounts();
+              // liveCounts should have 0 cells everywhere
+              GOL.updateStatisticsElements(liveCounts);
+              // This should probably be in an updateGeneration() function
+              GOL.element.generation.innerHTML = 0;
+
+              // DONE WITH CLEAR BUTTON CLEANUP
+              //////////////////////////////////////////
             }
           }
         },
@@ -1815,6 +1840,8 @@
        */
       init : function () {
         this.actualState = [];
+        this.actualState1 = [];
+        this.actualState2 = [];
       },
 
 
