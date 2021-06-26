@@ -1118,8 +1118,7 @@
         return;
       }
 
-      var finalGeneration = this.rows - 1;
-      if (this.generation==this.finalGeneration) {
+      if (this.generation===(this.rows-1)) {
         if (liveCounts.liveCells1 > liveCounts.liveCells2) {
           this.whoWon = 1;
           this.foundVictor = true;
@@ -1319,7 +1318,7 @@
 
       guiTime = (new Date()) - guiTime;
 
-      console.log('GUI Time: ' + guiTime);
+      //console.log('GUI Time: ' + guiTime);
 
       // Post-run updates
 
